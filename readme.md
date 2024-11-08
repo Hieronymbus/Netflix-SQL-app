@@ -41,6 +41,8 @@ https://excalidraw.com/#room=b55b4616375ceae98565,hXGwlruSL6lxhY47kI4MXw
 - In the main drop down which contains the login / register etc. options, There must be an option to access the watchlists.
 
 ## User story: As a user I want to be able to view details about the movie
+
+### Acceptance criteria
 - Each non-selected movie must display It's title, release year, genre, brief description and rating.
 - Each selected movie must display all information associated with it, along with an image and actors and directors.
   - Actors and directors names must be links that direct you to information on that person.
