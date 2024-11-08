@@ -1,22 +1,4 @@
-Hey guys here's a brief until Tuesday. It has some non-coding tasks in it to take care of before the real fun starts:
-
---Have a look at Knex.js, an SQL driver for express.js (Hint: you'll need the pg package to work with postgres)
-
---Come up with a bunch (3+) of User Stories with their acceptance criteria
-
---Draw a cheap sketch of the UI with excalidraw.com
-
---Open up a repository on GitHub and invite me :sunglasses:
-
---For every user story, add a GitHub issue in that repo
-
---Have a think about whether you want to go API Backend + React Frontend or just Backend + Templates
-
---After you've taken care of 1-6, feel free to get started :rocket:
-
-https://excalidraw.com/#room=b55b4616375ceae98565,hXGwlruSL6lxhY47kI4MXw
-
-## User story: As a user I want to be able to register and log into an account
+# Project Brief: Not sure yet
 
 ### Acceptance criteria 
 - The user must be able to login / register.
