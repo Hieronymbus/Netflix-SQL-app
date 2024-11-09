@@ -1,5 +1,7 @@
 # Project Brief: Not sure yet
 
+## User story: As a user I want to have my own account
+
 ### Acceptance criteria 
 - The user must be able to login / register.
 - The login form must contain a link to the registration form if the user is not registered and vice versa if the user is already registered.
