@@ -48,7 +48,9 @@ function Main() {
 
     return(
         <main className='w-5/6 relative'>
-            <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>{loading && 'loading...'}</h1>
+            <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>
+                {loading && 'loading...'}
+            </h1>
             <ul className='grid grid-cols-4 gap-2.5'>
                 {movies.map((movie, index) => {
                     if(movie.length >= 40) {
