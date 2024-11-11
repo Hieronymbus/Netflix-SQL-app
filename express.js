@@ -11,11 +11,13 @@ const client = new Client({
   password: 'mypassword',
   port: 5432,
 });
-client.connect();
+client.connect()
+    .then(() => console.log('Connected to PostgreSQL database'))
+    .catch(err => console.error('Connection error ', err.stack));
 
 app.get('/', async(req, res) => {
     try {
-        const result = await client.query('SELECT * FROM neflix_shows');
+        const result = await client.query('SELECT * FROM netflix_shows');
         res.json(result.rows);
     } catch(err) {
         console.error(err);
