@@ -14,20 +14,25 @@ function Main() {
 
     useEffect(() => {
         setLoading(true);
-        async function generateWords() {
-            const response = await fetch(`https://random-word-api.herokuapp.com/word?number=${itemCount}`);
-            const data = await response.json();
+        async function getMovieData() {
+            const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
+            const movieData = await response.json(); 
+            let movieArr = [];
+
+            for(const movie of movieData) {
+                movieArr.push(movie.title);
+            };
     
             setMovies(prev => [
                 ...prev,
-                ...data
+                ...movieArr
             ]);
     
             setLoading(false);
             console.log(data);
         };
 
-        generateWords();
+        getMovieData();
     }, [itemCount]);
 
     function handleScroll() {
