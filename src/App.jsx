@@ -1,7 +1,14 @@
+import React from 'react';
+import Header from './Sections/Header.jsx';
+import Main from './Sections/Main.jsx';
+
 export default function App() {
   return (
-    <h1 className="text-3xl text-amber-400 font-bold underline">
-      Hello world!
-    </h1>
+    <>
+      <div className='w-full p-2.5 mx-auto bg-gray-200 flex flex-col gap-10'>
+        <Header />
+        <Main />
+      </div>
+    </>
   )
 }
