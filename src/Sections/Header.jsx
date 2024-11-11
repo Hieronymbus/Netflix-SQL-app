@@ -4,8 +4,8 @@ function Header() {
     return (
         <header className='text-center w-5/6'>
             <div>
-                <h1>NETFLIX</h1>
-                <form className='flex my-2.5'>
+                <h1 className='mt-5'>NETFLIX</h1>
+                <form className='flex my-5'>
                     <input type="text" name="searchInput" className='p-2.5 mr-2.5 w-full border border-black rounded' />
                     <button type="submit" className='w-1/5 border border-black rounded'>Search</button>
                 </form>
