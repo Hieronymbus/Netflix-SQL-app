@@ -8,8 +8,12 @@ function Main() {
         'The Least Expected Day: Inside the Life of a Medicritical Family', 
         'Star Trek'
     ]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {}, []);
 
     useEffect(() => {
+        setLoading(true);
         async function generateWords() {
             const response = await fetch(`https://random-word-api.herokuapp.com/word?number=${itemCount}`);
             const data = await response.json();
@@ -19,6 +23,7 @@ function Main() {
                 ...data
             ]);
     
+            setLoading(false);
             console.log(data);
         };
 
@@ -42,7 +47,8 @@ function Main() {
 
 
     return(
-        <main className='w-5/6'>
+        <main className='w-5/6 relative'>
+            <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>{loading && 'loading...'}</h1>
             <ul className='grid grid-cols-4 gap-2.5'>
                 {movies.map((movie, index) => {
                     if(movie.length >= 40) {
