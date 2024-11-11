@@ -28,17 +28,18 @@ function Main() {
                 ...movieArr
             ]);
     
+            console.log(movieArr);
+            movieArr = [];
             setLoading(false);
-            console.log(data);
         };
 
         getMovieData();
     }, [itemCount]);
 
     function handleScroll() {
-        console.log('HEIGHT: ', document.documentElement.scrollHeight);
-        console.log('TOP: ', document.documentElement.scrollTop);
-        console.log('WINDOW: ', window.innerHeight);
+        // console.log('HEIGHT: ', document.documentElement.scrollHeight);
+        // console.log('TOP: ', document.documentElement.scrollTop);
+        // console.log('WINDOW: ', window.innerHeight);
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
         if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
