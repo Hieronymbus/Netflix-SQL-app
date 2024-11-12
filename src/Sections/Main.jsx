@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function Main() {
+function Main(props) {
     const [itemCount, setItemCount] = useState(12);
     const [movies, setMovies] = useState([
         // 'The Starling', 

@@ -1,6 +1,6 @@
 
 
-function Header() {
+function Header(props) {
     return (
         <header className='text-center w-5/6'>
             <div>
@@ -11,13 +11,13 @@ function Header() {
                 </form>
                 <div name="dropDownContainer" className='flex gap-2.5'>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button>Release_year</button>
+                        <button onClick={() => props.setDuration(!props.isDuration)}>Release_year</button>
                     </div>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button>Minimum_rating</button>
+                        <button onClick={() => props.setDuration(!props.isDuration)}>Minimum_rating</button>
                     </div>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button>Release_year</button>
+                        <button onClick={() => props.setDuration(!props.isDuration)}>Duration</button>
                     </div>
                 </div>
             </div>

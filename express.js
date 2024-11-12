@@ -22,28 +22,50 @@ client.connect()
 app.get('/', async(req, res) => {
     try {
         const itemCount = parseInt(req.query.itemCount) || 12;
-        const releaseYear = parseInt(req.query.releaseYear) || null;
         const rating = req.query.rating || null;
-        const duration = req.query.duration || null;
-
-        let sqlCommand;
-
-        if(orderByReleaseYear) {
-            sqlCommand = `SELECT * FROM netflix_shows WHERE release_year = ${releaseYear}`;
-        } else if(duration) {
-            sqlCommand = `SELECT * FROM netflix_shows WHERE duration = ${duration}`;
-        } else if(orderByRating) {
-            sqlCommand = `SELECT * FROM netflix_shows WHERE rating = ${rating}`;
-        };
         
-        const result = await client.query(`${sqlCommand} LIMIT $1`, [itemCount]);
-
-
+        const result = await client.query(`SELECT * FROM netflix_shows LIMIT $1`, [itemCount]);
 
         res.json(result.rows);
     } catch(err) {
         console.error(err);
         res.status(500).send('server error');   
+    };
+});
+
+app.get('/releaseYear', async(req, res) => {
+    const releaseYear = parseInt(req.query.releaseYear) || null;
+
+    try {
+        const result = await client.query(`SELECT * FROM netflix_shows WHERE release_year = 2000 LIMIT $1`, [itemCount]);
+        res.json(result.rows);
+    } catch(err) {
+        console.error('server error');
+        res.status(500).send('server error');
+    };
+});
+
+app.get('/duration', async(req, res) => {
+    const duration = req.query.duration || null;
+
+    try {
+        const result = await client.query(`SELECT * FROM netflix_shows WHERE duration='1 Season' LIMIT $1`, [itemCount]);
+        res.json(result.rows);
+    } catch(err) {
+        console.error('server error');
+        res.status(500).send('server error');
+    };
+});
+
+app.get('/rating', async(req, res) => {
+    const releaseYear = parseInt(req.query.releaseYear) || null;
+
+    try {
+        const result = await client.query(`SELECT * FROM netflix_shows WHERE rating='R' LIMIT $1`, [itemCount]);
+        res.json(result.rows);
+    } catch(err) {
+        console.error('server error');
+        res.status(500).send('server error');
     };
 });
 
