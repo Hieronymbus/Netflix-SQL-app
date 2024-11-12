@@ -1,15 +1,115 @@
 import React, { useEffect, useState } from 'react';
 
-function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching } ) {
-    
-
-    useEffect(() => {}, []);
+function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching, isReleaseYear, isRating, isDuration } ) {
+    const [itemCount, setItemCount] = useState(12);
+    const [movies, setMovies] = useState([]);
+    const [loading, setLoading] = useState(false);
+    //Clear movies when applying filter
+    useEffect(() => {
+        setMovies([]);
+        setItemCount(12);
+    }, [isRating, isReleaseYear, isDuration]);
 
     useEffect(() => {
         setLoading(true);
+        if(isRating) {
+            fetchMoviesByRating();
+        } else if(isReleaseYear) {
+            fetchMoviesByReleaseYear();
+        } else if(isDuration) {
+            fetchMoviesByDuration();
+        } else {
+            fetchAllMovies();
+        };
+    }, [itemCount, isRating, isReleaseYear, isDuration]);
+
+    function handleScroll() {
+        // console.log('HEIGHT: ', document.documentElement.scrollHeight);
+        // console.log('TOP: ', document.documentElement.scrollTop);
+        // console.log('WINDOW: ', window.innerHeight);
+
+        // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
+        if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+            setItemCount(prev => prev + 12);
+        };
+    }
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+    }, []);
+
+    async function fetchMoviesByReleaseYear() {
+        console.log('releaseYear');
+        try {
+            const response = await fetch(`http://localhost:3000/releaseYear/?itemCount=${itemCount}&releaseYear=1990`);
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+
+            const movieData = await response.json();
+            const newMovies = movieData.slice(-12).map(movie => {
+                return movie.title + ' ' + movie.release_year;
+            });
+
+            console.log(movies);
+
+            setMovies(prev => [...prev, ...newMovies]);
+        } catch(err) {
+            console.error('Error fetching movies ', err);
+        } finally {
+            setLoading(false);
+        };
+    };
+
+    async function fetchMoviesByDuration() {
+        console.log('executing duration function');
+
+        try {
+            const response = await fetch(`http://localhost:3000/duration/?itemCount=${itemCount}&duration=1+Season`);
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+
+            const movieData = await response.json();
+            const newMovies = movieData.slice(-12).map(movie => {
+                return movie.title + ' ' + movie.duration;
+            });
+
+            setMovies(prev => [...prev, ...newMovies]);
+        } catch(err) {
+            console.error('Error fetching movies ', err);
+        } finally {
+            setLoading(false);
+        };
+    };
+
+    async function fetchMoviesByRating() {
+        try {
+            const response = await fetch(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=R`);
+            console.log(itemCount);
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+
+            const movieData = await response.json();
+            const newMovies = movieData.slice(-12).map(movie => {
+                return movie.title + ' ' + movie.rating;
+            });
+
+            console.log(movies);
+
+            setMovies(prev => [...prev, ...newMovies]);
+        } catch(err) {
+            console.error('Error fetching movies ', err);
+        } finally {
+            setLoading(false);
+        };
+    };
+
+    async function fetchAllMovies() {
+        const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
         console.log(isSearching)
-        async function getMovieData() {
-            const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
+
             const movieData = await response.json(); 
             let movieArr = [];
 
@@ -17,7 +117,7 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
                 movieArr.push(movie.title);
             };
             
-            let newMovies = movieArr.slice(itemCount - 12)
+        let newMovies = movieArr.slice(itemCount - 12);
 
             setMovies(prev => [
                 ...prev,
@@ -28,25 +128,6 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
             // movieArr = [];
             setLoading(false);
         };
-
-        getMovieData();
-    }, [itemCount]);
-
-    function handleScroll() {
-        // console.log('HEIGHT: ', document.documentElement.scrollHeight);
-        // console.log('TOP: ', document.documentElement.scrollTop);
-        // console.log('WINDOW: ', window.innerHeight);
-
-        // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
-        if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-            setItemCount(prev =>  prev + 12);
-        }
-    }
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-    }, []);
-
 
     return(
         <main className='w-5/6 relative'>
