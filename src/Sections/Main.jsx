@@ -2,45 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 function Main(props) {
     const [itemCount, setItemCount] = useState(12);
-    const [movies, setMovies] = useState([
-        // 'The Starling', 
-        // 'Bright Star', 
-        // 'The Least Expected Day: Inside the Life of a Medicritical Family', 
-        // 'Star Trek'
-    ]);
+    const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [fetchUrl, setFetchUrl] = useState(`http://localhost:3000/?itemCount=${itemCount}`); //Initial fetch url
 
+    const fetchUrl = `http://localhost:3000/?itemCount=${itemCount}`;
     useEffect(() => {
         setLoading(true);
-        async function getMovieData() {
-            if(props.isRating) {
-                setMovies([]);
-                setFetchUrl(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=R`);
-                console.log('movies ', movies);
-            };
-            const response = await fetch(fetchUrl);
-            const movieData = await response.json(); 
-            let movieArr = [];
-
-            for(const movie of movieData) {
-                movieArr.push(movie.title);
-            };
-            
-            let newMovies = movieArr.slice(itemCount - 12)
-
-            setMovies(prev => [
-                ...prev,
-                ...newMovies
-            ]);
-            
-            console.log(movieArr);
-            // movieArr = [];
-            setLoading(false);
-        };
-
-        getMovieData();
-    }, [itemCount, props.isRating]);
+        fetchAllMovies();
+    }, [itemCount]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
@@ -49,14 +18,38 @@ function Main(props) {
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
         if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-            setItemCount(prev =>  prev + 12);
-        }
+            setItemCount(prev => {
+                let newItemCount = prev + 12;
+                console.log(newItemCount);
+                return newItemCount;
+            });
+        };
     }
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
     }, []);
 
+    async function fetchAllMovies() {
+        const response = await fetch(fetchUrl);
+        const movieData = await response.json(); 
+        let movieArr = [];
+
+        for(const movie of movieData) {
+            movieArr.push(movie.title);
+        };
+        
+        let newMovies = movieArr.slice(itemCount - 12)
+
+        setMovies(prev => [
+            ...prev,
+            ...newMovies
+        ]);
+        
+        console.log(movieArr);
+        // movieArr = [];
+        setLoading(false);
+    };
 
     return(
         <main className='w-5/6 relative'>

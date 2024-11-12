@@ -21,9 +21,7 @@ client.connect()
 
 app.get('/', async(req, res) => {
     try {
-        const itemCount = parseInt(req.query.itemCount) || 12;
-        const rating = req.query.rating || null;
-        
+        const itemCount = parseInt(req.query.itemCount) || 12;        
         const result = await client.query(`SELECT * FROM netflix_shows LIMIT $1`, [itemCount]);
 
         res.json(result.rows);
