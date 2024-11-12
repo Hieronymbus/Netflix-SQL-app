@@ -5,11 +5,19 @@ function Main(props) {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const fetchUrl = `http://localhost:3000/?itemCount=${itemCount}`;
+    //Clear movies when applying filter
+    useEffect(() => {
+        setMovies([]);
+    }, [props.isRating]);
+
     useEffect(() => {
         setLoading(true);
-        fetchAllMovies();
-    }, [itemCount]);
+        if(props.isRating) {
+            fetchMoviesByRating();
+        } else{
+            fetchAllMovies();
+        };
+    }, [itemCount, props.isRating]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
@@ -30,8 +38,29 @@ function Main(props) {
         window.addEventListener('scroll', handleScroll);
     }, []);
 
+    async function fetchMoviesByRating() {
+        try {
+            const response = await fetch(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=PG-13`);
+
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+
+            const movieData = await response.json();
+            const newMovies = movieData.map(movie => {
+                return movie.title + ' ' + movie.rating;
+            });
+
+            setMovies(prev => [...prev, ...newMovies]);
+        } catch(err) {
+            console.error('Error fetching movies ', err);
+        } finally {
+            setLoading(false);
+        };
+    };
+
     async function fetchAllMovies() {
-        const response = await fetch(fetchUrl);
+        const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
         const movieData = await response.json(); 
         let movieArr = [];
 
@@ -39,7 +68,7 @@ function Main(props) {
             movieArr.push(movie.title);
         };
         
-        let newMovies = movieArr.slice(itemCount - 12)
+        let newMovies = movieArr.slice(itemCount - 12);
 
         setMovies(prev => [
             ...prev,
