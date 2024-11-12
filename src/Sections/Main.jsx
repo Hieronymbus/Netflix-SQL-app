@@ -8,16 +8,30 @@ function Main(props) {
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
-    }, [props.isRating]);
+        setItemCount(12);
+    }, [props.isRating, props.isReleaseYear, props.isDuration]);
 
     useEffect(() => {
         setLoading(true);
         if(props.isRating) {
+            props.setReleaseYear(false);
+            props.setDuration(false);
             fetchMoviesByRating();
-        } else{
+        } else if(props.isReleaseYear) {
+            props.setRating(false);
+            props.setDuration(false);
+            fetchMoviesByReleaseYear();
+        } else if(props.isDuration) {
+            props.setReleaseYear(false);
+            props.setRating(false);
+            fetchMoviesByDuration();
+        } else {
+            props.setReleaseYear(false);
+            props.setDuration(false);
+            props.setRating(false);
             fetchAllMovies();
-        };
-    }, [itemCount, props.isRating]);
+        }
+    }, [itemCount, props.isRating, props.isReleaseYear]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
@@ -26,11 +40,7 @@ function Main(props) {
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
         if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-            setItemCount(prev => {
-                let newItemCount = prev + 12;
-                console.log(newItemCount);
-                return newItemCount;
-            });
+            setItemCount(prev => prev + 12);
         };
     }
 
@@ -38,18 +48,66 @@ function Main(props) {
         window.addEventListener('scroll', handleScroll);
     }, []);
 
-    async function fetchMoviesByRating() {
+    async function fetchMoviesByReleaseYear() {
         try {
-            const response = await fetch(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=PG-13`);
-
+            const response = await fetch(`http://localhost:3000/releaseYear/?itemCount=${itemCount}&releaseYear=2000`);
+            console.log(itemCount);
             if(!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };
 
             const movieData = await response.json();
-            const newMovies = movieData.map(movie => {
+            const newMovies = movieData.slice(-12).map(movie => {
+                return movie.title + ' ' + movie.release_year;
+            });
+
+            console.log(movies);
+
+            setMovies(prev => [...prev, ...newMovies]);
+        } catch(err) {
+            console.error('Error fetching movies ', err);
+        } finally {
+            setLoading(false);
+        };
+    }
+
+    async function fetchMoviesByDuration() {
+        try {
+            const response = await fetch(`http://localhost:3000/duration/?itemCount=${itemCount}&duration=1+Season`);
+            console.log(itemCount);
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+
+            const movieData = await response.json();
+            const newMovies = movieData.slice(-12).map(movie => {
+                return movie.title + ' ' + movie.duration;
+            });
+
+            console.log(movies);
+
+            setMovies(prev => [...prev, ...newMovies]);
+        } catch(err) {
+            console.error('Error fetching movies ', err);
+        } finally {
+            setLoading(false);
+        };
+    }
+
+    async function fetchMoviesByRating() {
+        try {
+            const response = await fetch(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=PG-13`);
+            console.log(itemCount);
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+
+            const movieData = await response.json();
+            const newMovies = movieData.slice(-12).map(movie => {
                 return movie.title + ' ' + movie.rating;
             });
+
+            console.log(movies);
 
             setMovies(prev => [...prev, ...newMovies]);
         } catch(err) {
