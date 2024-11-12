@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function Main(props) {
+function Main({ isReleaseYear, isRating, isDuration }) {
     const [itemCount, setItemCount] = useState(12);
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -9,29 +9,20 @@ function Main(props) {
     useEffect(() => {
         setMovies([]);
         setItemCount(12);
-    }, [props.isRating, props.isReleaseYear, props.isDuration]);
+    }, [isRating, isReleaseYear, isDuration]);
 
     useEffect(() => {
         setLoading(true);
-        if(props.isRating) {
-            props.setReleaseYear(false);
-            props.setDuration(false);
+        if(isRating) {
             fetchMoviesByRating();
-        } else if(props.isReleaseYear) {
-            props.setRating(false);
-            props.setDuration(false);
+        } else if(isReleaseYear) {
             fetchMoviesByReleaseYear();
-        } else if(props.isDuration) {
-            props.setReleaseYear(false);
-            props.setRating(false);
+        } else if(isDuration) {
             fetchMoviesByDuration();
         } else {
-            props.setReleaseYear(false);
-            props.setDuration(false);
-            props.setRating(false);
             fetchAllMovies();
         }
-    }, [itemCount, props.isRating, props.isReleaseYear]);
+    }, [itemCount, isRating, isReleaseYear]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);

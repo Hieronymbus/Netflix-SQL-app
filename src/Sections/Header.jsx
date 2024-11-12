@@ -1,6 +1,16 @@
+import { useEffect } from 'react';
 
+function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration }) {
+    useEffect(() => {
+        if(isReleaseYear || isDuration) {
+            setRating(false);
+        } else if(isReleaseYear || isRating) {
+            setDuration(false);
+        } else if(isRating || isDuration) {
+            setReleaseYear(false);
+        }
+    }, [isReleaseYear, isRating, isDuration])
 
-function Header(props) {
     return (
         <header className='text-center w-5/6'>
             <div>
@@ -11,13 +21,13 @@ function Header(props) {
                 </form>
                 <div name="dropDownContainer" className='flex gap-2.5'>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button onClick={() => props.setReleaseYear(!props.isReleaseYear)}>Release_year</button>
+                        <button onClick={() => setReleaseYear(!isReleaseYear)}>Release_year</button>
                     </div>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button onClick={() => props.setRating(!props.isRating)}>Minimum_rating</button>
+                        <button onClick={() => setRating(!isRating)}>Minimum_rating</button>
                     </div>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button onClick={() => props.setDuration(!props.isDuration)}>Duration</button>
+                        <button onClick={() => setDuration(!isDuration)}>Duration</button>
                     </div>
                 </div>
             </div>
