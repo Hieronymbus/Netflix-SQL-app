@@ -9,13 +9,15 @@ function Main(props) {
         // 'Star Trek'
     ]);
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {}, []);
+    const [fetchUrl, setFetchUrl] = useState(`http://localhost:3000/?itemCount=${itemCount}`); //Initial fetch url
 
     useEffect(() => {
         setLoading(true);
         async function getMovieData() {
-            const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
+            if(props.isRating) {
+                setFetchUrl(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=R`);
+            };
+            const response = await fetch(fetchUrl);
             const movieData = await response.json(); 
             let movieArr = [];
 
@@ -36,7 +38,7 @@ function Main(props) {
         };
 
         getMovieData();
-    }, [itemCount]);
+    }, [itemCount, props.isRating]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);

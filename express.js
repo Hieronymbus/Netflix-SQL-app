@@ -34,6 +34,7 @@ app.get('/', async(req, res) => {
 });
 
 app.get('/releaseYear', async(req, res) => {
+    const itemCount = parseInt(req.query.itemCount) || 12;
     const releaseYear = parseInt(req.query.releaseYear) || null;
 
     try {
@@ -46,6 +47,7 @@ app.get('/releaseYear', async(req, res) => {
 });
 
 app.get('/duration', async(req, res) => {
+    const itemCount = parseInt(req.query.itemCount) || 12;
     const duration = req.query.duration || null;
 
     try {
@@ -58,14 +60,16 @@ app.get('/duration', async(req, res) => {
 });
 
 app.get('/rating', async(req, res) => {
+    const itemCount = parseInt(req.query.itemCount) || 12;
     const releaseYear = parseInt(req.query.releaseYear) || null;
 
     try {
         const result = await client.query(`SELECT * FROM netflix_shows WHERE rating='R' LIMIT $1`, [itemCount]);
+        console.log('made it to rating endpoint');
         res.json(result.rows);
     } catch(err) {
-        console.error('server error');
-        res.status(500).send('server error');
+        console.error(err);
+        res.status(500).send('ssss');
     };
 });
 

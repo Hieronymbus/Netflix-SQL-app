@@ -11,10 +11,10 @@ function Header(props) {
                 </form>
                 <div name="dropDownContainer" className='flex gap-2.5'>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button onClick={() => props.setDuration(!props.isDuration)}>Release_year</button>
+                        <button onClick={() => props.setReleaseYear(!props.isReleaseYear)}>Release_year</button>
                     </div>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button onClick={() => props.setDuration(!props.isDuration)}>Minimum_rating</button>
+                        <button onClick={() => props.setRating(!props.isRating)}>Minimum_rating</button>
                     </div>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
                         <button onClick={() => props.setDuration(!props.isDuration)}>Duration</button>

@@ -4,7 +4,7 @@ import Main from './Sections/Main.jsx';
 
 export default function App() {
   const [isDuration, setDuration] = useState(false);
-  const [isReleaseYear, setRelaseYear] = useState(false);
+  const [isReleaseYear, setReleaseYear] = useState(false);
   const [isRating, setRating] = useState(false);
 
   return (
@@ -13,7 +13,7 @@ export default function App() {
         <Header 
           setDuration={setDuration}
           isDuration={isDuration}
-          setRelaseYear={setRelaseYear}
+          setReleaseYear={setReleaseYear}
           isReleaseYear={isReleaseYear}
           setRating={setRating}
           isRating={isRating}
@@ -21,7 +21,7 @@ export default function App() {
         <Main 
           setDuration={setDuration}
           isDuration={isDuration}
-          setRelaseYear={setRelaseYear}
+          setReleaseYear={setReleaseYear}
           isReleaseYear={isReleaseYear}
           setRating={setRating}
           isRating={isRating}
