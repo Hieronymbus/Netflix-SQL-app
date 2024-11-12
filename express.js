@@ -26,7 +26,7 @@ app.get('/', async(req, res) => {
 
         // SELECT * FROM netflix_shows 
         //  ORDER BY date_added ;
-        const result = await client.query('SELECT * FROM netflix_shows ORDER BY date_added DESC LIMIT $1 ', [itemCount]);
+        const result = await client.query('SELECT * FROM netflix_shows ORDER BY date_added ASC LIMIT $1 ', [itemCount]);
         res.json(result.rows);
     } catch(err) {
         console.error(err);
