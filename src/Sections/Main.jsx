@@ -15,7 +15,9 @@ function Main(props) {
         setLoading(true);
         async function getMovieData() {
             if(props.isRating) {
+                setMovies([]);
                 setFetchUrl(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=R`);
+                console.log('movies ', movies);
             };
             const response = await fetch(fetchUrl);
             const movieData = await response.json(); 
