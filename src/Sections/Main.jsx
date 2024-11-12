@@ -30,9 +30,19 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
         // console.log('WINDOW: ', window.innerHeight);
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
-        if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+        if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
             setItemCount(prev => prev + 12);
+            console.log('aa ', isSearching)
         };
+    }
+
+    useEffect(() => {
+        const listener = window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', listener);
+        }
+    }, [isSearching]);
     };
 
     async function fetchMoviesByReleaseYear() {
@@ -96,6 +106,7 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
 
     async function fetchAllMovies() {
         const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
+        console.log(isSearching)
 
             const movieData = await response.json(); 
             let movieArr = [];

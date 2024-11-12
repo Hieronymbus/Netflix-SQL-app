@@ -2,7 +2,65 @@
 import { useState, useEffect } from "react";
 import FilterDropDown from "../Compontents/FilterDropDown";
 
-function Header({ setMovies, setIsSearching, isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration }) {
+
+function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration, isSearching, setIsSearching, setMovies }) {
+
+    const [searchInput, setSearchInput] = useState('')
+    const [debounceValue, setDebounceValue] = useState('')
+    
+    const useDebounce = (value, delay = 550) => {
+        
+
+        
+        useEffect (() => {
+            
+            const timeout =  setTimeout(() => {
+                setDebounceValue(value)
+            }, delay )
+            
+            return () => clearTimeout(timeout)
+            
+        }, [value])
+        
+        return debounceValue
+    } 
+    
+    const debounceSearch = useDebounce(searchInput)
+    
+    const searchMovie = async (e) => {
+        
+        try {
+            
+            const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
+
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+
+            const searchData = await response.json();
+            
+            let searchedForArr = []
+    
+            for(const movie of searchData) {
+                searchedForArr.push(movie.title);
+            };
+            
+            setMovies(searchedForArr);
+            console.log('made it');
+            console.log(isSearching) 
+            
+        } catch (error) {
+            console.error(error)
+        }
+
+    }
+    useEffect(() => {
+
+        if(isSearching) {
+            searchMovie()
+        }
+    }, [debounceSearch] )
+
 
     useEffect(() => {
         if(isReleaseYear || isDuration) {
@@ -53,7 +111,7 @@ function Header({ setMovies, setIsSearching, isReleaseYear, setReleaseYear, isRa
                     className='flex my-5'
                     onSubmit={ (e) => {
                         e.preventDefault() 
-                        setIsSearching(true)
+                        setIsSearching(true);
                         searchMovie()
                     }} 
                 >        
@@ -63,8 +121,8 @@ function Header({ setMovies, setIsSearching, isReleaseYear, setReleaseYear, isRa
                         className='p-2.5 mr-2.5 w-full border border-black rounded' 
                         value={searchInput}
                         onChange={ (e)=> { 
+                            setIsSearching(true);
                             setSearchInput(e.target.value)
-                            setIsSearching(true)
                         } } 
                     />
                     <button 
