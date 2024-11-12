@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 function Main() {
     const [itemCount, setItemCount] = useState(12);
     const [movies, setMovies] = useState([
-        'The Starling', 
-        'Bright Star', 
-        'The Least Expected Day: Inside the Life of a Medicritical Family', 
-        'Star Trek'
+        // 'The Starling', 
+        // 'Bright Star', 
+        // 'The Least Expected Day: Inside the Life of a Medicritical Family', 
+        // 'Star Trek'
     ]);
     const [loading, setLoading] = useState(false);
 
@@ -22,14 +22,16 @@ function Main() {
             for(const movie of movieData) {
                 movieArr.push(movie.title);
             };
-    
+            
+            let newMovies = movieArr.slice(itemCount - 12)
+
             setMovies(prev => [
                 ...prev,
-                ...movieArr
+                ...newMovies
             ]);
-    
+            
             console.log(movieArr);
-            movieArr = [];
+            // movieArr = [];
             setLoading(false);
         };
 
@@ -43,7 +45,7 @@ function Main() {
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
         if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-            setItemCount(prev => prev + 1);
+            setItemCount(prev =>  prev + 12);
         }
     }
 
