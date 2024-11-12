@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-function Main({ isReleaseYear, isRating, isDuration }) {
+function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching, isReleaseYear, isRating, isDuration } ) {
     const [itemCount, setItemCount] = useState(12);
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
-
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
@@ -109,6 +108,8 @@ function Main({ isReleaseYear, isRating, isDuration }) {
 
     async function fetchAllMovies() {
         const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
+        console.log(isSearching)
+
             const movieData = await response.json(); 
             let movieArr = [];
 

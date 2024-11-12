@@ -6,6 +6,10 @@ export default function App() {
   const [isDuration, setDuration] = useState(false);
   const [isReleaseYear, setReleaseYear] = useState(false);
   const [isRating, setRating] = useState(false);
+  const [itemCount, setItemCount] = useState(12);
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   return (
     <>
@@ -25,6 +29,14 @@ export default function App() {
           isReleaseYear={isReleaseYear}
           setRating={setRating}
           isRating={isRating}
+          itemCount={itemCount}
+          setItemCount={setItemCount}
+          movies={movies}
+          setMovies={setMovies}
+          loading={loading}
+          setLoading={setLoading}
+          isSearching={isSearching}
+          setIsSearching={setIsSearching}
         />
       </div>
     </>
