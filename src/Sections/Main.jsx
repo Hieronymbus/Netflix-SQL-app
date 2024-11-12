@@ -8,6 +8,10 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
     }, [isRating, isReleaseYear, isDuration]);
 
     useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
         setLoading(true);
         if(isRating) {
             fetchMoviesByRating();
@@ -29,14 +33,9 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
         if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
             setItemCount(prev => prev + 12);
         };
-    }
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-    }, []);
+    };
 
     async function fetchMoviesByReleaseYear() {
-        console.log('releaseYear');
         try {
             const response = await fetch(`http://localhost:3000/releaseYear/?itemCount=${itemCount}&releaseYear=1990`);
             if(!response.ok) {
@@ -48,8 +47,6 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
                 return movie.title + ' ' + movie.release_year;
             });
 
-            console.log(movies);
-
             setMovies(prev => [...prev, ...newMovies]);
         } catch(err) {
             console.error('Error fetching movies ', err);
@@ -59,8 +56,6 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
     };
 
     async function fetchMoviesByDuration() {
-        console.log('executing duration function');
-
         try {
             const response = await fetch(`http://localhost:3000/duration/?itemCount=${itemCount}&duration=1+Season`);
             if(!response.ok) {
@@ -83,7 +78,6 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
     async function fetchMoviesByRating() {
         try {
             const response = await fetch(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=R`);
-            console.log(itemCount);
             if(!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };
@@ -92,9 +86,6 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
             const newMovies = movieData.slice(-12).map(movie => {
                 return movie.title + ' ' + movie.rating;
             });
-
-            console.log(movies);
-
             setMovies(prev => [...prev, ...newMovies]);
         } catch(err) {
             console.error('Error fetching movies ', err);
@@ -105,7 +96,6 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
 
     async function fetchAllMovies() {
         const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
-        console.log(isSearching)
 
             const movieData = await response.json(); 
             let movieArr = [];
@@ -120,9 +110,7 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
                 ...prev,
                 ...newMovies
             ]);
-            
-            console.log(movieArr);
-            // movieArr = [];
+
             setLoading(false);
         };
 

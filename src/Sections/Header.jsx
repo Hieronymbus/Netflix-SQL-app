@@ -1,7 +1,9 @@
 
 import { useState, useEffect } from "react";
+import FilterDropDown from "../Compontents/FilterDropDown";
 
 function Header({ setMovies, setIsSearching, isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration }) {
+
     useEffect(() => {
         if(isReleaseYear || isDuration) {
             setRating(false);
@@ -11,8 +13,6 @@ function Header({ setMovies, setIsSearching, isReleaseYear, setReleaseYear, isRa
             setReleaseYear(false);
         }
     }, [isReleaseYear, isRating, isDuration]);
-
-    const [searchInput, setSearchInput] = useState('')
     
     const useDebounce = (value, delay = 550) => {
         
@@ -25,31 +25,25 @@ function Header({ setMovies, setIsSearching, isReleaseYear, setReleaseYear, isRa
             return () => clearTimeout(timeout)    
         }, [value]);
         return debounceValue;
-    } 
+    };
+
+    const [searchInput, setSearchInput] = useState('');
+    const debounceSearch = useDebounce(searchInput);
     
-    const debounceSearch = useDebounce(searchInput)
-    
-    const searchMovie = async (e) => {
-         
+    const searchMovie = async (e) => {        
         const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
         const searchData = await response.json();
-
-        console.log(searchData);
-
         let searchedForArr = []
 
         for(const movie of searchData) {
             searchedForArr.push(movie.title);
         };
-
-        
         setMovies(searchedForArr);
-    }
+    };
+
     useEffect(() => {
-
-        searchMovie()
-
-    }, [debounceSearch] )
+        searchMovie();
+    }, [debounceSearch]);
 
     return (
         <header className='text-center w-5/6'>
@@ -81,8 +75,9 @@ function Header({ setMovies, setIsSearching, isReleaseYear, setReleaseYear, isRa
                     </button>
                 </form>
                 <div name="dropDownContainer" className='flex gap-2.5'>
-                    <div name="dropDown" className='border border-black rounded p-2.5'>
+                    <div name="dropDown" className='relative border border-black rounded p-2.5'>
                         <button onClick={() => setReleaseYear(!isReleaseYear)}>Release_year</button>
+                        <FilterDropDown options={[1990, 2000, 2010, 2020]}/>
                     </div>
                     <div name="dropDown" className='border border-black rounded p-2.5'>
                         <button onClick={() => setRating(!isRating)}>Minimum_rating</button>
