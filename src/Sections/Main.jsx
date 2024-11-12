@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching, isReleaseYear, isRating, isDuration } ) {
-    const [itemCount, setItemCount] = useState(12);
-    const [movies, setMovies] = useState([]);
-    const [loading, setLoading] = useState(false);
+    
+    console.log("Rerendering main with isSearching = " + isSearching);
+    
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
@@ -29,14 +29,19 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
         // console.log('WINDOW: ', window.innerHeight);
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
-        if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+        if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
             setItemCount(prev => prev + 12);
+            console.log('aa ', isSearching)
         };
     }
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-    }, []);
+        const listener = window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', listener);
+        }
+    }, [isSearching]);
 
     async function fetchMoviesByReleaseYear() {
         console.log('releaseYear');
@@ -108,8 +113,6 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
 
     async function fetchAllMovies() {
         const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
-        console.log(isSearching)
-
             const movieData = await response.json(); 
             let movieArr = [];
 
@@ -124,7 +127,6 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
                 ...newMovies
             ]);
             
-            console.log(movieArr);
             // movieArr = [];
             setLoading(false);
         };

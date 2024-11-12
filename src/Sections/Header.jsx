@@ -1,20 +1,20 @@
 
 import { useState, useEffect } from "react";
 
-function Header( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching } ) {
+
+function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration, isSearching, setIsSearching, setMovies }) {
 
     const [searchInput, setSearchInput] = useState('')
+    const [debounceValue, setDebounceValue] = useState('')
     
     const useDebounce = (value, delay = 550) => {
         
-        const [debounceValue, setDebounceValue] = useState('')
+
         
         useEffect (() => {
             
             const timeout =  setTimeout(() => {
-                
                 setDebounceValue(value)
-                
             }, delay )
             
             return () => clearTimeout(timeout)
@@ -27,30 +27,40 @@ function Header( { itemCount, setItemCount, movies, setMovies, loading, setLoadi
     const debounceSearch = useDebounce(searchInput)
     
     const searchMovie = async (e) => {
-         
-        const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
-        const searchData = await response.json();
-
-        console.log(searchData);
-
-        let searchedForArr = []
-
-        for(const movie of searchData) {
-            searchedForArr.push(movie.title);
-        };
-
         
-        setMovies(searchedForArr);
+        try {
+            
+            const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
+
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+
+            const searchData = await response.json();
+            
+            let searchedForArr = []
+    
+            for(const movie of searchData) {
+                searchedForArr.push(movie.title);
+            };
+            
+            setMovies(searchedForArr);
+            console.log('made it');
+            console.log(isSearching) 
+            
+        } catch (error) {
+            console.error(error)
+        }
+
     }
     useEffect(() => {
 
-        searchMovie()
-
+        if(isSearching) {
+            searchMovie()
+        }
     }, [debounceSearch] )
 
 
-
-function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration }) {
     useEffect(() => {
         if(isReleaseYear || isDuration) {
             setRating(false);
@@ -69,7 +79,7 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
                     className='flex my-5'
                     onSubmit={ (e) => {
                         e.preventDefault() 
-                        setIsSearching(true)
+                        setIsSearching(true);
                         searchMovie()
                     }} 
                 >        
@@ -79,8 +89,8 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
                         className='p-2.5 mr-2.5 w-full border border-black rounded' 
                         value={searchInput}
                         onChange={ (e)=> { 
+                            setIsSearching(true);
                             setSearchInput(e.target.value)
-                            setIsSearching(true)
                         } } 
                     />
                     <button 
