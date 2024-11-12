@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-function Main() {
-    const [itemCount, setItemCount] = useState(12);
-    const [movies, setMovies] = useState([
-        // 'The Starling', 
-        // 'Bright Star', 
-        // 'The Least Expected Day: Inside the Life of a Medicritical Family', 
-        // 'Star Trek'
-    ]);
-    const [loading, setLoading] = useState(false);
+function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching } ) {
+    
 
     useEffect(() => {}, []);
 
     useEffect(() => {
         setLoading(true);
+        console.log(isSearching)
         async function getMovieData() {
             const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
             const movieData = await response.json(); 
