@@ -22,11 +22,24 @@ client.connect()
 app.get('/', async(req, res) => {
     try {
         const itemCount = parseInt(req.query.itemCount) || 12;
-        //How can I limit the amount of data I recieve based on a query param??????
+        const releaseYear = parseInt(req.query.releaseYear) || null;
+        const rating = req.query.rating || null;
+        const duration = req.query.duration || null;
 
-        // SELECT * FROM netflix_shows 
-        //  ORDER BY date_added ;
-        const result = await client.query('SELECT * FROM netflix_shows ORDER BY date_added ASC LIMIT $1 ', [itemCount]);
+        let sqlCommand;
+
+        if(orderByReleaseYear) {
+            sqlCommand = `SELECT * FROM netflix_shows WHERE release_year = ${releaseYear}`;
+        } else if(duration) {
+            sqlCommand = `SELECT * FROM netflix_shows WHERE duration = ${duration}`;
+        } else if(orderByRating) {
+            sqlCommand = `SELECT * FROM netflix_shows WHERE rating = ${rating}`;
+        };
+        
+        const result = await client.query(`${sqlCommand} LIMIT $1`, [itemCount]);
+
+
+
         res.json(result.rows);
     } catch(err) {
         console.error(err);
