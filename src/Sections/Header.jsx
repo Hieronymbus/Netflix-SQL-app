@@ -1,7 +1,16 @@
 
 import { useState, useEffect } from "react";
 
-function Header( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching } ) {
+function Header({ setMovies, setIsSearching, isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration }) {
+    useEffect(() => {
+        if(isReleaseYear || isDuration) {
+            setRating(false);
+        } else if(isReleaseYear || isRating) {
+            setDuration(false);
+        } else if(isRating || isDuration) {
+            setReleaseYear(false);
+        }
+    }, [isReleaseYear, isRating, isDuration]);
 
     const [searchInput, setSearchInput] = useState('')
     
@@ -9,19 +18,13 @@ function Header( { itemCount, setItemCount, movies, setMovies, loading, setLoadi
         
         const [debounceValue, setDebounceValue] = useState('')
         
-        useEffect (() => {
-            
-            const timeout =  setTimeout(() => {
-                
-                setDebounceValue(value)
-                
-            }, delay )
-            
-            return () => clearTimeout(timeout)
-            
-        }, [value])
-        
-        return debounceValue
+        useEffect (() => {           
+            const timeout =  setTimeout(() => {               
+                setDebounceValue(value);             
+            }, delay )        
+            return () => clearTimeout(timeout)    
+        }, [value]);
+        return debounceValue;
     } 
     
     const debounceSearch = useDebounce(searchInput)
@@ -47,19 +50,6 @@ function Header( { itemCount, setItemCount, movies, setMovies, loading, setLoadi
         searchMovie()
 
     }, [debounceSearch] )
-
-
-
-function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration }) {
-    useEffect(() => {
-        if(isReleaseYear || isDuration) {
-            setRating(false);
-        } else if(isReleaseYear || isRating) {
-            setDuration(false);
-        } else if(isRating || isDuration) {
-            setReleaseYear(false);
-        }
-    }, [isReleaseYear, isRating, isDuration])
 
     return (
         <header className='text-center w-5/6'>

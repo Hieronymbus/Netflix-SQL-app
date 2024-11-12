@@ -21,6 +21,9 @@ export default function App() {
           isReleaseYear={isReleaseYear}
           setRating={setRating}
           isRating={isRating}
+          setMovies={setMovies}
+          movies={movies}
+          setIsSearching={setIsSearching}
         />
         <Main 
           setDuration={setDuration}
