@@ -3,14 +3,10 @@ import { useState, useEffect } from "react";
 import FilterDropDown from "../Compontents/FilterDropDown";
 
 
-function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration, isSearching, setIsSearching, setMovies }) {
+function Header({ setFilterValue, isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration, isSearching, setIsSearching, setMovies }) {
 
     const [searchInput, setSearchInput] = useState('');
     const [debounceValue, setDebounceValue] = useState('');
-    const [isReleaseYearDropDown, setIsReleaseYearDropDown] = useState(false);
-    const [isRatingDropDown, setIsRatingDropDown] = useState(false);
-    const [isDurationDropDown, setIsDurationDropDown] = useState(false);
-    const [dropDownValue, setDropDownValue] = useState();
 
     const useDebounce = (value, delay = 550) => {
         
@@ -30,21 +26,11 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
 
     useEffect(() => {
         if(isSearching) {
-            searchMovie()
-        }
+            searchMovie();
+        };
     }, [debounceSearch] );
-
-    useEffect(() => {
-        if(isReleaseYear || isDuration) {
-            setRating(false);
-        } else if(isReleaseYear || isRating) {
-            setDuration(false);
-        } else if(isRating || isDuration) {
-            setReleaseYear(false);
-        }
-    }, [isReleaseYear, isRating, isDuration]);
     
-    const searchMovie = async (e) => {
+    const searchMovie = async () => {
         
         try {        
             const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
@@ -66,17 +52,17 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
 
     function handleClick(arg) {
         if(arg === 'year') {
-            setIsReleaseYearDropDown(true);
-            setIsRatingDropDown(false);
-            setIsDurationDropDown(false);
+            setReleaseYear(true);
+            setRating(false);
+            setDuration(false);
         } else if(arg === 'rating') {
-            setIsRatingDropDown(true);
-            setIsDurationDropDown(false);
-            setIsReleaseYearDropDown(false);
+            setRating(true);
+            setDuration(false);
+            setReleaseYear(false);
         } else {
-            setIsDurationDropDown(true);
-            setIsReleaseYearDropDown(false);
-            setIsRatingDropDown(false);
+            setDuration(true);
+            setReleaseYear(false);
+            setRating(false);
         };
     }
 
@@ -112,15 +98,15 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
                 <div name="dropDownContainer" className='flex gap-2.5'>
                     <div name="dropDown" className='relative border border-black rounded p-2.5'>
                         <button onClick={() => handleClick('year')}>Release_year</button>
-                        <FilterDropDown options={[1990, 2000, 2010, 2020]} setDropDownValue={setDropDownValue} isYear={true} isShown={isReleaseYearDropDown}/>
+                        <FilterDropDown setFilterValue={setFilterValue} options={[1990, 2000, 2010, 2020]} isYear={true} isShown={isReleaseYear}/>
                     </div>
                     <div name="dropDown" className='relative border border-black rounded p-2.5'>
                         <button onClick={() => handleClick('rating')}>Minimum_rating</button>
-                        <FilterDropDown options={['PG-13', 'R', 'TV-MA', 'PG', 'TV-14']} setDropDownValue={setDropDownValue} isShown={isRatingDropDown}/>
+                        <FilterDropDown setFilterValue={setFilterValue} options={['PG-13', 'R', 'TV-MA', 'PG', 'TV-14']} isShown={isRating}/>
                     </div>
                     <div name="dropDown" className='relative border border-black rounded p-2.5'>
                         <button onClick={() => handleClick('duration')}>Duration</button>
-                        <FilterDropDown options={['1 Season', '2 Seasons', '125 min']} setDropDownValue={setDropDownValue} isShown={isDurationDropDown}/>
+                        <FilterDropDown setFilterValue={setFilterValue} options={['1 Season', '2 Seasons', '125 min']} isShown={isDuration}/>
                     </div>
                 </div>
             </div>

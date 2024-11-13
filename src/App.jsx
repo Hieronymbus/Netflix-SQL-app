@@ -10,6 +10,7 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [filterValue, setFilterValue] = useState();
 
 const debugSetIsSearching = (newState) => {
   console.log("setting to " + newState);
@@ -22,6 +23,7 @@ const debugSetIsSearching = (newState) => {
     <>
       <div className='w-full p-2.5 mx-auto bg-gray-200 flex flex-col gap-10'>
         <Header 
+          setFilterValue={setFilterValue}
           setDuration={setDuration}
           isDuration={isDuration}
           setReleaseYear={setReleaseYear}
@@ -36,6 +38,7 @@ const debugSetIsSearching = (newState) => {
           setItemCount={setItemCount}
         />
         <Main 
+          filterValue={filterValue}
           setDuration={setDuration}
           isDuration={isDuration}
           setReleaseYear={setReleaseYear}
