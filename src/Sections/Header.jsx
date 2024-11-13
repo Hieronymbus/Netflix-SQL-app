@@ -10,13 +10,11 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
     
     const useDebounce = (value, delay = 550) => {
         
-
-        
         useEffect (() => {
             
             const timeout =  setTimeout(() => {
                 setDebounceValue(value)
-            }, delay )
+            }, delay );
             
             return () => clearTimeout(timeout)
             
