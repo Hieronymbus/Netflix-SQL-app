@@ -13,11 +13,42 @@ export default function App() {
 
   const [searchItemCount, setSearchItemCount] = useState(12);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
 
 const debugSetIsSearching = (newState) => {
   console.log("setting to " + newState);
   setIsSearching(newState);
 }
+
+
+const fetchSearchedMovie = async (e) => {
+        
+  try {
+      
+      const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}&itemCount=${itemCount}`);
+
+      if(!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      };
+
+      const searchData = await response.json();
+      
+      let searchedForArr = []
+
+      for(const movie of searchData) {
+          searchedForArr.push(movie.title);
+      };
+      
+      setMovies( searchedForArr);
+      console.log('made it');
+      console.log(isSearching) 
+      
+  } catch (error) {
+      console.error(error)
+  }
+
+}
+
 
   console.log("Rerendering App.jsx with isSearching = " + isSearching);
 
@@ -36,6 +67,9 @@ const debugSetIsSearching = (newState) => {
           setIsSearching={debugSetIsSearching}
           searchItemCount={searchItemCount}
           setSearchItemCount={setSearchItemCount}
+          fetchSearchedMovie={fetchSearchedMovie}
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
         />
         <Main 
           setDuration={setDuration}
@@ -54,6 +88,9 @@ const debugSetIsSearching = (newState) => {
           setIsSearching={debugSetIsSearching}
           searchItemCount={searchItemCount}
           setSearchItemCount={setSearchItemCount}
+          fetchSearchedMovie={fetchSearchedMovie}
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
         />
       </div>
     </>

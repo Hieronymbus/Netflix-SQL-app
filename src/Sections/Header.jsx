@@ -2,15 +2,15 @@
 import { useState, useEffect } from "react";
 
 
-function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration, isSearching, setIsSearching, setMovies }) {
+function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration, isSearching, setIsSearching, setMovies, fetchSearchedMovie, searchInput, setSearchInput }) {
 
-    const [searchInput, setSearchInput] = useState('')
-    const [debounceValue, setDebounceValue] = useState('')
     
+    
+    // custom hook for handling debounce
     const useDebounce = (value, delay = 550) => {
         
+        const [debounceValue, setDebounceValue] = useState('')
 
-        
         useEffect (() => {
             
             const timeout =  setTimeout(() => {
@@ -23,43 +23,19 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
         
         return debounceValue
     } 
+    // async function that handles fetch api using searchInput as query and sets movies state to the response
     
+    // calling useDebounce with searchInput as value to set debounceSearch which is passed as a dependency for useEffect to call search movie
     const debounceSearch = useDebounce(searchInput)
     
-    const searchMovie = async (e) => {
-        
-        try {
-            
-            const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
-
-            if(!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            };
-
-            const searchData = await response.json();
-            
-            let searchedForArr = []
-    
-            for(const movie of searchData) {
-                searchedForArr.push(movie.title);
-            };
-            
-            setMovies(searchedForArr);
-            console.log('made it');
-            console.log(isSearching) 
-            
-        } catch (error) {
-            console.error(error)
-        }
-
-    }
+    // triggers search movie when debounceSearchUpdates
     useEffect(() => {
 
         if(isSearching) {
-            searchMovie()
+            fetchSearchedMovie()
         }
-    }, [debounceSearch] )
 
+    }, [debounceSearch] )
 
     useEffect(() => {
         if(isReleaseYear || isDuration) {
@@ -80,7 +56,7 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
                     onSubmit={ (e) => {
                         e.preventDefault() 
                         setIsSearching(true);
-                        searchMovie()
+                        fetchSearchedMovie()
                     }} 
                 >        
                     <input 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching, isReleaseYear, isRating, isDuration } ) {
+function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching, isReleaseYear, isRating, isDuration, fetchSearchedMovie, searchInput, setSearchInput } ) {
     
-    console.log("Rerendering main with isSearching = " + isSearching);
+    // console.log("Rerendering main with isSearching = " + isSearching);
     
     //Clear movies when applying filter
     useEffect(() => {
@@ -18,10 +18,12 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
             fetchMoviesByReleaseYear();
         } else if(isDuration) {
             fetchMoviesByDuration();
-        } else {
+        } else if(isSearching) {
+            fetchSearchedMovie()
+        }else {
             fetchAllMovies();
-        };
-    }, [itemCount, isRating, isReleaseYear, isDuration]);
+        }
+    }, [itemCount, isRating, isReleaseYear, isDuration, isSearching]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
@@ -30,18 +32,19 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
         if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
-            setItemCount(prev => prev + 12);
-            console.log('aa ', isSearching)
+            if(!isSearching){
+                setItemCount(prev => prev + 12);
+            }
+            console.log('handlescroll is searching' , isSearching)
         };
     }
 
     useEffect(() => {
-        const listener = window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', listener);
-        }
-    }, [isSearching]);
+        
+        window.addEventListener('scroll', handleScroll);
+       
+       
+    }, []);
 
     async function fetchMoviesByReleaseYear() {
         console.log('releaseYear');
