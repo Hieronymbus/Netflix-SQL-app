@@ -112,7 +112,7 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
                 <div name="dropDownContainer" className='flex gap-2.5'>
                     <div name="dropDown" className='relative border border-black rounded p-2.5'>
                         <button onClick={() => handleClick('year')}>Release_year</button>
-                        <FilterDropDown options={[1990, 2000, 2010, 2020]} setDropDownValue={setDropDownValue} isShown={isReleaseYearDropDown}/>
+                        <FilterDropDown options={[1990, 2000, 2010, 2020]} setDropDownValue={setDropDownValue} isYear={true} isShown={isReleaseYearDropDown}/>
                     </div>
                     <div name="dropDown" className='relative border border-black rounded p-2.5'>
                         <button onClick={() => handleClick('rating')}>Minimum_rating</button>

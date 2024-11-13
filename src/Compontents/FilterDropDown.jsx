@@ -1,10 +1,21 @@
-function FilterDropDown({ options, isShown }) {
+function FilterDropDown({ options, isShown, isYear, setDropDownValue }) {
+    
+    function handleDropDownValue(e) {
+        let value;
+        if(isYear) {
+            value = parseInt(e.target.textContent);//return integer for release_year data type
+        } else {
+            value = e.target.textContent;
+        };
+        console.log(value);
+        setDropDownValue(value);
+    };
     return (
         <div className={`absolute ${isShown ? '' : 'hidden'} z-40 top-0 bg-black text-white w-full left-0 h-fit border border-black rounded`}>
             <ul>
                 {options.map((option, index) => {
                     return(
-                        <li key={index} className='hover:cursor-pointer hover:bg-gray-600 py-2.5 mb-5 hover:text-gray-200'>
+                        <li key={index} onClick={(e) => handleDropDownValue(e)} className='hover:cursor-pointer hover:bg-gray-600 py-2.5 mb-5 hover:text-gray-200'>
                             {option}
                         </li>
                     );
