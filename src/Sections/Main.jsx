@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function Main( { itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYear, isRating, isDuration } ) {
+function Main( { itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYearFilter, isRatingFilter, isDurationFilter } ) {
     const [movieCount, setMovieCount] = useState();
     //Clear movies when applying filter
     useEffect(() => {
@@ -15,16 +15,16 @@ function Main( { itemCount, filterValue, setItemCount, movies, setMovies, loadin
 
     useEffect(() => {
         setLoading(true);
-        if(isRating) {
+        if(isRatingFilter) {
             fetchMoviesByRating();
-        } else if(isReleaseYear) {
+        } else if(isReleaseYearFilter) {
             fetchMoviesByReleaseYear();
-        } else if(isDuration) {
+        } else if(isDurationFilter) {
             fetchMoviesByDuration();
         } else {
             fetchAllMovies();
         };
-    }, [itemCount, filterValue, isRating, isReleaseYear, isDuration]);
+    }, [itemCount, filterValue, isRatingFilter, isReleaseYearFilter, isDurationFilter]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
