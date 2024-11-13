@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 function Main( { itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYear, isRating, isDuration } ) {
+    const [movieCount, setMovieCount] = useState();
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
+        setMovieCount(movies.length);
         setItemCount(12);
-    }, [isRating, isReleaseYear, isDuration]);
+    }, [filterValue]);
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);

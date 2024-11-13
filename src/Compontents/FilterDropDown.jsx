@@ -1,9 +1,10 @@
-function FilterDropDown({ options, isShown, isYear, setFilterValue }) {
+function FilterDropDown({ options, isShown, setIsState, setShown, setFilterValue }) {
     
     function handleDropDownValue(e) {
         let value = e.target.textContent;
-        console.log(value);
+        setIsState(true);
         setFilterValue(value);
+        setShown(false);
     };
     return (
         <div className={`absolute ${isShown ? '' : 'hidden'} z-40 top-0 bg-black text-white w-full left-0 h-fit border border-black rounded`}>
