@@ -5,9 +5,13 @@ import FilterDropDown from "../Compontents/FilterDropDown";
 
 function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration, setDuration, isSearching, setIsSearching, setMovies }) {
 
-    const [searchInput, setSearchInput] = useState('')
-    const [debounceValue, setDebounceValue] = useState('')
-    
+    const [searchInput, setSearchInput] = useState('');
+    const [debounceValue, setDebounceValue] = useState('');
+    const [isReleaseYearDropDown, setIsReleaseYearDropDown] = useState(false);
+    const [isRatingDropDown, setIsRatingDropDown] = useState(false);
+    const [isDurationDropDown, setIsDurationDropDown] = useState(false);
+    const [dropDownValue, setDropDownValue] = useState();
+
     const useDebounce = (value, delay = 550) => {
         
         useEffect (() => {
@@ -21,44 +25,14 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
         }, [value])
         
         return debounceValue
-    } 
-    
-    const debounceSearch = useDebounce(searchInput)
-    
-    const searchMovie = async (e) => {
-        
-        try {
-            
-            const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
+    };
+    const debounceSearch = useDebounce(searchInput);
 
-            if(!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            };
-
-            const searchData = await response.json();
-            
-            let searchedForArr = []
-    
-            for(const movie of searchData) {
-                searchedForArr.push(movie.title);
-            };
-            
-            setMovies(searchedForArr);
-            console.log('made it');
-            console.log(isSearching) 
-            
-        } catch (error) {
-            console.error(error)
-        }
-
-    }
     useEffect(() => {
-
         if(isSearching) {
             searchMovie()
         }
-    }, [debounceSearch] )
-
+    }, [debounceSearch] );
 
     useEffect(() => {
         if(isReleaseYear || isDuration) {
@@ -70,36 +44,35 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
         }
     }, [isReleaseYear, isRating, isDuration]);
     
-    const useDebounce = (value, delay = 550) => {
+    const searchMovie = async (e) => {
         
-        const [debounceValue, setDebounceValue] = useState('')
-        
-        useEffect (() => {           
-            const timeout =  setTimeout(() => {               
-                setDebounceValue(value);             
-            }, delay )        
-            return () => clearTimeout(timeout)    
-        }, [value]);
-        return debounceValue;
+        try {        
+            const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+            const searchData = await response.json();    
+            let searchedForArr = []
+            for(const movie of searchData) {
+                searchedForArr.push(movie.title);
+            };
+            
+            setMovies(searchedForArr);           
+        } catch (error) {
+            console.error(error)
+        }
+
     };
 
-    const [searchInput, setSearchInput] = useState('');
-    const debounceSearch = useDebounce(searchInput);
-    
-    const searchMovie = async (e) => {        
-        const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
-        const searchData = await response.json();
-        let searchedForArr = []
-
-        for(const movie of searchData) {
-            searchedForArr.push(movie.title);
+    function handleClick(arg) {
+        if(arg === 'year') {
+            setIsReleaseYearDropDown(true);
+        } else if(arg === 'rating') {
+            setIsRatingDropDown(true);
+        } else {
+            setIsDurationDropDown(true);
         };
-        setMovies(searchedForArr);
-    };
-
-    useEffect(() => {
-        searchMovie();
-    }, [debounceSearch]);
+    }
 
     return (
         <header className='text-center w-5/6'>
@@ -132,14 +105,16 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
                 </form>
                 <div name="dropDownContainer" className='flex gap-2.5'>
                     <div name="dropDown" className='relative border border-black rounded p-2.5'>
-                        <button onClick={() => setReleaseYear(!isReleaseYear)}>Release_year</button>
-                        <FilterDropDown options={[1990, 2000, 2010, 2020]}/>
+                        <button onClick={() => handleClick('year')}>Release_year</button>
+                        <FilterDropDown options={[1990, 2000, 2010, 2020]} setDropDownValue={setDropDownValue} isShown={isReleaseYearDropDown}/>
                     </div>
-                    <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button onClick={() => setRating(!isRating)}>Minimum_rating</button>
+                    <div name="dropDown" className='relative border border-black rounded p-2.5'>
+                        <button onClick={() => handleClick('rating')}>Minimum_rating</button>
+                        <FilterDropDown options={['PG-13', 'R', 'TV-MA', 'PG', 'TV-14']} setDropDownValue={setDropDownValue} isShown={isRatingDropDown}/>
                     </div>
-                    <div name="dropDown" className='border border-black rounded p-2.5'>
-                        <button onClick={() => setDuration(!isDuration)}>Duration</button>
+                    <div name="dropDown" className='relative border border-black rounded p-2.5'>
+                        <button onClick={() => handleClick('duration')}>Duration</button>
+                        <FilterDropDown options={['1 Season', '2 Seasons', '125 min']} setDropDownValue={setDropDownValue} isShown={isDurationDropDown}/>
                     </div>
                 </div>
             </div>

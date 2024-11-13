@@ -1,6 +1,6 @@
-function FilterDropDown({ options }) {
+function FilterDropDown({ options, isShown }) {
     return (
-        <div className='absolute hidden z-40 top-0 bg-black text-white w-full left-0 h-fit border border-black rounded'>
+        <div className={`absolute ${isShown ? '' : 'hidden'} z-40 top-0 bg-black text-white w-full left-0 h-fit border border-black rounded`}>
             <ul>
                 {options.map((option, index) => {
                     return(

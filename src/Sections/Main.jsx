@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching, isReleaseYear, isRating, isDuration } ) {
+function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYear, isRating, isDuration } ) {
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
@@ -32,9 +32,8 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
         if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
             setItemCount(prev => prev + 12);
-            console.log('aa ', isSearching)
         };
-    }
+    };
 
     useEffect(() => {
         const listener = window.addEventListener('scroll', handleScroll);
@@ -43,7 +42,6 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
             window.removeEventListener('scroll', listener);
         }
     }, [isSearching]);
-    };
 
     async function fetchMoviesByReleaseYear() {
         try {
@@ -123,7 +121,7 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
             ]);
 
             setLoading(false);
-        };
+    };
 
     return(
         <main className='w-5/6 relative'>
