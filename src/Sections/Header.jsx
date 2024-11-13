@@ -67,10 +67,16 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
     function handleClick(arg) {
         if(arg === 'year') {
             setIsReleaseYearDropDown(true);
+            setIsRatingDropDown(false);
+            setIsDurationDropDown(false);
         } else if(arg === 'rating') {
             setIsRatingDropDown(true);
+            setIsDurationDropDown(false);
+            setIsReleaseYearDropDown(false);
         } else {
             setIsDurationDropDown(true);
+            setIsReleaseYearDropDown(false);
+            setIsRatingDropDown(false);
         };
     }
 

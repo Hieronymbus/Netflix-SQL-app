@@ -4,7 +4,7 @@ function FilterDropDown({ options, isShown }) {
             <ul>
                 {options.map((option, index) => {
                     return(
-                        <li key={index} className='hover:cursor-pointer py-2.5 mb-5 hover:text-gray-200'>
+                        <li key={index} className='hover:cursor-pointer hover:bg-gray-600 py-2.5 mb-5 hover:text-gray-200'>
                             {option}
                         </li>
                     );
