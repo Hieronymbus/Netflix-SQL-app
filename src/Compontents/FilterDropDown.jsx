@@ -1,12 +1,7 @@
 function FilterDropDown({ options, isShown, isYear, setFilterValue }) {
     
     function handleDropDownValue(e) {
-        let value;
-        if(isYear) {
-            value = parseInt(e.target.textContent);//return integer for release_year data type
-        } else {
-            value = e.target.textContent;
-        };
+        let value = e.target.textContent;
         console.log(value);
         setFilterValue(value);
     };
