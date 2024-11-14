@@ -42,11 +42,7 @@ function Main( { fetchSearchedMovie, searchInput, setSearchInput, itemCount, fil
 
     useEffect(() => {
         const listener = window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', listener);
-        }
-    }, [isSearching]);
+    }, []);
 
     async function fetchMoviesByReleaseYear() {
         try {

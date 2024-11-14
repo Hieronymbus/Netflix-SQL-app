@@ -9,7 +9,6 @@ export default function App() {
   const [itemCount, setItemCount] = useState(12);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [searchItemCount, setSearchItemCount] = useState(12);
   const [isSearching, setIsSearching] = useState(false);
   const [filterValue, setFilterValue] = useState();
@@ -17,14 +16,13 @@ export default function App() {
 
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
 const fetchSearchedMovie = async (e) => {
-  
   try {
       const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}&itemCount=${itemCount}`);
       if(!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
       };
       const searchData = await response.json();
-      let searchedForArr = []
+      let searchedForArr = [];
 
       for(const movie of searchData) {
           searchedForArr.push(movie.title);
@@ -34,8 +32,7 @@ const fetchSearchedMovie = async (e) => {
       console.error(error)
   } finally {
     setLoading(false)
-  }
-
+  };
 }
   return (
     <>
