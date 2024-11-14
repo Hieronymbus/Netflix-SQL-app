@@ -15,12 +15,9 @@ export default function App() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
-const debugSetIsSearching = (newState) => {
-  console.log("setting to " + newState);
-  setIsSearching(newState);
-}
 
 
+ // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
 const fetchSearchedMovie = async (e) => {
         
   try {
@@ -40,17 +37,17 @@ const fetchSearchedMovie = async (e) => {
       };
       
       setMovies( searchedForArr);
-      console.log('made it');
-      console.log(isSearching) 
+
       
   } catch (error) {
       console.error(error)
+  } finally {
+    setLoading(false)
   }
 
 }
 
 
-  console.log("Rerendering App.jsx with isSearching = " + isSearching);
 
   return (
     <>
@@ -64,7 +61,7 @@ const fetchSearchedMovie = async (e) => {
           isRating={isRating}
           setMovies={setMovies}
           isSearching={isSearching}
-          setIsSearching={debugSetIsSearching}
+          setIsSearching={setIsSearching}
           searchItemCount={searchItemCount}
           setSearchItemCount={setSearchItemCount}
           fetchSearchedMovie={fetchSearchedMovie}
@@ -85,7 +82,7 @@ const fetchSearchedMovie = async (e) => {
           loading={loading}
           setLoading={setLoading}
           isSearching={isSearching}
-          setIsSearching={debugSetIsSearching}
+          setIsSearching={setIsSearching}
           searchItemCount={searchItemCount}
           setSearchItemCount={setSearchItemCount}
           fetchSearchedMovie={fetchSearchedMovie}

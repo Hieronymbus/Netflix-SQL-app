@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsSearching, isReleaseYear, isRating, isDuration, fetchSearchedMovie, searchInput, setSearchInput } ) {
     
-    // console.log("Rerendering main with isSearching = " + isSearching);
     
     //Clear movies when applying filter
     useEffect(() => {
@@ -32,18 +31,12 @@ function Main( { itemCount, setItemCount, movies, setMovies, loading, setLoading
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
         if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
-            if(!isSearching){
-                setItemCount(prev => prev + 12);
-            }
-            console.log('handlescroll is searching' , isSearching)
+                setItemCount(prev => prev + 12);  
         };
     }
 
     useEffect(() => {
-        
         window.addEventListener('scroll', handleScroll);
-       
-       
     }, []);
 
     async function fetchMoviesByReleaseYear() {

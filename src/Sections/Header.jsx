@@ -23,8 +23,7 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
         
         return debounceValue
     } 
-    // async function that handles fetch api using searchInput as query and sets movies state to the response
-    
+   
     // calling useDebounce with searchInput as value to set debounceSearch which is passed as a dependency for useEffect to call search movie
     const debounceSearch = useDebounce(searchInput)
     
@@ -55,8 +54,7 @@ function Header({ isReleaseYear, setReleaseYear, isRating, setRating, isDuration
                     className='flex my-5'
                     onSubmit={ (e) => {
                         e.preventDefault() 
-                        setIsSearching(true);
-                        fetchSearchedMovie()
+                        setIsSearching(true);   
                     }} 
                 >        
                     <input 
