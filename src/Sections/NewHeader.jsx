@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import FilterDropDown from "../Compontents/FilterDropDown01";
+import DropDown from "../Compontents/FilterDropDown01";
 
-function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, setReleaseYearFilter, setRatingFilter, setDurationFilter, isSearching, setIsSearching }) {
+function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching }) {
   const [debounceValue, setDebounceValue] = useState("");
   const [isDropDown, setIsDropDown] = useState(false);
 
-  const [durationFilterValue, setDurationFilterValue] = useState();
-  const [ratingFilterValue, setRatingFilterValue] = useState();
-  const [releaseYearFilterValue, setReleaseYearFilterValue] = useState();
+  const [durationValue, setDurationValue] = useState();
+  const [ratingValue, setRatingValue] = useState();
+  const [releaseYearValue, setReleaseYearValue] = useState();
 
   const useDebounce = (value, delay = 550) => {
     useEffect(() => {
@@ -25,37 +25,21 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
   useEffect(() => {
     if (isSearching) {
       fetchSearchedMovie();
-    }
+    };
   }, [debounceSearch]);
-
-  function handleClick(arg) {
-    if (arg === "year") {
-      setYearDropDown(true);
-      setRatingDropDown(false);
-      setDurationDropDown(false);
-    } else if (arg === "rating") {
-      setRatingDropDown(true);
-      setDurationDropDown(false);
-      setYearDropDown(false);
-    } else {
-      setDurationDropDown(true);
-      setYearDropDown(false);
-      setRatingDropDown(false);
-    }
-  };
 
   function closeDropDown(e) {
     e.preventDefault();
     setIsDropDown(false);
   };
 
-  function generateFilterValue() {
+  function generateValue() {
     setFilterValue({
-      durationValue: durationFilterValue || null,
-      releaseYearValue: releaseYearFilterValue || null,
-      ratingValue: ratingFilterValue || null,
+      durationValue: durationValue || null,
+      releaseYearValue: releaseYearValue || null,
+      ratingValue: ratingValue || null,
     });
-  }
+  };
 
   return (
     <header className="text-center w-5/6">
@@ -69,7 +53,7 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
           }}
         >
             <div name="dropDownContainer" className={`${isDropDown ? '' : 'hidden'} absolute z-50 pb-10 px-10 h-fit bg-black flex w-full gap-2.5`}>
-                <FilterDropDown onHandleCloseDropDown={closeDropDown} />
+                <DropDown onHandleCloseDropDown={closeDropDown} generateValue={generateValue} setDurationValue={setDurationValue} setRatingValue={setRatingValue} setReleaseYearValue={setReleaseYearValue} />
             </div>
 
           <input
