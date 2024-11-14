@@ -15,6 +15,7 @@ const client = new Client({
   password: 'mypassword',
   port: 5432,
 });
+
 client.connect()
     .then(() => console.log('Connected to PostgreSQL database'))
     .catch(err => console.error('Connection error ', err.stack));
@@ -36,6 +37,7 @@ app.get('/releaseYear', async(req, res) => {
 
     try {
         const result = await client.query(`SELECT * FROM netflix_shows WHERE release_year=$1 LIMIT $2`, [releaseYear, itemCount]);
+        console.log('release year endpoint');
         res.json(result.rows);
     } catch(err) {
         console.error('server error');
