@@ -34,9 +34,10 @@ app.get('/', async(req, res) => {
 app.get('/releaseYear', async(req, res) => {
     const itemCount = parseInt(req.query.itemCount) || 12;
     const releaseYear = parseInt(req.query.releaseYear) || null;
+    const releaseDecade = releaseYear + 10;
 
     try {
-        const result = await client.query(`SELECT * FROM netflix_shows WHERE release_year=$1 LIMIT $2`, [releaseYear, itemCount]);
+        const result = await client.query(`SELECT * FROM netflix_shows WHERE release_year BETWEEN $1 AND $2 ORDER BY release_year ASC LIMIT $3`, [releaseYear, releaseDecade, itemCount]);
         console.log('release year endpoint');
         res.json(result.rows);
     } catch(err) {

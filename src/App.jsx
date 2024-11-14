@@ -17,26 +17,19 @@ export default function App() {
 
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
 const fetchSearchedMovie = async (e) => {
-        
+  
   try {
-      
       const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}&itemCount=${itemCount}`);
-
       if(!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
       };
-
       const searchData = await response.json();
-      
       let searchedForArr = []
 
       for(const movie of searchData) {
           searchedForArr.push(movie.title);
       };
-      
       setMovies( searchedForArr);
-
-      
   } catch (error) {
       console.error(error)
   } finally {
@@ -79,6 +72,7 @@ const fetchSearchedMovie = async (e) => {
           isSearching={isSearching}
           setIsSearching={setIsSearching}
           searchItemCount={searchItemCount}
+          setItemCount={setItemCount}
           itemCount={itemCount}
           setSearchItemCount={setSearchItemCount}
           fetchSearchedMovie={fetchSearchedMovie}

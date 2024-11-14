@@ -3,9 +3,8 @@ import { useState, useEffect } from "react";
 import FilterDropDown from "../Compontents/FilterDropDown";
 
 
-function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDurationFilter, setReleaseYearFilter, setRatingFilter, setDurationFilter, isSearching, setIsSearching, setMovies }) {
+function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, setReleaseYearFilter, setRatingFilter, setDurationFilter, isSearching, setIsSearching, setMovies }) {
 
-    const [searchInput, setSearchInput] = useState('');
     const [debounceValue, setDebounceValue] = useState('');
     const [yearDropDown, setYearDropDown] = useState(false);
     const [ratingDropDown, setRatingDropDown] = useState(false);
@@ -28,29 +27,9 @@ function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDuratio
 
     useEffect(() => {
         if(isSearching) {
-            searchMovie();
+            fetchSearchedMovie();
         };
     }, [debounceSearch] );
-    
-    const searchMovie = async () => {
-        
-        try {        
-            const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
-            if(!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            };
-            const searchData = await response.json();    
-            let searchedForArr = []
-            for(const movie of searchData) {
-                searchedForArr.push(movie.title);
-            };
-            
-            setMovies(searchedForArr);           
-        } catch (error) {
-            console.error(error)
-        }
-
-    };
 
     function handleClick(arg) {
         if(arg === 'year') {
