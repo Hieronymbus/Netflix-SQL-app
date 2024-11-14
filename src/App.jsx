@@ -39,6 +39,7 @@ const fetchSearchedMovie = async (e) => {
       <div className='w-full p-2.5 mx-auto bg-gray-200 flex flex-col gap-10'>
         <Header 
           setFilterValue={setFilterValue}
+          filterValue={filterValue}
           setDurationFilter={setDurationFilter}
           isDurationFilter={isDurationFilter}
           setReleaseYearFilter={setReleaseYearFilter}

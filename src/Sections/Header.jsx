@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import FilterDropDown from "../Compontents/FilterDropDown";
 
 
-function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, setReleaseYearFilter, setRatingFilter, setDurationFilter, isSearching, setIsSearching, setMovies }) {
+function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, setReleaseYearFilter, setRatingFilter, setDurationFilter, isSearching, setIsSearching }) {
 
     const [debounceValue, setDebounceValue] = useState('');
     const [yearDropDown, setYearDropDown] = useState(false);
@@ -53,9 +53,9 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
 
     function generateFilterValue() {
         setFilterValue({
-            durationValue: durationFilterValue,
-            releaseYearValue: releaseYearFilterValue,
-            ratingValue: ratingFilterValue
+            durationValue: durationFilterValue || null,
+            releaseYearValue: releaseYearFilterValue || null,
+            ratingValue: ratingFilterValue || null
         });
     };
 
@@ -77,7 +77,7 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
                         value={searchInput}
                         onChange={ (e)=> { 
                             setIsSearching(true);
-                            setSearchInput(e.target.value)
+                            setSearchInput(e.target.value);
                         } } 
                     />
                     <button 
@@ -89,15 +89,15 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
                 </form>
                 <div name="dropDownContainer" className='flex gap-2.5'>
                     <div name="dropDown" className='relative border border-black rounded p-2.5'>
-                        <button onClick={() => handleClick('year')}>Release_year</button>
+                        <button onClick={() => handleClick('year')}>{releaseYearFilterValue ? releaseYearFilterValue : 'Release_year'}</button>
                         <FilterDropDown setFilterValue={setReleaseYearFilterValue} options={[1990, 2000, 2010, 2020]} setIsState={() => { setReleaseYearFilter(true); setDurationFilter(false); setRatingFilter(false); }} setShown={setYearDropDown} isShown={yearDropDown}/>
                     </div>
                     <div name="dropDown" className='relative border border-black rounded p-2.5'>
-                        <button onClick={() => handleClick('rating')}>Minimum_rating</button>
+                        <button onClick={() => handleClick('rating')}>{ratingFilterValue ? ratingFilterValue : 'Minimum_rating'}</button>
                         <FilterDropDown setFilterValue={setRatingFilterValue} options={['PG-13', 'R', 'TV-MA', 'PG', 'TV-14']} setIsState={() => { setRatingFilter(true); setReleaseYearFilter(false); setDurationFilter(false); }} setShown={setRatingDropDown} isShown={ratingDropDown}/>
                     </div>
                     <div name="dropDown" className='relative border border-black rounded p-2.5'>
-                        <button onClick={() => handleClick('duration')}>Duration</button>
+                        <button onClick={() => handleClick('duration')}>{durationFilterValue ? durationFilterValue : 'Duration'}</button>
                         <FilterDropDown setFilterValue={setDurationFilterValue} options={['1 Season', '2 Seasons', '125 min']} setIsState={() => { setDurationFilter(true); setReleaseYearFilter(false); setRatingFilter(false); }} setShown={setDurationDropDown} isShown={durationDropDown}/>
                     </div>
                     <button onClick={() => generateFilterValue()}>Duration</button>
