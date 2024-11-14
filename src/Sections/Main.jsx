@@ -120,7 +120,7 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
     async function fetchMoviesByFilter() {
         console.log(filterValue);
         try {
-            const response = await fetch(`http://localhost:3000/releaseYear/?itemCount=${itemCount}&releaseYear=${filterValue}`);
+            const response = await fetch(`http://localhost:3000/filter/?itemCount=${itemCount}&releaseYear=${filterValue.releaseYearValue}&duration=${filterValue.durationValue}&rating=${filterValue.ratingValue}`);
             if(!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };
