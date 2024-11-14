@@ -74,10 +74,10 @@ app.get('/rating', async(req, res) => {
 
 app.get('/search', async(req, res) => {
 
-    const { searchFor } = req.query
+    const { searchFor,itemCount } = req.query
 
     try {
-        const result = await client.query(`SELECT * FROM netflix_shows WHERE title ILIKE '%${searchFor}%'  LIMIT 12 `);
+        const result = await client.query(`SELECT * FROM netflix_shows WHERE title ILIKE '%${searchFor}%'  LIMIT $1 `,[itemCount]);
         res.json(result.rows);
     } catch (err) {
         console.error(err);

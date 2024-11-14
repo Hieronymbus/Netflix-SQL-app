@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function Main( { itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYearFilter, isRatingFilter, isDurationFilter } ) {
+function Main( { fetchSearchedMovie, searchInput, setSearchInput, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYearFilter, isRatingFilter, isDurationFilter } ) {
     const [movieCount, setMovieCount] = useState();
     //Clear movies when applying filter
     useEffect(() => {
@@ -21,10 +21,13 @@ function Main( { itemCount, filterValue, setItemCount, movies, setMovies, loadin
             fetchMoviesByReleaseYear();
         } else if(isDurationFilter) {
             fetchMoviesByDuration();
-        } else {
+        } else if(isSearching) {
+            fetchSearchedMovie()
+        }else {
             fetchAllMovies();
         };
-    }, [itemCount, filterValue, isRatingFilter, isReleaseYearFilter, isDurationFilter]);
+    }, [isSearching, itemCount, filterValue, isRatingFilter, isReleaseYearFilter, isDurationFilter]);
+
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
@@ -33,7 +36,7 @@ function Main( { itemCount, filterValue, setItemCount, movies, setMovies, loadin
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
         if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
-            setItemCount(prev => prev + 12);
+                setItemCount(prev => prev + 12);  
         };
     };
 
@@ -107,8 +110,6 @@ function Main( { itemCount, filterValue, setItemCount, movies, setMovies, loadin
 
     async function fetchAllMovies() {
         const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
-        console.log(isSearching)
-
             const movieData = await response.json(); 
             let movieArr = [];
 
@@ -122,7 +123,6 @@ function Main( { itemCount, filterValue, setItemCount, movies, setMovies, loadin
                 ...prev,
                 ...newMovies
             ]);
-
             setLoading(false);
     };
 

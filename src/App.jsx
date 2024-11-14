@@ -9,16 +9,41 @@ export default function App() {
   const [itemCount, setItemCount] = useState(12);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [searchItemCount, setSearchItemCount] = useState(12);
   const [isSearching, setIsSearching] = useState(false);
   const [filterValue, setFilterValue] = useState();
+  const [searchInput, setSearchInput] = useState('');
 
-const debugSetIsSearching = (newState) => {
-  console.log("setting to " + newState);
-  setIsSearching(newState);
+ // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
+const fetchSearchedMovie = async (e) => {
+        
+  try {
+      
+      const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}&itemCount=${itemCount}`);
+
+      if(!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      };
+
+      const searchData = await response.json();
+      
+      let searchedForArr = []
+
+      for(const movie of searchData) {
+          searchedForArr.push(movie.title);
+      };
+      
+      setMovies( searchedForArr);
+
+      
+  } catch (error) {
+      console.error(error)
+  } finally {
+    setLoading(false)
+  }
+
 }
-
-  console.log("Rerendering App.jsx with isRatingFilter = " + isSearching);
-
   return (
     <>
       <div className='w-full p-2.5 mx-auto bg-gray-200 flex flex-col gap-10'>
@@ -34,9 +59,11 @@ const debugSetIsSearching = (newState) => {
           movies={movies}
           setIsSearching={setIsSearching}
           isSearching={isSearching}
-          itemCount={itemCount}
-          setItemCount={setItemCount}
+          fetchSearchedMovie={fetchSearchedMovie}
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
         />
+   
         <Main 
           filterValue={filterValue}
           setDurationFilter={setDurationFilter}
@@ -50,9 +77,13 @@ const debugSetIsSearching = (newState) => {
           loading={loading}
           setLoading={setLoading}
           isSearching={isSearching}
-          setIsSearching={debugSetIsSearching}
+          setIsSearching={setIsSearching}
+          searchItemCount={searchItemCount}
           itemCount={itemCount}
-          setItemCount={setItemCount}
+          setSearchItemCount={setSearchItemCount}
+          fetchSearchedMovie={fetchSearchedMovie}
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
         />
       </div>
     </>

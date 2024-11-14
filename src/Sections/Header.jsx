@@ -12,12 +12,11 @@ function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDuratio
     const [durationDropDown, setDurationDropDown] = useState(false);
 
     const useDebounce = (value, delay = 550) => {
-        
         useEffect (() => {
             
             const timeout =  setTimeout(() => {
                 setDebounceValue(value)
-            }, delay );
+            }, delay )
             
             return () => clearTimeout(timeout)
             
@@ -68,7 +67,6 @@ function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDuratio
             setRatingDropDown(false);
         };
     }
-
     return (
         <header className='text-center w-5/6'>
             <div>
@@ -77,8 +75,7 @@ function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDuratio
                     className='flex my-5'
                     onSubmit={ (e) => {
                         e.preventDefault() 
-                        setIsSearching(true);
-                        searchMovie()
+                        setIsSearching(true);   
                     }} 
                 >        
                     <input 
