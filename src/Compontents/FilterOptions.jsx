@@ -1,6 +1,8 @@
-
+import { useState } from 'react';
 
 function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, setDurationValue, setReleaseYearValue }) {
+    const [selectedOptions, setSelectedOptions] = useState({});
+
     const yearValues = [1990, 2000, 2010, 2020];
     const durationValues = ['PG-13', 'R', 'TV-MA', 'PG', 'TV-14'];
     const ratingValues = ['1 Season', '2 Seasons', '125 min'];
@@ -19,7 +21,7 @@ function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, s
     function mapValues(arr, filterType) { 
         const mapArr = arr.map((item, index) => {
             return(
-                <p key={index} onClick={() => setFilterValue(filterType, item)} className='text-white hover:cursor-pointer bg-gray-500 my-5'>
+                <p key={index} onClick={() => setFilterValue(filterType, item)} className='text-white hover:cursor-pointer active:bg-green-500 bg-gray-500 my-5'>
                     {item}
                 </p>
             )

@@ -1,111 +1,83 @@
-
 import { useState, useEffect } from "react";
-import FilterDropDown from "../Compontents/FilterDropDown";
+import DropDown from "../Compontents/FilterDropDown01";
 
+function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching }) {
+  const [debounceValue, setDebounceValue] = useState("");
+  const [isDropDown, setIsDropDown] = useState(false);
 
-function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, setReleaseYearFilter, setRatingFilter, setDurationFilter, isSearching, setIsSearching }) {
+  const [durationValue, setDurationValue] = useState();
+  const [ratingValue, setRatingValue] = useState();
+  const [releaseYearValue, setReleaseYearValue] = useState();
 
-    const [debounceValue, setDebounceValue] = useState('');
-    const [yearDropDown, setYearDropDown] = useState(false);
-    const [ratingDropDown, setRatingDropDown] = useState(false);
-    const [durationDropDown, setDurationDropDown] = useState(false);
-
-    const [durationFilterValue, setDurationFilterValue] = useState();
-    const [ratingFilterValue, setRatingFilterValue] = useState();
-    const [releaseYearFilterValue, setReleaseYearFilterValue] = useState();
-
-    const useDebounce = (value, delay = 550) => {
-        useEffect (() => {
-            
-            const timeout =  setTimeout(() => {
-                setDebounceValue(value)
-            }, delay )
-            
-            return () => clearTimeout(timeout)
-            
-        }, [value])
-        
-        return debounceValue
-    };
-    const debounceSearch = useDebounce(searchInput);
-
+  const useDebounce = (value, delay = 550) => {
     useEffect(() => {
-        if(isSearching) {
-            fetchSearchedMovie();
-        };
-    }, [debounceSearch] );
+      const timeout = setTimeout(() => {
+        setDebounceValue(value);
+      }, delay);
 
-    function handleClick(arg) {
-        if(arg === 'year') {
-            setYearDropDown(true);
-            setRatingDropDown(false);
-            setDurationDropDown(false);
-        } else if(arg === 'rating') {
-            setRatingDropDown(true);
-            setDurationDropDown(false);
-            setYearDropDown(false);
-        } else {
-            setDurationDropDown(true);
-            setYearDropDown(false);
-            setRatingDropDown(false);
-        };
+      return () => clearTimeout(timeout);
+    }, [value]);
+
+    return debounceValue;
+  };
+  const debounceSearch = useDebounce(searchInput);
+
+  useEffect(() => {
+    if (isSearching) {
+      fetchSearchedMovie();
     };
+  }, [debounceSearch]);
 
-    function generateFilterValue() {
-        setFilterValue({
-            durationValue: durationFilterValue || null,
-            releaseYearValue: releaseYearFilterValue || null,
-            ratingValue: ratingFilterValue || null
-        });
-    };
+  function closeDropDown(e) {
+    e.preventDefault();
+    setIsDropDown(false);
+  };
 
-    return (
-        <header className='text-center w-5/6'>
-            <div>
-                <h1 className='mt-5'>NETFLIX</h1>
-                <form 
-                    className='flex my-5'
-                    onSubmit={ (e) => {
-                        e.preventDefault() 
-                        setIsSearching(true);   
-                    }} 
-                >        
-                    <input 
-                        type="text" 
-                        name="searchInput" 
-                        className='p-2.5 mr-2.5 w-full border border-black rounded' 
-                        value={searchInput}
-                        onChange={ (e)=> { 
-                            setIsSearching(true);
-                            setSearchInput(e.target.value);
-                        } } 
-                    />
-                    <button 
-                        type="submit" 
-                        className='w-1/5 border border-black rounded' 
-                    >
-                        Search
-                    </button>
-                </form>
-                <div name="dropDownContainer" className='flex gap-2.5'>
-                    <div name="dropDown" className='relative border border-black rounded p-2.5'>
-                        <button onClick={() => handleClick('year')}>{releaseYearFilterValue ? releaseYearFilterValue : 'Release_year'}</button>
-                        <FilterDropDown setFilterValue={setReleaseYearFilterValue} options={[1990, 2000, 2010, 2020]} setIsState={() => { setReleaseYearFilter(true); setDurationFilter(false); setRatingFilter(false); }} setShown={setYearDropDown} isShown={yearDropDown}/>
-                    </div>
-                    <div name="dropDown" className='relative border border-black rounded p-2.5'>
-                        <button onClick={() => handleClick('rating')}>{ratingFilterValue ? ratingFilterValue : 'Minimum_rating'}</button>
-                        <FilterDropDown setFilterValue={setRatingFilterValue} options={['PG-13', 'R', 'TV-MA', 'PG', 'TV-14']} setIsState={() => { setRatingFilter(true); setReleaseYearFilter(false); setDurationFilter(false); }} setShown={setRatingDropDown} isShown={ratingDropDown}/>
-                    </div>
-                    <div name="dropDown" className='relative border border-black rounded p-2.5'>
-                        <button onClick={() => handleClick('duration')}>{durationFilterValue ? durationFilterValue : 'Duration'}</button>
-                        <FilterDropDown setFilterValue={setDurationFilterValue} options={['1 Season', '2 Seasons', '125 min']} setIsState={() => { setDurationFilter(true); setReleaseYearFilter(false); setRatingFilter(false); }} setShown={setDurationDropDown} isShown={durationDropDown}/>
-                    </div>
-                    <button onClick={() => generateFilterValue()}>Duration</button>
-                </div>
+  function generateValue() {
+    setFilterValue({
+      durationValue: durationValue || null,
+      releaseYearValue: releaseYearValue || null,
+      ratingValue: ratingValue || null,
+    });
+  };
+
+  return (
+    <header className="text-center w-5/6">
+      <div>
+        <h1 className="mt-5">NETFLIX</h1>
+        <form
+          className="flex my-5 relative"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setIsSearching(true);
+          }}
+        >
+            <div name="dropDownContainer" className={`${isDropDown ? '' : 'hidden'} absolute top-12 z-50 pb-10 px-10 h-fit bg-black flex w-full gap-2.5`}>
+                <DropDown onHandleCloseDropDown={closeDropDown} generateValue={generateValue} setDurationValue={setDurationValue} setRatingValue={setRatingValue} setReleaseYearValue={setReleaseYearValue} />
             </div>
 
-        </header>
-    );
+          <input
+            type="text"
+            name="searchInput"
+            className="p-2.5 mr-2.5 w-full border border-black rounded"
+            value={searchInput}
+            onChange={(e) => {
+              setIsSearching(true);
+              setSearchInput(e.target.value);
+            }}
+          />
+          <button type="submit" onClick={() => setIsDropDown(true)} className="flex justify-center items-center size-12 aspect-square border border-black rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+            </svg>
+          </button>
+          <button type="submit" className="w-1/5 border border-black rounded">
+            Search
+          </button>
+        </form>
+      </div>
+    </header>
+  );
 }
 
 export default Header;

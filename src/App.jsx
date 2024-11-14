@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Header from './Sections/NewHeader.jsx';
+import Header from './Sections/Header.jsx';
 import Main from './Sections/Main.jsx';
 
 export default function App() {

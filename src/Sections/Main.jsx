@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYearFilter, isRatingFilter, isDurationFilter } ) {
+function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching } ) {
     const [movieCount, setMovieCount] = useState();
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
-        setMovieCount(movies.length);
+        setMovieCount(movies.length); // Re render the page to load filtered movies
         setItemCount(12);
     }, [filterValue]);
 
@@ -15,7 +15,7 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
 
     useEffect(() => {
         setLoading(true);
-        if(isRatingFilter || isReleaseYearFilter || isDurationFilter) {
+        if(filterValue) {
             fetchMoviesByFilter();
         } else if(isSearching) {
             fetchSearchedMovie()
