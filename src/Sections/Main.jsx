@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching } ) {
+function Main( { fetchSearchedMovie, itemCount, setFilterValue, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching } ) {
     const [movieCount, setMovieCount] = useState();
     //Clear movies when applying filter
     useEffect(() => {

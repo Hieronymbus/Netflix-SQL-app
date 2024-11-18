@@ -27,7 +27,7 @@ const fetchSearchedMovie = async () => {
       for(const movie of searchData) {
           searchedForArr.push(movie.title);
       };
-      setMovies( searchedForArr);
+      setMovies(searchedForArr);
   } catch (error) {
       console.error(error)
   } finally {
@@ -56,6 +56,7 @@ const fetchSearchedMovie = async () => {
         />
    
         <Main 
+          setFilterValue={setFilterValue}
           filterValue={filterValue}
           setDurationFilter={setDurationFilter}
           isDurationFilter={isDurationFilter}
