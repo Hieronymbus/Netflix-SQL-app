@@ -147,13 +147,13 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
             </h1>
             <ul className='grid grid-cols-4 gap-2.5'>
                 {movies.map((movie, index) => {
-                    if(movie.length >= 40) {
-                        let truncatedMovieTitle = movie.slice(0, 40) + "...";
-                        movie = truncatedMovieTitle;
-                    };
+                    // if(movie.length >= 40) {
+                    //     let truncatedMovieTitle = movie.slice(0, 40) + "...";
+                    //     movie = truncatedMovieTitle;
+                    // };
 
                     return (        
-                        <li key={index} className='p-5 w-full h-64 border border-black rounded flex justify-center items-center text-center'>
+                        <li key={index} className='p-5 w-full h-64 border border-black rounded flex flex-col justify-center items-center text-center'>
                             <div>
                                 <h1 className='text-lg'>{movie}</h1>
                             </div>

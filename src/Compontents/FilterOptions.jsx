@@ -1,7 +1,5 @@
-import { useState } from 'react';
 
 function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, setDurationValue, setReleaseYearValue }) {
-    const [selectedOptions, setSelectedOptions] = useState({});
 
     const yearValues = [1990, 2000, 2010, 2020];
     const  ratingValues = ['PG-13', 'R', 'TV-MA', 'PG', 'TV-14'];
@@ -13,7 +11,6 @@ function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, s
             setReleaseYearValue(item);
         } else if(filterType === 'duration') {
             setDurationValue(item);
-            console.log(item);
         } else if(filterType === 'rating') {
             setRatingValue(item);
         };

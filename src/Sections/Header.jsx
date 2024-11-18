@@ -39,7 +39,6 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
       releaseYearValue: releaseYearValue || null,
       ratingValue: ratingValue || null,
     });
-
     setIsDropDown(false);
   };
 

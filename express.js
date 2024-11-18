@@ -42,9 +42,10 @@ app.get("/filter", async (req, res) => {
 
   try {
     const result = await client.query(`SELECT * FROM netflix_shows 
-                                      WHERE release_year BETWEEN $1 AND $2 OR release_year IS NULL
-                                      AND duration=$3 OR duration IS NULL
-                                      AND rating=$4 OR rating IS NULL
+                                      WHERE 
+                                      (release_year BETWEEN $1 AND $2 OR release_year IS NULL)
+                                      AND (duration=$3 OR duration IS NULL)
+                                      AND (rating=$4 OR rating IS NULL)
                                       ORDER BY release_year ASC LIMIT $5`, [releaseYear, releaseDecade, duration, rating, itemCount]);
     console.log("Filter year endpoint");
     res.json(result.rows);
