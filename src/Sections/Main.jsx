@@ -126,7 +126,10 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
             };
             const movieData = await response.json();
             const newMovies = movieData.slice(-12).map(movie => {
-                return movie.title + ' ' + movie.release_year;
+                const releaseYear = movie.release_year || null;
+                const rating = movie.rating || null;
+                const duration = movie.duration || null;
+                return `${movie.title} ${releaseYear} ${rating} ${duration}`;
             });
 
             setMovies(prev => [...prev, ...newMovies]);
@@ -135,7 +138,7 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
         } finally {
             setLoading(false);
         };
-    }
+    };
 
     return(
         <main className='w-5/6 relative'>

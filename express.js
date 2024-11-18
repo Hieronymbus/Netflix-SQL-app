@@ -46,37 +46,10 @@ app.get("/filter", async (req, res) => {
                                       AND duration=$3 OR duration IS NULL
                                       AND rating=$4 OR rating IS NULL
                                       ORDER BY release_year ASC LIMIT $5`, [releaseYear, releaseDecade, duration, rating, itemCount]);
-    console.log("release year endpoint");
+    console.log("Filter year endpoint");
     res.json(result.rows);
   } catch (err) {
     console.error("server error");
-    res.status(500).send("server error");
-  }
-});
-
-app.get("/duration", async (req, res) => {
-  const itemCount = parseInt(req.query.itemCount) || 12;
-  const duration = req.query.duration || null;
-
-  try {
-    const result = await client.query(`SELECT * FROM netflix_shows WHERE duration=$1 LIMIT $2`, [duration, itemCount]);
-    res.json(result.rows);
-  } catch (err) {
-    console.error("server error");
-    res.status(500).send("server error");
-  }
-});
-
-app.get("/rating", async (req, res) => {
-  const itemCount = parseInt(req.query.itemCount) || 12;
-  const rating = req.query.rating || null;
-
-  try {
-    const result = await client.query(`SELECT * FROM netflix_shows WHERE rating=$1 LIMIT $2`, [rating, itemCount]);
-    console.log("made it to rating endpoint");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
     res.status(500).send("server error");
   }
 });

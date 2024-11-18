@@ -15,7 +15,7 @@ export default function App() {
   const [searchInput, setSearchInput] = useState('');
 
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
-const fetchSearchedMovie = async (e) => {
+const fetchSearchedMovie = async () => {
   try {
       const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}&itemCount=${itemCount}`);
       if(!response.ok) {

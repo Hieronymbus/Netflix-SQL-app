@@ -4,8 +4,8 @@ function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, s
     const [selectedOptions, setSelectedOptions] = useState({});
 
     const yearValues = [1990, 2000, 2010, 2020];
-    const durationValues = ['PG-13', 'R', 'TV-MA', 'PG', 'TV-14'];
-    const ratingValues = ['1 Season', '2 Seasons', '125 min'];
+    const  ratingValues = ['PG-13', 'R', 'TV-MA', 'PG', 'TV-14'];
+    const durationValues = ['1 Season', '2 Seasons', '125 min'];
 
     function setFilterValue(filterType, item) {
         console.log(item + ' ' + filterType);
@@ -13,6 +13,7 @@ function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, s
             setReleaseYearValue(item);
         } else if(filterType === 'duration') {
             setDurationValue(item);
+            console.log(item);
         } else if(filterType === 'rating') {
             setRatingValue(item);
         };

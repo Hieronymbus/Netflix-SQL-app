@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import DropDown from "../Compontents/FilterDropDown01";
+import FilterOptions from "../Compontents/FilterOptions";
 
 function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching }) {
   const [debounceValue, setDebounceValue] = useState("");
@@ -39,6 +39,8 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
       releaseYearValue: releaseYearValue || null,
       ratingValue: ratingValue || null,
     });
+
+    setIsDropDown(false);
   };
 
   return (
@@ -53,7 +55,7 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
           }}
         >
             <div name="dropDownContainer" className={`${isDropDown ? '' : 'hidden'} absolute top-12 z-50 pb-10 px-10 h-fit bg-black flex w-full gap-2.5`}>
-                <DropDown onHandleCloseDropDown={closeDropDown} generateValue={generateValue} setDurationValue={setDurationValue} setRatingValue={setRatingValue} setReleaseYearValue={setReleaseYearValue} />
+                <FilterOptions onHandleCloseDropDown={closeDropDown} generateValue={generateValue} setDurationValue={setDurationValue} setRatingValue={setRatingValue} setReleaseYearValue={setReleaseYearValue} />
             </div>
 
           <input
