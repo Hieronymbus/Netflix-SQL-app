@@ -29,9 +29,18 @@ function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, s
 
     return(
         <div className=''>
-            {/* <h1 className='text-white'>Hello world</h1> */}
-            <button className='absolute top-0 right-0 text-red-200' onClick={onHandleCloseDropDown}>CLOSE</button>
-            <button className='absolute bottom-0 right-0 text-green-200' onClick={generateValue}>SUBMIT</button>
+            <div className='flex absolute gap-2.5 pr-2.5 pt-2.5 top-0 right-0'>
+                <button className='bg-slate-950 rounded p-1 text-2xl text-green-500 border border-black' onClick={generateValue}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                </button>
+                <button className='bg-slate-950 rounded p-1 text-2xl text-white border border-black' onClick={onHandleCloseDropDown}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
             <div className='text-white flex gap-10'>
                 <div>
                     <p className="underline">Year</p>
