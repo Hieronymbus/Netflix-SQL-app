@@ -83,10 +83,7 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
             };
             const movieData = await response.json();
             const newMovies = movieData.slice(-12).map(movie => {
-                const releaseYear = movie.release_year || null;
-                const rating = movie.rating || null;
-                const duration = movie.duration || null;
-                return `${movie.title} ${releaseYear} ${rating} ${duration}`;
+                return `${movie.title}`;
             });
 
             setMovies(prev => [...prev, ...newMovies]);

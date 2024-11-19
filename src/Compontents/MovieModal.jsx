@@ -21,21 +21,6 @@ const MovieModal = ( { setIsModalFor, isModalFor } ) => {
 
    async function fetchOneMoviesDetails(title) {
         
-      //   const splitTitle = title.split("")
-      //   if(splitTitle.includes("&")){
-      //    console.log("&&")
-      //    const mappedSplitTitle = splitTitle.map((character) => {
-      //       if(character === "&") {
-      //          return "%26"
-      //       } else {
-      //          return character
-      //       }
-      //    })
-      //    title = mappedSplitTitle.join("")
-      //    console.log(title)
-         
-      //   } 
-        
         const response = await fetch(`http://localhost:3000/oneMovieDetails/?movieTitle=${encodeURIComponent(title)}`)
         const data = await response.json()
 
