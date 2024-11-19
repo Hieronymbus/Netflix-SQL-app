@@ -67,7 +67,10 @@ const MovieModal = ( { setIsModalFor, isModalFor } ) => {
    return (
       
       <div 
-         className="w-4/5 h-3/4 z-20 bg-slate-600 text-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border border-black flex flex-col gap-2 overflow-scroll no-scrollbar "
+         className="
+                     w-4/5 h-3/4 z-20 bg-slate-600 text-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                     rounded border border-black shadow-2xl  flex flex-col gap-2 overflow-scroll no-scrollbar 
+                  "
       >  
       <div className="flex justify-between">
          <div className="pl-5 pt-2 ">
@@ -83,7 +86,9 @@ const MovieModal = ( { setIsModalFor, isModalFor } ) => {
                className="bg-slate-950 rounded p-1 text-2xl border border-black "
                onClick={ () => setIsModalFor("") }
             > 
-               X
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+               </svg>
             </button>
          </div>
       </div>
