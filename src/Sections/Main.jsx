@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import MovieModal from './movieModal';
 
-function Main( { fetchSearchedMovie, searchInput, setSearchInput, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYearFilter, isRatingFilter, isDurationFilter } ) {
+function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYearFilter, isRatingFilter, isDurationFilter } ) {
     const [movieCount, setMovieCount] = useState();
+    const [isModalFor, setIsModalFor ] = useState("");
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
@@ -23,10 +25,10 @@ function Main( { fetchSearchedMovie, searchInput, setSearchInput, itemCount, fil
             fetchMoviesByDuration();
         } else if(isSearching) {
             fetchSearchedMovie()
-        }else {
+        } else {
             fetchAllMovies();
         };
-    }, [isSearching, itemCount, filterValue, isRatingFilter, isReleaseYearFilter, isDurationFilter]);
+    }, [ itemCount, filterValue, isRatingFilter, isReleaseYearFilter, isDurationFilter]);
 
 
     function handleScroll() {
@@ -42,11 +44,7 @@ function Main( { fetchSearchedMovie, searchInput, setSearchInput, itemCount, fil
 
     useEffect(() => {
         const listener = window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', listener);
-        }
-    }, [isSearching]);
+    }, []);
 
     async function fetchMoviesByReleaseYear() {
         try {
@@ -126,22 +124,36 @@ function Main( { fetchSearchedMovie, searchInput, setSearchInput, itemCount, fil
             setLoading(false);
     };
 
+
+    
+
     return(
         <main className='w-5/6 relative'>
             <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>
                 {loading && 'loading...'}
             </h1>
+            {
+                isModalFor 
+                && 
+                <MovieModal 
+                    setIsModalFor={setIsModalFor}
+                    isModalFor={isModalFor}
+                />
+            }  
             <ul className='grid grid-cols-4 gap-2.5'>
                 {movies.map((movie, index) => {
-                    if(movie.length >= 40) {
-                        let truncatedMovieTitle = movie.slice(0, 40) + "...";
-                        movie = truncatedMovieTitle;
-                    };
 
                     return (        
-                        <li key={index} className='p-5 w-full h-64 border border-black rounded flex justify-center items-center text-center'>
-                            <div>
-                                <h1 className='text-lg'>{movie}</h1>
+                        <li 
+                            key={index} 
+                            className='p-5 w-full h-64 border border-black rounded flex justify-center items-center text-center cursor-pointer'
+                            onClick={()=>{
+                                setIsModalFor(movie)
+                                console.log(movie)
+                            }}
+                        >
+                            <div>  
+                                <h1 className='text-lg'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
                             </div>
                         </li>
                     )

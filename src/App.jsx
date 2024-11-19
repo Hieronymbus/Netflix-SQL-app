@@ -10,38 +10,37 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [searchItemCount, setSearchItemCount] = useState(12);
+  
   const [isSearching, setIsSearching] = useState(false);
   const [filterValue, setFilterValue] = useState();
   const [searchInput, setSearchInput] = useState('');
 
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
-const fetchSearchedMovie = async (e) => {
+  const fetchSearchedMovie = async (e) => {
+          
+    try {
         
-  try {
-      
-      const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}&itemCount=${itemCount}`);
+        const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}&itemCount=${itemCount}`);
 
-      if(!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-      };
+        if(!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        };
 
-      const searchData = await response.json();
-      
-      let searchedForArr = []
+        const searchData = await response.json();
+        
+        let searchedForArr = []
 
-      for(const movie of searchData) {
-          searchedForArr.push(movie.title);
-      };
-      
-      setMovies( searchedForArr);
-
-      
-  } catch (error) {
-      console.error(error)
-  } finally {
-    setLoading(false)
-  }
+        for(const movie of searchData) {
+            searchedForArr.push(movie.title);
+        };
+        
+        setMovies( searchedForArr);
+        console.log("yo")
+    } catch (error) {
+        console.error(error)
+    } finally {
+        setLoading(false)
+    }
 
 }
   return (
@@ -49,14 +48,19 @@ const fetchSearchedMovie = async (e) => {
       <div className='w-full p-2.5 mx-auto bg-gray-200 flex flex-col gap-10'>
         <Header 
           setFilterValue={setFilterValue}
+          setItemCount={setItemCount}
           setDurationFilter={setDurationFilter}
           isDurationFilter={isDurationFilter}
+
           setReleaseYearFilter={setReleaseYearFilter}
           isReleaseYearFilter={isReleaseYearFilter}
+          
           setRatingFilter={setRatingFilter}
           isRatingFilter={isRatingFilter}
+
           setMovies={setMovies}
           movies={movies}
+
           setIsSearching={setIsSearching}
           isSearching={isSearching}
           fetchSearchedMovie={fetchSearchedMovie}
@@ -76,13 +80,16 @@ const fetchSearchedMovie = async (e) => {
           setMovies={setMovies}
           loading={loading}
           setLoading={setLoading}
+
           isSearching={isSearching}
           setIsSearching={setIsSearching}
-          searchItemCount={searchItemCount}
-          itemCount={itemCount}
-          setSearchItemCount={setSearchItemCount}
-          fetchSearchedMovie={fetchSearchedMovie}
           searchInput={searchInput}
+
+          itemCount={itemCount}
+          setItemCount={setItemCount}
+          
+          fetchSearchedMovie={fetchSearchedMovie}
+          
           setSearchInput={setSearchInput}
         />
       </div>

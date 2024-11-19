@@ -3,15 +3,15 @@ import { useState, useEffect } from "react";
 import FilterDropDown from "../Compontents/FilterDropDown";
 
 
-function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDurationFilter, setReleaseYearFilter, setRatingFilter, setDurationFilter, isSearching, setIsSearching, setMovies }) {
-
-    const [searchInput, setSearchInput] = useState('');
-    const [debounceValue, setDebounceValue] = useState('');
+function Header({ setFilterValue, setReleaseYearFilter, setRatingFilter, setDurationFilter, searchInput,  setIsSearching, isSearching, setSearchInput, fetchSearchedMovie, setItemCount }) {
+ 
+    
     const [yearDropDown, setYearDropDown] = useState(false);
     const [ratingDropDown, setRatingDropDown] = useState(false);
     const [durationDropDown, setDurationDropDown] = useState(false);
 
-    const useDebounce = (value, delay = 550) => {
+    const useDebounce = (value, delay = 500) => {
+        const [debounceValue, setDebounceValue] = useState('');
         useEffect (() => {
             
             const timeout =  setTimeout(() => {
@@ -25,33 +25,13 @@ function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDuratio
         return debounceValue
     };
     const debounceSearch = useDebounce(searchInput);
-
     useEffect(() => {
-        if(isSearching) {
-            searchMovie();
-        };
+        if(isSearching) {  
+            fetchSearchedMovie()
+            setItemCount(12)
+        }
     }, [debounceSearch] );
     
-    const searchMovie = async () => {
-        
-        try {        
-            const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}`);
-            if(!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            };
-            const searchData = await response.json();    
-            let searchedForArr = []
-            for(const movie of searchData) {
-                searchedForArr.push(movie.title);
-            };
-            
-            setMovies(searchedForArr);           
-        } catch (error) {
-            console.error(error)
-        }
-
-    };
-
     function handleClick(arg) {
         if(arg === 'year') {
             setYearDropDown(true);
@@ -67,6 +47,7 @@ function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDuratio
             setRatingDropDown(false);
         };
     }
+
     return (
         <header className='text-center w-5/6'>
             <div>
@@ -75,7 +56,9 @@ function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDuratio
                     className='flex my-5'
                     onSubmit={ (e) => {
                         e.preventDefault() 
-                        setIsSearching(true);   
+                        setIsSearching(true); 
+                        fetchSearchedMovie();
+                        setItemCount(12);
                     }} 
                 >        
                     <input 
@@ -84,8 +67,8 @@ function Header({ setFilterValue, isRatingFilter, isReleaseYearFilter, isDuratio
                         className='p-2.5 mr-2.5 w-full border border-black rounded' 
                         value={searchInput}
                         onChange={ (e)=> { 
-                            setIsSearching(true);
                             setSearchInput(e.target.value)
+                            setIsSearching(true);
                         } } 
                     />
                     <button 

@@ -74,15 +74,29 @@ app.get('/rating', async(req, res) => {
 
 app.get('/search', async(req, res) => {
 
-    const { searchFor,itemCount } = req.query
+    const { searchFor, itemCount } = req.query
 
     try {
-        const result = await client.query(`SELECT * FROM netflix_shows WHERE title ILIKE '%${searchFor}%'  LIMIT $1 `,[itemCount]);
+        const result = await client.query(`SELECT * FROM netflix_shows WHERE title ILIKE '%${searchFor}%'  LIMIT $1 `, [itemCount]);
         res.json(result.rows);
     } catch (err) {
         console.error(err);
         res.status(500).send('server error');
     }
+})
+
+app.get('/oneMovieDetails', async(req, res) => {
+
+    const{movieTitle} = req.query
+
+    try {
+        const result = await client.query(`SELECT * FROM netflix_shows WHERE title = $1 LIMIT 1` , [movieTitle])
+        res.json(result.rows)
+    } catch (error) {
+        console.error(err);
+        res.status(500).send('server error');
+    }
+
 })
 
 app.listen(port, () => console.log(`Listening on localhost:${port}`));
