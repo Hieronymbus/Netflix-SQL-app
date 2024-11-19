@@ -59,15 +59,15 @@ export default function App() {
 }
   return (
     <>
-      <div className='w-full  mx-auto bg-gray-200 flex flex-col gap-10 '>
-        {
-          isModalFor 
-          &&
-          <div
-            className='w-screen h-screen z-10 bg-slate-950 fixed opacity-50'
-          >
-          </div>
-        }
+      {
+        isModalFor 
+        &&
+        <div
+          className='w-screen h-screen z-10 bg-slate-950 fixed opacity-50'
+        >
+        </div>
+      }
+      <div className='p-5 mx-auto bg-gray-200 flex flex-col  gap-10 '>
         <Header 
           setFilterValue={setFilterValue}
           filterValue={filterValue}

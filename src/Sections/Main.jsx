@@ -144,7 +144,7 @@ function Main( { fetchSearchedMovie, itemCount, setFilterValue, filterValue, set
         };
     };
     return(
-        <main className='w-5/6 relative '>
+        <main className='w-full relative '>
             <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>
                 {loading && 'loading...'}
             </h1>
@@ -157,20 +157,20 @@ function Main( { fetchSearchedMovie, itemCount, setFilterValue, filterValue, set
                 />
             }  
             
-            <ul className='grid grid-cols-4 gap-2.5'>
+            <ul className='grid grid-cols-2 md:grid-cols-4 gap-2.5'>
                 {movies.map((movie, index) => {
 
                     return (        
                         <li 
                             key={index} 
-                            className='p-5 w-full h-64 border border-black rounded flex justify-center items-center text-center cursor-pointer'
+                            className='p-5 w-full h-64 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
                             onClick={()=>{
                                 setIsModalFor(movie)
                                 console.log(movie)
                             }}
                         >
                             <div>  
-                                <h1 className='text-lg'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
+                                <h1 className='text-2xl'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
                             </div>
                         </li>
                     )
