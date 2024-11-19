@@ -9,11 +9,12 @@ const port = 3000;
 app.use(cors());
 
 const client = new Client({
-  user: "myuser",
-  host: "localhost",
-  database: "netflix",
-  password: "mypassword",
-  port: 5432,
+  // user: "myuser",
+  // host: "localhost",
+  // database: "netflix",
+  // password: "mypassword",
+  // port: 5432,
+  connectionString: process.env.POSTGRES_URI
 });
 
 client

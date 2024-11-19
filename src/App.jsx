@@ -18,20 +18,6 @@ export default function App() {
          
     let titleToSearch = encodeURIComponent(searchInput) ;
 
-    // const splitTitle = titleToSearch.split("")
-    //     if(splitTitle.includes("&")){
-    //      console.log("&&")
-    //      const mappedSplitTitle = splitTitle.map((character) => {
-    //         if(character === "&") {
-    //            return "%26"
-    //         } else {
-    //            return character
-    //         }
-    //      })
-    //      titleToSearch = mappedSplitTitle.join("")
-           
-    //     } 
-
     try {
         
         const response = await fetch(`http://localhost:3000/search?searchFor=${titleToSearch}&itemCount=${itemCount}`);
