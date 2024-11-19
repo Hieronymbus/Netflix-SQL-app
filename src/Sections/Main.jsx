@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import MovieModal from './movieModal';
+import MovieModal from '../Compontents/MovieModal';
 
-function Main( { fetchSearchedMovie, itemCount, setFilterValue, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching } ) {
+function Main( { fetchSearchedMovie, itemCount, setFilterValue, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
     const [movieCount, setMovieCount] = useState();
-    const [isModalFor, setIsModalFor ] = useState("");
+    
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
@@ -109,6 +109,7 @@ function Main( { fetchSearchedMovie, itemCount, setFilterValue, filterValue, set
 
             for(const movie of movieData) {
                 movieArr.push(movie.title);
+                
             };
             
         let newMovies = movieArr.slice(itemCount - 12);
@@ -143,7 +144,7 @@ function Main( { fetchSearchedMovie, itemCount, setFilterValue, filterValue, set
         };
     };
     return(
-        <main className='w-5/6 relative'>
+        <main className='w-5/6 relative '>
             <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>
                 {loading && 'loading...'}
             </h1>
@@ -155,6 +156,7 @@ function Main( { fetchSearchedMovie, itemCount, setFilterValue, filterValue, set
                     isModalFor={isModalFor}
                 />
             }  
+            
             <ul className='grid grid-cols-4 gap-2.5'>
                 {movies.map((movie, index) => {
 

@@ -12,13 +12,29 @@ export default function App() {
   const [isSearching, setIsSearching] = useState(false);
   const [filterValue, setFilterValue] = useState();
   const [searchInput, setSearchInput] = useState('');
-
+  const [isModalFor, setIsModalFor ] = useState("");
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
   const fetchSearchedMovie = async (e) => {
-          
+         
+    let titleToSearch = encodeURIComponent(searchInput) ;
+
+    // const splitTitle = titleToSearch.split("")
+    //     if(splitTitle.includes("&")){
+    //      console.log("&&")
+    //      const mappedSplitTitle = splitTitle.map((character) => {
+    //         if(character === "&") {
+    //            return "%26"
+    //         } else {
+    //            return character
+    //         }
+    //      })
+    //      titleToSearch = mappedSplitTitle.join("")
+           
+    //     } 
+
     try {
         
-        const response = await fetch(`http://localhost:3000/search?searchFor=${searchInput}&itemCount=${itemCount}`);
+        const response = await fetch(`http://localhost:3000/search?searchFor=${titleToSearch}&itemCount=${itemCount}`);
 
         if(!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -43,7 +59,15 @@ export default function App() {
 }
   return (
     <>
-      <div className='w-full p-2.5 mx-auto bg-gray-200 flex flex-col gap-10'>
+      <div className='w-full  mx-auto bg-gray-200 flex flex-col gap-10 '>
+        {
+          isModalFor 
+          &&
+          <div
+            className='w-screen h-screen z-10 bg-slate-950 fixed opacity-50'
+          >
+          </div>
+        }
         <Header 
           setFilterValue={setFilterValue}
           filterValue={filterValue}
@@ -90,6 +114,9 @@ export default function App() {
           fetchSearchedMovie={fetchSearchedMovie}
           
           setSearchInput={setSearchInput}
+
+          isModalFor={isModalFor}
+          setIsModalFor={setIsModalFor}
         />
       </div>
     </>

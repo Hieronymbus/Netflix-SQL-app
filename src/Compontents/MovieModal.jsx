@@ -21,7 +21,22 @@ const MovieModal = ( { setIsModalFor, isModalFor } ) => {
 
    async function fetchOneMoviesDetails(title) {
         
-        const response = await fetch(`http://localhost:3000/oneMovieDetails/?movieTitle=${title}`)
+      //   const splitTitle = title.split("")
+      //   if(splitTitle.includes("&")){
+      //    console.log("&&")
+      //    const mappedSplitTitle = splitTitle.map((character) => {
+      //       if(character === "&") {
+      //          return "%26"
+      //       } else {
+      //          return character
+      //       }
+      //    })
+      //    title = mappedSplitTitle.join("")
+      //    console.log(title)
+         
+      //   } 
+        
+        const response = await fetch(`http://localhost:3000/oneMovieDetails/?movieTitle=${encodeURIComponent(title)}`)
         const data = await response.json()
 
         setMovieDetails(prev => ({
@@ -52,7 +67,7 @@ const MovieModal = ( { setIsModalFor, isModalFor } ) => {
    return (
       
       <div 
-         className="w-2/3 h-2/3 bg-slate-600 text-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border border-black flex flex-col gap-2 overflow-scroll"
+         className="w-4/5 h-3/4 z-20 bg-slate-600 text-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border border-black flex flex-col gap-2 overflow-scroll no-scrollbar "
       >  
       <div className="flex justify-between">
          <div className="pl-5 pt-2 ">
