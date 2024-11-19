@@ -80,4 +80,18 @@ app.get("/search", async (req, res) => {
   }
 });
 
+app.get('/oneMovieDetails', async(req, res) => {
+
+    const{movieTitle} = req.query
+
+    try {
+        const result = await client.query(`SELECT * FROM netflix_shows WHERE title = $1 LIMIT 1` , [movieTitle])
+        res.json(result.rows)
+    } catch (error) {
+        console.error(err);
+        res.status(500).send('server error');
+    }
+
+})
+
 app.listen(port, () => console.log(`Listening on localhost:${port}`));
