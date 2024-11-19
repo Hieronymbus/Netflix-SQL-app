@@ -41,11 +41,24 @@ app.get("/filter", async (req, res) => {
   console.log(releaseYear);
 
   try {
+
+    //Use the CASE clause
+    const filters = [];
+    if(duration && !releaseYear && !rating) {
+      filters.push("(duration = $3)");
+    } else if(releaseYear) {
+      filters.push("(release_year BETWEEN $1");
+      filters.push("$2)");
+    } else if(rating) {
+      filters.push("(rating = $4)");
+    }
+    filters.join("AND");
+
+    console.log(filters);
+
     const result = await client.query(`SELECT * FROM netflix_shows 
-                                      WHERE 
-                                      (release_year BETWEEN $1 AND $2 OR release_year IS NULL)
-                                      AND (duration=$3 OR duration IS NULL)
-                                      AND (rating=$4 OR rating IS NULL)
+                                      WHERE
+                                      ${filters}
                                       ORDER BY release_year ASC LIMIT $5`, [releaseYear, releaseDecade, duration, rating, itemCount]);
     console.log("Filter year endpoint");
     res.json(result.rows);
