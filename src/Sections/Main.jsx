@@ -64,7 +64,20 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
     async function fetchMoviesByFilter() {
         console.log(filterValue);
         try {
-            const response = await fetch(`http://localhost:3000/filter/?itemCount=${itemCount}&releaseYear=${filterValue.releaseYearValue || ''}&duration=${filterValue.durationValue || ''}&rating=${filterValue.ratingValue || ''}`);
+            //Use URLSearchParams to omit queries;
+            const queryParams = new URLSearchParams();
+            if(filterValue.releaseYearValue) {
+                queryParams.append('releaseYear', filterValue.releaseYearValue);    
+            };
+            if(filterValue.durationValue) {
+                queryParams.append('duration', filterValue.durationValue);
+            };
+            if(filterValue.ratingValue) {
+                queryParams.append('rating', filterValue.ratingValue);
+            };
+            queryParams.append('itemCount', itemCount);
+
+            const response = await fetch(`http://localhost:3000/filter/?${queryParams.toString()}`);
             if(!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };

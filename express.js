@@ -34,42 +34,47 @@ app.get("/", async (req, res) => {
 
 app.get("/filter", async (req, res) => {
   const itemCount = parseInt(req.query.itemCount) || 12;
-  const releaseYear = parseInt(req.query.releaseYear);
-  const duration = req.query.duration;
-  const rating = req.query.rating;
-  const releaseDecade = releaseYear + 10;
+  const releaseYear = parseInt(req.query.releaseYear) || null;
+  const duration = req.query.duration || null;
+  const rating = req.query.rating || null;
+  const releaseDecade = releaseYear ? releaseYear + 10 : null;
 
   try {
-
-    //Use the CASE clause
     const filters = [];
     const values = [];
-    if(releaseYear) {
-      filters.push("(release_year BETWEEN $1 AND $2)");
+
+    if (releaseYear) {
+      filters.push(`release_year BETWEEN $${filters.length + 1} AND $${filters.length + 2}`);
       values.push(releaseYear, releaseDecade);
     };
-    if(duration) {
-      filters.push("duration=$3");
+    if (duration) {
+      filters.push(`duration = $${filters.length + 1}`);
       values.push(duration);
     };
-    if(rating) {
-      filters.push("rating=$4");
+    if (rating) {
+      filters.push(`rating = $${filters.length + 1}`);
       values.push(rating);
     };
 
-    const resultQuery = filters.length ? filters.join(" AND ") : '' ;
-    console.log(resultQuery);
-    
-    const result = await client.query(`SELECT * FROM netflix_shows 
-                                      WHERE 
-                                      ${resultQuery}
-                                      ORDER BY release_year LIMIT ${itemCount}`, [...values]);
-    console.log("Filter year endpoint");
-    console.log(result.rows);
+    const resultQuery = filters.length ? `WHERE ${filters.join(" AND ")}` : '';
+
+    const query = `
+      SELECT * FROM netflix_shows
+      ${resultQuery}
+      ORDER BY release_year
+      LIMIT $${values.length + 1}
+    `;
+
+    values.push(itemCount);
+
+    console.log('Executing Query:', query);
+    console.log('With values:', values);
+
+    const result = await client.query(query, values);
     res.json(result.rows);
   } catch (err) {
-    console.error("server error");
-    res.status(500).send("server error");
+    console.error("Server error:", err);
+    res.status(500).send("Server error");
   }
 });
 
