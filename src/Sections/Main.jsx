@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import MovieModal from './movieModal';
 
-function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, isReleaseYearFilter, isRatingFilter, isDurationFilter } ) {
+function Main( { fetchSearchedMovie, itemCount, setFilterValue, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching } ) {
     const [movieCount, setMovieCount] = useState();
     const [isModalFor, setIsModalFor ] = useState("");
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
-        setMovieCount(movies.length);
+        setMovieCount(movies.length); // Re render the page to load filtered movies
         setItemCount(12);
     }, [filterValue]);
 
@@ -17,19 +17,15 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
 
     useEffect(() => {
         setLoading(true);
-        if(isRatingFilter) {
-            fetchMoviesByRating();
-        } else if(isReleaseYearFilter) {
-            fetchMoviesByReleaseYear();
-        } else if(isDurationFilter) {
-            fetchMoviesByDuration();
+        if(filterValue) {
+            fetchMoviesByFilter();
         } else if(isSearching) {
             fetchSearchedMovie()
         } else {
             fetchAllMovies();
         };
-    }, [ itemCount, filterValue, isRatingFilter, isReleaseYearFilter, isDurationFilter]);
 
+    }, [itemCount, filterValue]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
@@ -43,68 +39,68 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
     };
 
     useEffect(() => {
-        const listener = window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll);
     }, []);
 
-    async function fetchMoviesByReleaseYear() {
-        try {
-            const response = await fetch(`http://localhost:3000/releaseYear/?itemCount=${itemCount}&releaseYear=${filterValue}`);
-            if(!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            };
-            const movieData = await response.json();
-            const newMovies = movieData.slice(-12).map(movie => {
-                return movie.title + ' ' + movie.release_year;
-            });
+    // async function fetchMoviesByReleaseYear() {
+        // try {
+        //     const response = await fetch(`http://localhost:3000/releaseYear/?itemCount=${itemCount}&releaseYear=${filterValue}`);
+        //     if(!response.ok) {
+        //         throw new Error(`HTTP error! Status: ${response.status}`);
+        //     };
+        //     const movieData = await response.json();
+        //     const newMovies = movieData.slice(-12).map(movie => {
+        //         return movie.title + ' ' + movie.release_year;
+        //     });
 
-            setMovies(prev => [...prev, ...newMovies]);
-        } catch(err) {
-            console.error('Error fetching movies ', err);
-        } finally {
-            setLoading(false);
-        };
-    };
+        //     setMovies(prev => [...prev, ...newMovies]);
+        // } catch(err) {
+        //     console.error('Error fetching movies ', err);
+        // } finally {
+        //     setLoading(false);
+        // };
+    // };
 
-    async function fetchMoviesByDuration() {
-        try {
-            const response = await fetch(`http://localhost:3000/duration/?itemCount=${itemCount}&duration=${filterValue}`);
-            if(!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            };
+    // async function fetchMoviesByDuration() {
+    //     try {
+    //         const response = await fetch(`http://localhost:3000/duration/?itemCount=${itemCount}&duration=${filterValue}`);
+    //         if(!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         };
 
-            const movieData = await response.json();
-            const newMovies = movieData.slice(-12).map(movie => {
-                return movie.title + ' ' + movie.duration;
-            });
+    //         const movieData = await response.json();
+    //         const newMovies = movieData.slice(-12).map(movie => {
+    //             return movie.title + ' ' + movie.duration;
+    //         });
 
-            setMovies(prev => [...prev, ...newMovies]);
-        } catch(err) {
-            console.error('Error fetching movies ', err);
-        } finally {
-            setLoading(false);
-        };
-    };
+    //         setMovies(prev => [...prev, ...newMovies]);
+    //     } catch(err) {
+    //         console.error('Error fetching movies ', err);
+    //     } finally {
+    //         setLoading(false);
+    //     };
+    // };
 
-    async function fetchMoviesByRating() {
-        setLoading(true);
-        try {
-            const response = await fetch(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=${filterValue}`);
-            console.log('RATING FILTER');
-            if(!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            };
+    // async function fetchMoviesByRating() {
+    //     setLoading(true);
+    //     try {
+    //         const response = await fetch(`http://localhost:3000/rating/?itemCount=${itemCount}&rating=${filterValue}`);
+    //         console.log('RATING FILTER');
+    //         if(!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         };
 
-            const movieData = await response.json();
-            const newMovies = movieData.slice(-12).map(movie => {
-                return movie.title + ' ' + movie.rating;
-            });
-            setMovies(prev => [...prev, ...newMovies]);
-        } catch(err) {
-            console.error('Error fetching movies ', err);
-        } finally {
-            setLoading(false);
-        };
-    };
+    //         const movieData = await response.json();
+    //         const newMovies = movieData.slice(-12).map(movie => {
+    //             return movie.title + ' ' + movie.rating;
+    //         });
+    //         setMovies(prev => [...prev, ...newMovies]);
+    //     } catch(err) {
+    //         console.error('Error fetching movies ', err);
+    //     } finally {
+    //         setLoading(false);
+    //     };
+    // };
 
     async function fetchAllMovies() {
         const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
@@ -124,9 +120,28 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
             setLoading(false);
     };
 
+    async function fetchMoviesByFilter() {
+        console.log(filterValue);
+        try {
+            const response = await fetch(`http://localhost:3000/filter/?itemCount=${itemCount}&releaseYear=${filterValue.releaseYearValue}&duration=${filterValue.durationValue}&rating=${filterValue.ratingValue}`);
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+            const movieData = await response.json();
+            const newMovies = movieData.slice(-12).map(movie => {
+                const releaseYear = movie.release_year || null;
+                const rating = movie.rating || null;
+                const duration = movie.duration || null;
+                return `${movie.title} ${releaseYear} ${rating} ${duration}`;
+            });
 
-    
-
+            setMovies(prev => [...prev, ...newMovies]);
+        } catch(err) {
+            console.error('Error fetching movies ', err);
+        } finally {
+            setLoading(false);
+        };
+    };
     return(
         <main className='w-5/6 relative'>
             <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>

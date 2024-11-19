@@ -1,89 +1,84 @@
-import express from 'express';
-import pkg from 'pg';
-import cors from 'cors';
+import express from "express";
+import pkg from "pg";
+import cors from "cors";
 
 const { Client } = pkg;
 const app = express();
-const port = 3000;  
+const port = 3000;
 
 app.use(cors());
 
 const client = new Client({
-  user: 'myuser',
-  host: 'localhost',
-  database: 'netflix',
-  password: 'mypassword',
+  user: "myuser",
+  host: "localhost",
+  database: "netflix",
+  password: "mypassword",
   port: 5432,
 });
 
-client.connect()
-    .then(() => console.log('Connected to PostgreSQL database'))
-    .catch(err => console.error('Connection error ', err.stack));
+client
+  .connect()
+  .then(() => console.log("Connected to PostgreSQL database"))
+  .catch((err) => console.error("Connection error ", err.stack));
 
-app.get('/', async(req, res) => {
-    try {
-        const itemCount = parseInt(req.query.itemCount) || 12;        
-        const result = await client.query(`SELECT * FROM netflix_shows LIMIT $1`, [itemCount]);
-        res.json(result.rows);
-    } catch(err) {
-        console.error(err);
-        res.status(500).send('server error');   
-    };
-});
-
-app.get('/releaseYear', async(req, res) => {
+app.get("/", async (req, res) => {
+  try {
     const itemCount = parseInt(req.query.itemCount) || 12;
-    const releaseYear = parseInt(req.query.releaseYear) || null;
-
-    try {
-        const result = await client.query(`SELECT * FROM netflix_shows WHERE release_year=$1 LIMIT $2`, [releaseYear, itemCount]);
-        console.log('release year endpoint');
-        res.json(result.rows);
-    } catch(err) {
-        console.error('server error');
-        res.status(500).send('server error');
-    };
+    const result = await client.query(`SELECT * FROM netflix_shows LIMIT $1`, [itemCount]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("server error");
+  }
 });
 
-app.get('/duration', async(req, res) => {
-    const itemCount = parseInt(req.query.itemCount) || 12;
-    const duration = req.query.duration || null;
+app.get("/filter", async (req, res) => {
+  const itemCount = parseInt(req.query.itemCount) || 12;
+  const releaseYear = parseInt(req.query.releaseYear) || null;
+  const duration = req.query.duration || null;
+  const rating = req.query.rating || null;
+  const releaseDecade = releaseYear + 10;
+  console.log(releaseYear);
 
-    try {
-        const result = await client.query(`SELECT * FROM netflix_shows WHERE duration=$1 LIMIT $2`, [duration, itemCount]);
-        res.json(result.rows);
-    } catch(err) {
-        console.error('server error');
-        res.status(500).send('server error');
-    };
-});
+  try {
 
-app.get('/rating', async(req, res) => {
-    const itemCount = parseInt(req.query.itemCount) || 12;
-    const rating = req.query.rating || null;
-
-    try {
-        const result = await client.query(`SELECT * FROM netflix_shows WHERE rating=$1 LIMIT $2`, [rating, itemCount]);
-        console.log('made it to rating endpoint');
-        res.json(result.rows);
-    } catch(err) {
-        console.error(err);
-        res.status(500).send('server error');
-    };
-});
-
-app.get('/search', async(req, res) => {
-
-    const { searchFor, itemCount } = req.query
-
-    try {
-        const result = await client.query(`SELECT * FROM netflix_shows WHERE title ILIKE '%${searchFor}%'  LIMIT $1 `, [itemCount]);
-        res.json(result.rows);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('server error');
+    //Use the CASE clause
+    const filters = [];
+    if(duration && !releaseYear && !rating) {
+      filters.push("(duration = $3)");
+    } else if(releaseYear) {
+      filters.push("(release_year BETWEEN $1");
+      filters.push("$2)");
+    } else if(rating) {
+      filters.push("(rating = $4)");
     }
-})
+    filters.join("AND");
+
+    console.log(filters);
+
+    const result = await client.query(`SELECT * FROM netflix_shows 
+                                      WHERE
+                                      ${filters}
+                                      ORDER BY release_year ASC LIMIT $5`, [releaseYear, releaseDecade, duration, rating, itemCount]);
+    console.log("Filter year endpoint");
+    res.json(result.rows);
+  } catch (err) {
+    console.error("server error");
+    res.status(500).send("server error");
+  }
+});
+
+app.get("/search", async (req, res) => {
+  const { searchFor, itemCount } = req.query;
+
+  try {
+    const result = await client.query(`SELECT * FROM netflix_shows WHERE title ILIKE '%${searchFor}%'  LIMIT $1 `, [itemCount]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("server error");
+  }
+});
 
 app.get('/oneMovieDetails', async(req, res) => {
 

@@ -9,8 +9,6 @@ export default function App() {
   const [itemCount, setItemCount] = useState(12);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  
   const [isSearching, setIsSearching] = useState(false);
   const [filterValue, setFilterValue] = useState();
   const [searchInput, setSearchInput] = useState('');
@@ -48,6 +46,7 @@ export default function App() {
       <div className='w-full p-2.5 mx-auto bg-gray-200 flex flex-col gap-10'>
         <Header 
           setFilterValue={setFilterValue}
+          filterValue={filterValue}
           setItemCount={setItemCount}
           setDurationFilter={setDurationFilter}
           isDurationFilter={isDurationFilter}
@@ -69,6 +68,7 @@ export default function App() {
         />
    
         <Main 
+          setFilterValue={setFilterValue}
           filterValue={filterValue}
           setDurationFilter={setDurationFilter}
           isDurationFilter={isDurationFilter}
@@ -84,7 +84,6 @@ export default function App() {
           isSearching={isSearching}
           setIsSearching={setIsSearching}
           searchInput={searchInput}
-
           itemCount={itemCount}
           setItemCount={setItemCount}
           
