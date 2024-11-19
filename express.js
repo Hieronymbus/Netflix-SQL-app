@@ -34,33 +34,38 @@ app.get("/", async (req, res) => {
 
 app.get("/filter", async (req, res) => {
   const itemCount = parseInt(req.query.itemCount) || 12;
-  const releaseYear = parseInt(req.query.releaseYear) || null;
-  const duration = req.query.duration || null;
-  const rating = req.query.rating || null;
+  const releaseYear = parseInt(req.query.releaseYear);
+  const duration = req.query.duration;
+  const rating = req.query.rating;
   const releaseDecade = releaseYear + 10;
-  console.log(releaseYear);
 
   try {
 
     //Use the CASE clause
     const filters = [];
-    if(duration && !releaseYear && !rating) {
-      filters.push("(duration = $3)");
-    } else if(releaseYear) {
-      filters.push("(release_year BETWEEN $1");
-      filters.push("$2)");
-    } else if(rating) {
-      filters.push("(rating = $4)");
-    }
-    filters.join("AND");
+    const values = [];
+    if(releaseYear) {
+      filters.push("(release_year BETWEEN $1 AND $2)");
+      values.push(releaseYear, releaseDecade);
+    };
+    if(duration) {
+      filters.push("duration=$3");
+      values.push(duration);
+    };
+    if(rating) {
+      filters.push("rating=$4");
+      values.push(rating);
+    };
 
-    console.log(filters);
-
+    const resultQuery = filters.length ? filters.join(" AND ") : '' ;
+    console.log(resultQuery);
+    
     const result = await client.query(`SELECT * FROM netflix_shows 
-                                      WHERE
-                                      ${filters}
-                                      ORDER BY release_year ASC LIMIT $5`, [releaseYear, releaseDecade, duration, rating, itemCount]);
+                                      WHERE 
+                                      ${resultQuery}
+                                      ORDER BY release_year LIMIT ${itemCount}`, [...values]);
     console.log("Filter year endpoint");
+    console.log(result.rows);
     res.json(result.rows);
   } catch (err) {
     console.error("server error");
