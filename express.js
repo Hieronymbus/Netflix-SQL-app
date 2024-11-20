@@ -26,7 +26,25 @@ client
   .catch((err) => console.error("Connection error ", err.stack));
 
 //HardCoded user id
-const userId = 1;
+let userId;
+
+function authMiddleware(req, res, next) {
+  const authenticationHeader = req.header("authentication");
+
+  if(!authenticationHeader || !authenticationHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ success: false, message: "Invalid authorization header" });
+  };
+
+  const token = authenticationHeader.replace("Bearer ", "");
+  console.log('authMiddleware called and returning: ', token);
+
+  next();
+};
+
+app.get('/authenticate', authMiddleware, async (req, res) => {
+  const data = req.header("authentication");
+  console.log(data);
+});
 
 app.get("/", async (req, res) => {
   try {
@@ -108,6 +126,10 @@ app.get('/oneMovieDetails', async(req, res) => {
         console.error(err);
         res.status(500).send('server error');
     }
+
+});
+
+app.get('/favourites', async(req, res) => {
 
 });
 
