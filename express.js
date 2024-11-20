@@ -5,10 +5,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 dotenv.config()
+const __dirname = path.resolve()
 
 const { Client } = pkg;
 const app = express();
 const port = 3000;
+
 
 app.use(cors());
 
