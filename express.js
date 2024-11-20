@@ -48,7 +48,8 @@ app.get("/filter", async (req, res) => {
     const values = [];
 
     if (releaseYear) {
-      filters.push(`release_year BETWEEN $${filters.length + 1} AND $${filters.length + 2}`);
+      filters.push(`(release_year BETWEEN $${filters.length + 1}`);
+      filters.push(`$${filters.length + 1})`);
       values.push(releaseYear, releaseDecade);
     };
     if (duration) {
@@ -63,9 +64,8 @@ app.get("/filter", async (req, res) => {
     const resultQuery = filters.length ? `WHERE ${filters.join(" AND ")}` : '';
 
     const query = `
-      SELECT * FROM netflix_shows
+      SELECT * FROM netflix_shows 
       ${resultQuery}
-      ORDER BY release_year
       LIMIT $${values.length + 1}
     `;
 
