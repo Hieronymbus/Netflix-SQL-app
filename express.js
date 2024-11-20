@@ -11,6 +11,7 @@ const { Client } = pkg;
 const app = express();
 const port = 3000;
 
+const userID = 1;
 
 app.use(cors());
 
@@ -31,14 +32,22 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const client = new Client({
-  // user: "myuser",
-  // host: "localhost",
-  // database: "netflix",
-  // password: "mypassword",
-  // port: 5432,
-  connectionString: process.env.POSTGRES_URI
-});
+let clientConfig ;
+if (process.env.NODE_ENV !== "production") {
+  clientConfig = {
+    user: "myuser",
+    host: "localhost",
+    database: "netflix",
+    password: "mypassword",
+    port: 5432,
+  }
+} else {
+  clientConfig = {
+    connectionString: process.env.POSTGRES_URI
+  }
+}  
+
+const client = new Client(clientConfig);
 
 client
   .connect()
