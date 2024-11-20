@@ -43,7 +43,7 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
     }, []);
 
     async function fetchAllMovies() {
-        const response = await fetch(`https://netflix-sql-app.onrender.com/allMovies/?itemCount=${itemCount}`);
+        const response = await fetch(`https://netflix-sql-app.onrender.com/?itemCount=${itemCount}`);
             const movieData = await response.json(); 
             let movieArr = [];
 
