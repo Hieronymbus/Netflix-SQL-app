@@ -43,7 +43,7 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
     }, []);
 
     async function fetchAllMovies() {
-        const response = await fetch(`https://netflix-sql-app.onrender.com/allMovies/?itemCount=${itemCount}`);
+        const response = await fetch(`${import.meta.env.VITE_PORT}/allMovies/?itemCount=${itemCount}`);
             const movieData = await response.json(); 
             let movieArr = [];
 
@@ -77,7 +77,7 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
             };
             queryParams.append('itemCount', itemCount);
 
-            const response = await fetch(`https://netflix-sql-app.onrender.com/filter/?${queryParams.toString()}`);
+            const response = await fetch(`${import.meta.env.VITE_PORT}/filter/?${queryParams.toString()}`);
             if(!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };

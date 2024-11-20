@@ -20,7 +20,7 @@ export default function App() {
 
     try {
         
-        const response = await fetch(`https://netflix-sql-app.onrender.com/search?searchFor=${titleToSearch}&itemCount=${itemCount}`);
+        const response = await fetch(`${import.meta.env.VITE_PORT}/search?searchFor=${titleToSearch}&itemCount=${itemCount}`);
 
         if(!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);

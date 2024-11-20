@@ -21,7 +21,7 @@ const MovieModal = ( { setIsModalFor, isModalFor } ) => {
 
    async function fetchOneMoviesDetails(title) {
         
-        const response = await fetch(`https://netflix-sql-app.onrender.com/oneMovieDetails/?movieTitle=${encodeURIComponent(title)}`)
+        const response = await fetch(`${import.meta.env.VITE_PORT}/oneMovieDetails/?movieTitle=${encodeURIComponent(title)}`)
         const data = await response.json()
 
         setMovieDetails(prev => ({
