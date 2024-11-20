@@ -12,11 +12,11 @@ const port = 3000;
 app.use(cors());
 
 const client = new Client({
-  // user: "myuser",
-  // host: "localhost",
-  // database: "netflix",
-  // password: "mypassword",
-  // port: 5432,
+  user: "myuser",
+  host: "localhost",
+  database: "netflix",
+  password: "mypassword",
+  port: 5432,
   connectionString: process.env.POSTGRES_URI
 });
 
@@ -24,6 +24,9 @@ client
   .connect()
   .then(() => console.log("Connected to PostgreSQL database"))
   .catch((err) => console.error("Connection error ", err.stack));
+
+//HardCoded user id
+const userId = 1;
 
 app.get("/", async (req, res) => {
   try {
@@ -106,6 +109,6 @@ app.get('/oneMovieDetails', async(req, res) => {
         res.status(500).send('server error');
     }
 
-})
+});
 
 app.listen(port, () => console.log(`Listening on localhost:${port}`));

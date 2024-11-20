@@ -29,10 +29,12 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
 
   return (
     <header className="w-full text-center ">
+      <div className='absolute left-5 top-5'>
+        <button className='rounded bg-slate-600 text-white p-2.5 mr-5'>User 1</button>
+        <button className='rounded bg-slate-600 text-white p-2.5'>User 2</button>
+      </div>
       <div>
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>
-       
-      
         <SearchBar 
           searchInput={searchInput}
           setSearchInput={setSearchInput}
