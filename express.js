@@ -32,22 +32,23 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-let clientConfig ;
-// if (process.env.NODE_ENV === "production") {
-    clientConfig = {
-      connectionString: process.env.POSTGRES_URI
-    }
-// } else {
+// let clientConfig ;
+// // if (process.env.NODE_ENV === "production") {
+//     clientConfig = {
+//       connectionString: process.env.POSTGRES_URI
+//     }
+
 //   clientConfig = {
 //     user: "myuser",
 //     host: "localhost",
 //     database: "netflix",
 //     password: "mypassword",
 //     port: 5432,
-//   }
-// }  
+//
 
-const client = new Client(clientConfig);
+const client = new Client({
+  connectionString: process.env.POSTGRES_URI
+});
 
 client
   .connect()
