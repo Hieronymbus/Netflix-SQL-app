@@ -14,7 +14,11 @@ const port = process.env.PORT || 3000;
 const userID = 1;
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, "/dist")));
+if (process.env.NODE_ENV === "production") {
+  // Serve static files from the "dist" folder inside the "frontend" directory
+  // In production, the frontend files (HTML, CSS, JavaScript, etc.) are often bundled and placed in a "dist" folder
+  app.use(express.static(path.join(__dirname, "/dist")));
+}
 
 let clientConfig;
 
@@ -135,8 +139,6 @@ app.get("/oneMovieDetails", async (req, res) => {
 // Check if the app is running in "production" mode
 // "process.env.NODE_ENV" is an environment variable that stores the current mode (development or production)
 if (process.env.NODE_ENV === "production") {
-  // Serve static files from the "dist" folder inside the "frontend" directory
-  // In production, the frontend files (HTML, CSS, JavaScript, etc.) are often bundled and placed in a "dist" folder
   
 
   // Handle all other routes by sending the "index.html" file
