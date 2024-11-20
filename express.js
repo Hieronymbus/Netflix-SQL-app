@@ -11,6 +11,24 @@ const port = 3000;
 
 app.use(cors());
 
+// Check if the app is running in "production" mode
+// "process.env.NODE_ENV" is an environment variable that stores the current mode (development or production)
+if (process.env.NODE_ENV === "production") {
+
+  // Serve static files from the "dist" folder inside the "frontend" directory
+  // In production, the frontend files (HTML, CSS, JavaScript, etc.) are often bundled and placed in a "dist" folder
+  app.use(express.static(path.join(__dirname, "/dist")));
+
+  // Handle all other routes by sending the "index.html" file
+  // The "*" means that any route that doesn't match an API or static file will be handled by this
+  app.get("*", (request, response) => {
+      // Send the "index.html" file located in the "dist" folder
+      // This ensures that the frontend's main HTML file is served for any route (like React or Vue's client-side routing)
+      response.sendFile(path.resolve(__dirname, "dist", "index.html"));
+  });
+}
+
+
 const client = new Client({
   // user: "myuser",
   // host: "localhost",

@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "renderBuild":"npm install && npm run build",
-    "start":"node express.js",
+    "start":"cross-env NODE_ENV=production node express.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
