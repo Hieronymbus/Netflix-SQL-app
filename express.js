@@ -1,5 +1,6 @@
 import express from "express";
 import pkg from "pg";
+import path from "path"
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -27,7 +28,6 @@ if (process.env.NODE_ENV === "production") {
       response.sendFile(path.resolve(__dirname, "dist", "index.html"));
   });
 }
-
 
 const client = new Client({
   // user: "myuser",

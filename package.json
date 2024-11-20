@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "renderBuild":"npm install && npm run build",
-    "start":"cross-env NODE_ENV=production node express.js",
+    "renderBuild": "npm install && npm run build",
+    "start": "cross-env NODE_ENV=production node express.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -17,6 +17,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "knex": "^3.1.0",
+    "path": "^0.12.7",
     "pg": "^8.13.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
