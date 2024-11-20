@@ -33,17 +33,17 @@ if (process.env.NODE_ENV === "production") {
 }
 
 let clientConfig ;
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV === "production") {
+    clientConfig = {
+      connectionString: process.env.POSTGRES_URI
+    }
+} else {
   clientConfig = {
     user: "myuser",
     host: "localhost",
     database: "netflix",
     password: "mypassword",
     port: 5432,
-  }
-} else {
-  clientConfig = {
-    connectionString: process.env.POSTGRES_URI
   }
 }  
 
