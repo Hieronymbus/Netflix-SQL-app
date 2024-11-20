@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, "/dist")));
       .then(() => console.log("Connected to PostgreSQL database"))
       .catch((err) => console.error("Connection error ", err.stack));
       
-      app.get("/", async (req, res) => {
+      app.get("/allMovies", async (req, res) => {
         try {
           const itemCount = parseInt(req.query.itemCount) || 12;
           const result = await client.query(`SELECT * FROM netflix_shows LIMIT $1`, [itemCount]);
