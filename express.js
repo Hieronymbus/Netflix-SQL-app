@@ -136,18 +136,16 @@ app.get("/oneMovieDetails", async (req, res) => {
     res.status(500).send("server error");
   }
 });
-// Check if the app is running in "production" mode
-// "process.env.NODE_ENV" is an environment variable that stores the current mode (development or production)
+
 if (process.env.NODE_ENV === "production") {
   
-
   // Handle all other routes by sending the "index.html" file
   // The "*" means that any route that doesn't match an API or static file will be handled by this
-  app.get("*", (request, response) => {
-    // Send the "index.html" file located in the "dist" folder
-    // This ensures that the frontend's main HTML file is served for any route (like React or Vue's client-side routing)
-    response.sendFile(path.resolve(__dirname, "dist", "index.html"));
-  });
+  // app.get("*", (request, response) => {
+  //   // Send the "index.html" file located in the "dist" folder
+  //   // This ensures that the frontend's main HTML file is served for any route (like React or Vue's client-side routing)
+  //   response.sendFile(path.resolve(__dirname, "dist", "index.html"));
+  // });
 }
 
 app.listen(port, () => console.log(`Listening on localhost:${port}`));
