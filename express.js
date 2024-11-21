@@ -136,8 +136,20 @@ app.get('/oneMovieDetails', async(req, res) => {
 app.post('/favourites', async(req, res) => {
   const data = req.body;
   console.log(await data);
-  await client.query(`INSERT INTO favourites (netflix_Shows_id, user_id)
-                                    VALUES ('${data.show_id}', '${userId}')`);
+  await client.query(`CREATE TABLE IF NOT EXISTS favourites (
+                      netflix_shows_id VARCHAR(100) NOT NULL,
+                      user_id VARCHAR(100) NOT NULL
+                      )`
+  );
+
+  if(!userId) {
+    res.status(401);
+    return;
+  };
+
+  await client.query(`INSERT INTO favourites (netflix_shows_id, user_id)
+                     VALUES ('${data.show_id}', '${userId}')`
+  );
 
   const usersFavourites = await client.query(`SELECT * FROM favourites WHERE user_id = '${userId}'`);
   console.log(usersFavourites.rows);

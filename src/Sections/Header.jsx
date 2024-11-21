@@ -4,7 +4,6 @@ import SearchBar from "../Compontents/SearchBar";
 
 function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
-  
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
   const [releaseYearValue, setReleaseYearValue] = useState();
