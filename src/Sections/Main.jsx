@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import MovieModal from '../Compontents/MovieModal';
 
-function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, searchInput, isSearching, setIsModalFor, isModalFor } ) {
+function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
+
     const [movieCount, setMovieCount] = useState();
     
     //Clear movies when applying filter
@@ -115,6 +116,7 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
                 <MovieModal 
                     setIsModalFor={setIsModalFor}
                     isModalFor={isModalFor}
+                    token={token}
                 />
             }  
             
@@ -127,7 +129,6 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
                             className='p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
                             onClick={()=>{
                                 setIsModalFor(movie)
-                                console.log(movie)
                             }}
                         >
                             <div>  

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 
-const MovieModal = ( { setIsModalFor, isModalFor } ) => {
+const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
    const [isLoadingDetails, setIsLoadingDetails] = useState(false)
    const [movieDetails, setMovieDetails ] = useState({
       title:"",
@@ -54,8 +54,18 @@ const MovieModal = ( { setIsModalFor, isModalFor } ) => {
       setIsLoadingDetails(true)
       if(isModalFor) fetchOneMoviesDetails(isModalFor)   
 
-   }, [isModalFor])
+   }, [isModalFor]);
 
+   async function addToFavourites() {
+      await fetch('http://localhost:3000/favourites', {
+         method: 'POST',
+         headers: {
+            "Content-Type": "application/json",
+         },       
+         body: JSON.stringify(movieDetails)
+      });
+   };
+ 
    return (
       
       <div 

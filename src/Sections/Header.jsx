@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import FilterOptions from "../Compontents/FilterOptions";
 import SearchBar from "../Compontents/SearchBar";
 
-function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
+function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
-  
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
   const [releaseYearValue, setReleaseYearValue] = useState();
@@ -27,12 +26,34 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
     setIsDropDown(false);
   };
 
+  async function selectUser(arg) {
+    let token;
+    if(arg === 'user1'){
+      token = 'Ep9dgUtppo3dAjzf4GqDbWGG';
+      console.log('User 1 is active');
+    } else {
+      token = 'xKmUwizGSZm5dirMobXj6iQb';
+      console.log('User 2 is active');
+    };
+
+    await fetch('http://localhost:3000/authenticate', {
+      headers: {
+        "Content-Type": "application/json",
+        Authentication: `Bearer ${token}`
+      }
+    });
+
+    setToken(token);
+  };
+
   return (
     <header className="w-full text-center ">
+      <div className='absolute left-5 top-5'>
+        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => selectUser('user1')}>User 1</button>
+        <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => selectUser('user2')}>User 2</button>
+      </div>
       <div>
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>
-       
-      
         <SearchBar 
           searchInput={searchInput}
           setSearchInput={setSearchInput}

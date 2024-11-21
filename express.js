@@ -3,6 +3,8 @@ import pkg from "pg";
 import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
+import bodyParser from 'body-parser';
+
 
 dotenv.config();
 const __dirname = path.resolve();
@@ -14,6 +16,8 @@ const port = process.env.PORT || 3000;
 const userID = 1;
 
 app.use(cors());
+//Recieve data from req.header/body
+app.use(bodyParser.json());
 if (process.env.NODE_ENV === "production") {
   // Serve static files from the "dist" folder inside the "frontend" directory
   // In production, the frontend files (HTML, CSS, JavaScript, etc.) are often bundled and placed in a "dist" folder
@@ -43,8 +47,27 @@ client
   .then(() => console.log("Connected to PostgreSQL database"))
   .catch((err) => console.error("Connection error ", err.stack));
 
+//HardCoded user id
+let userId;
 
- 
+function authMiddleware(req, res, next) {
+  const authenticationHeader = req.header("authentication");
+
+  if(!authenticationHeader || !authenticationHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ success: false, message: "Invalid authorization header" });
+  };
+
+  const token = authenticationHeader.replace("Bearer ", "");
+  userId = token;
+  console.log('authMiddleware called and returning: ', token);
+
+  next();
+};
+
+app.get('/authenticate', authMiddleware, async (req, res) => {
+  const data = req.header("authentication");
+  console.log(data);
+});
   
 app.get("/allMovies", async (req, res) => {
   try {
@@ -72,9 +95,8 @@ app.get("/filter", async (req, res) => {
     const values = [];
 
     if (releaseYear) {
-      filters.push(
-        `release_year BETWEEN $${filters.length + 1} AND $${filters.length + 2}`
-      );
+      filters.push(`(release_year BETWEEN $${filters.length + 1}`);
+      filters.push(`$${filters.length + 1})`);
       values.push(releaseYear, releaseDecade);
     }
     if (duration) {
@@ -95,8 +117,7 @@ app.get("/filter", async (req, res) => {
     SELECT * FROM netflix_shows
     ${resultQuery}
     ORDER BY release_year
-    LIMIT $${values.length + 1}
-    `;
+    LIMIT $${values.length + 1}`;
 
     values.push(itemCount);
 
@@ -141,5 +162,26 @@ app.get("/oneMovieDetails", async (req, res) => {
   }
 });
 
+app.post('/favourites', async(req, res) => {
+  const data = req.body;
+  console.log(await data);
+  await client.query(`CREATE TABLE IF NOT EXISTS favourites (
+                      netflix_shows_id VARCHAR(100) NOT NULL,
+                      user_id VARCHAR(100) NOT NULL
+                      )`
+  );
+
+  if(!userId) {
+    res.status(401);
+    return;
+  };
+
+  await client.query(`INSERT INTO favourites (netflix_shows_id, user_id)
+                     VALUES ('${data.show_id}', '${userId}')`
+  );
+
+  const usersFavourites = await client.query(`SELECT * FROM favourites WHERE user_id = '${userId}'`);
+  console.log(usersFavourites.rows);
+});
 
 app.listen(port, () => console.log(`Listening on localhost:${port}`));
