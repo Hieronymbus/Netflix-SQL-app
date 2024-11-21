@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MovieModal from '../Compontents/MovieModal';
 
-function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
+function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, searchInput, isSearching, setIsModalFor, isModalFor } ) {
     const [movieCount, setMovieCount] = useState();
     
     //Clear movies when applying filter
@@ -63,9 +63,13 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
 
     async function fetchMoviesByFilter() {
         console.log(filterValue);
+        const searchValue = encodeURIComponent(searchInput);
         try {
             //Use URLSearchParams to omit queries;
             const queryParams = new URLSearchParams();
+            if(searchValue){
+                queryParams.append('searchValue', searchValue)
+            };
             if(filterValue.releaseYearValue) {
                 queryParams.append('releaseYear', filterValue.releaseYearValue);    
             };
@@ -107,13 +111,13 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
                 />
             }  
             
-            <ul className='grid grid-cols-2 md:grid-cols-4 gap-2.5'>
+            <ul className='grid grid-cols-1 md:grid-cols-4 gap-2.5'>
                 {movies.map((movie, index) => {
 
                     return (        
                         <li 
                             key={index} 
-                            className='p-5 w-full h-64 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
+                            className='p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
                             onClick={()=>{
                                 setIsModalFor(movie)
                                 console.log(movie)
