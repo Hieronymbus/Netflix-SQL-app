@@ -65,6 +65,7 @@ app.get("/filter", async (req, res) => {
   const duration = req.query.duration || null;
   const rating = req.query.rating || null;
   const releaseDecade = releaseYear ? releaseYear + 10 : null;
+  const searchValue = req.query.searchValue ;
 
   try {
     const filters = [];
@@ -83,6 +84,9 @@ app.get("/filter", async (req, res) => {
     if (rating) {
       filters.push(`rating = $${filters.length + 1}`);
       values.push(rating);
+    }
+    if (searchValue) {
+      filters.push(`title ILIKE '%${searchValue}%'`)
     }
 
     const resultQuery = filters.length ? `WHERE ${filters.join(" AND ")}` : "";
