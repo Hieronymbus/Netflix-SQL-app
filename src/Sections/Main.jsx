@@ -86,11 +86,18 @@ function Main( { fetchSearchedMovie, itemCount, filterValue, setItemCount, movie
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };
             const movieData = await response.json();
-            const newMovies = movieData.slice(-12).map(movie => {
-                return `${movie.title}`;
-            });
+            //trial changes using filteredArr
+            let filteredArr = []
+            for(const movie of movieData) {
+                filteredArr.push(movie.title);
+            };
 
-            setMovies(prev => [...prev, ...newMovies]);
+            // const newMovies = movieData.slice(-12).map(movie => {
+            //     return `${movie.title}`;
+            // });
+            // ...prev,  ...newMovies
+
+            setMovies(prev => [ ...filteredArr]);
         } catch(err) {
             console.error('Error fetching movies ', err);
         } finally {

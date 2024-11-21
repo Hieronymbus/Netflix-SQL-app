@@ -21,7 +21,9 @@ const SearchBar = ( { searchInput, setSearchInput, isSearching, setIsSearching, 
         if (isSearching) {
           fetchSearchedMovie();
           setItemCount(12) //keep this
+
         };
+        
       }, [debounceSearch]);
 
   return (
@@ -40,8 +42,8 @@ const SearchBar = ( { searchInput, setSearchInput, isSearching, setIsSearching, 
                     className="p-2.5 mr-2.5 w-full border border-black rounded"
                     value={searchInput}
                     onChange={(e) => {
-                    setIsSearching(true);
-                    setSearchInput(e.target.value);
+                      setIsSearching(true);
+                      setSearchInput(e.target.value);
                     }}
                 />
 
