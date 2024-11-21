@@ -2,6 +2,8 @@ import express from "express";
 import pkg from "pg";
 import cors from "cors";
 import dotenv from "dotenv";
+import bodyParser from 'body-parser';
+
 
 dotenv.config()
 
@@ -10,6 +12,7 @@ const app = express();
 const port = 3000;
 
 app.use(cors());
+app.use(bodyParser.json());
 
 const client = new Client({
   user: "myuser",
@@ -36,6 +39,7 @@ function authMiddleware(req, res, next) {
   };
 
   const token = authenticationHeader.replace("Bearer ", "");
+  userId = token;
   console.log('authMiddleware called and returning: ', token);
 
   next();
@@ -129,8 +133,9 @@ app.get('/oneMovieDetails', async(req, res) => {
 
 });
 
-app.get('/favourites', async(req, res) => {
-
+app.post('/favourites', async(req, res) => {
+  const data = req.body;
+  console.log(await data);
 });
 
 app.listen(port, () => console.log(`Listening on localhost:${port}`));

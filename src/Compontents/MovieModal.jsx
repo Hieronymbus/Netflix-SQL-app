@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 
-const MovieModal = ( { setIsModalFor, isModalFor } ) => {
+const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
    
    const [movieDetails, setMovieDetails ] = useState({
       title:"",
@@ -47,8 +47,18 @@ const MovieModal = ( { setIsModalFor, isModalFor } ) => {
       
       if(isModalFor) fetchOneMoviesDetails(isModalFor)   
 
-   }, [isModalFor])
+   }, [isModalFor]);
 
+   async function addToFavourites() {
+      await fetch('http://localhost:3000/favourites', {
+         method: 'POST',
+         headers: {
+            "Content-Type": "application/json",
+         },       
+         body: JSON.stringify(movieDetails)
+      });
+   };
+ 
    return (
       
       <div 
@@ -67,6 +77,8 @@ const MovieModal = ( { setIsModalFor, isModalFor } ) => {
             </p>
          </div>
          <div>
+            <button className="bg-slate-950 rounded p-1 text-2xl size-9 mr-5 fle border border-black" onClick={addToFavourites}>+</button>
+
             <button 
                className="bg-slate-950 rounded p-1 text-2xl border border-black "
                onClick={ () => setIsModalFor("") }

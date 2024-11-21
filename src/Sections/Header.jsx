@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import FilterOptions from "../Compontents/FilterOptions";
 import SearchBar from "../Compontents/SearchBar";
 
-function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
+function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
   
   const [durationValue, setDurationValue] = useState();
@@ -43,12 +43,14 @@ function Header({ setFilterValue, fetchSearchedMovie, setSearchInput, searchInpu
         Authentication: `Bearer ${token}`
       }
     });
+
+    setToken(token);
   };
 
   return (
     <header className="w-full text-center ">
       <div className='absolute left-5 top-5'>
-        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={async () => await selectUser('user1')}>User 1</button>
+        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => selectUser('user1')}>User 1</button>
         <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => selectUser('user2')}>User 2</button>
       </div>
       <div>
