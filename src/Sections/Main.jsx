@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MovieModal from '../Compontents/MovieModal';
 
 function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
+
     const [movieCount, setMovieCount] = useState();
     
     //Clear movies when applying filter
@@ -43,7 +44,7 @@ function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount
     }, []);
 
     async function fetchAllMovies() {
-        const response = await fetch(`http://localhost:3000/?itemCount=${itemCount}`);
+        const response = await fetch(`${import.meta.env.VITE_PORT}/allMovies/?itemCount=${itemCount}`);
             const movieData = await response.json(); 
             let movieArr = [];
 
@@ -63,9 +64,13 @@ function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount
 
     async function fetchMoviesByFilter() {
         console.log(filterValue);
+        const searchValue = encodeURIComponent(searchInput);
         try {
             //Use URLSearchParams to omit queries;
             const queryParams = new URLSearchParams();
+            if(searchValue){
+                queryParams.append('searchValue', searchValue)
+            };
             if(filterValue.releaseYearValue) {
                 queryParams.append('releaseYear', filterValue.releaseYearValue);    
             };
@@ -77,16 +82,23 @@ function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount
             };
             queryParams.append('itemCount', itemCount);
 
-            const response = await fetch(`http://localhost:3000/filter/?${queryParams.toString()}`);
+            const response = await fetch(`${import.meta.env.VITE_PORT}/filter/?${queryParams.toString()}`);
             if(!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };
             const movieData = await response.json();
-            const newMovies = movieData.slice(-12).map(movie => {
-                return `${movie.title}`;
-            });
+            //trial changes using filteredArr
+            let filteredArr = []
+            for(const movie of movieData) {
+                filteredArr.push(movie.title);
+            };
 
-            setMovies(prev => [...prev, ...newMovies]);
+            // const newMovies = movieData.slice(-12).map(movie => {
+            //     return `${movie.title}`;
+            // });
+            // ...prev,  ...newMovies
+
+            setMovies(prev => [ ...filteredArr]);
         } catch(err) {
             console.error('Error fetching movies ', err);
         } finally {
@@ -108,13 +120,13 @@ function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount
                 />
             }  
             
-            <ul className='grid grid-cols-2 md:grid-cols-4 gap-2.5'>
+            <ul className='grid grid-cols-1 md:grid-cols-4 gap-2.5'>
                 {movies.map((movie, index) => {
 
                     return (        
                         <li 
                             key={index} 
-                            className='p-5 w-full h-64 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
+                            className='p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
                             onClick={()=>{
                                 setIsModalFor(movie)
                             }}
