@@ -83,13 +83,13 @@ app.post('/register', async (req, res) => {
     }
    
     try {
-      const newUser = await client.query("INSERT INTO users( email, username, password ) VALUES ( $1, $2, $3)", [ email, userName, password])
+      await client.query("INSERT INTO users( email, username, password ) VALUES ( $1, $2, $3)", [ email, userName, password])
 
-      return res.status(204).json({ message: 'user registered' })
+      res.status(201).json( { message: 'user registered' } )
 
     } catch (error) {
       
-
+      res.status(400).json( {message: 'failed to create user'} )
     }
 
 });

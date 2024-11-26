@@ -16,33 +16,62 @@ export const LoginRegisterModal = ( { isLoginOpen, setIsLoginOpen, isSignUpOpen,
 
     const sendLoginData = async (e) => {
         e.preventDefault();
+        try {
+            
+            const response =  await fetch(`${import.meta.env.VITE_PORT}/login`, {
+                method : "POST"  ,
+                headers: {
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify(loginDetails)
+            });
+            const data = await response.json();
 
-        const response =  await fetch(`${import.meta.env.VITE_PORT}/login`, {
-            method : "POST"  ,
-            headers: {
-                "Content-Type" : "application/json",
-            },
-            body: JSON.stringify(loginDetails)
-        });
+            if(response.ok) {
+                console.log(data)
+                
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsLoginOpen(false)
+            setLoginDetails(prev => ({
+                userNameEmail: "",
+                password:""
+            }))
+        }
 
-        const data = await response.json();
 
-        console.log(data);
+    
     }
 
     const sendSignupData = async (e) => {
         e.preventDefault();
 
-        const response = await fetch(`${import.meta.env.VITE_PORT}/register`, {
-            method : "POST" ,
-            headers : {
-                "Content-Type" : "application/json"
-            },
-            body: JSON.stringify(signUpDetails)
-        });
+        try {
+            
+            const response = await fetch(`${import.meta.env.VITE_PORT}/register`, {
+                method : "POST" ,
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(signUpDetails)
+            });
+            const data = await response.json()
+            alert(data.message)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setSignUpOpen(false)
+            setIsLoginOpen(true)
+            setSignUpDetails(prev => ({
+                email: "", 
+                userName:"",
+                password:"",
+                confirmationPassword:""
+            }))
+        }
 
-        const data = await response.json()
-        console.log(data)
 
     }
 
@@ -149,7 +178,7 @@ export const LoginRegisterModal = ( { isLoginOpen, setIsLoginOpen, isSignUpOpen,
                 </div>
                 <form 
                     className='flex flex-col items-center '
-                    onSubmit={sendSignupData} 
+                    onSubmit={ sendSignupData} 
                     >
                         <h1 className='text-2xl'>
                             Sign Up
