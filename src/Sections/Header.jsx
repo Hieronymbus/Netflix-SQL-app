@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import FilterOptions from "../Compontents/FilterOptions";
 import SearchBar from "../Compontents/SearchBar";
+import { LoginRegisterModal } from "../Compontents/LoginRegisterModal";
 
 function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
   const [releaseYearValue, setReleaseYearValue] = useState();
-  
+  const [currentUser, setCurrentUser] = useState("");
+
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignUpOpen, setSignUpOpen] = useState(false);
+
   function closeDropDown(e) {
     e.preventDefault();
     setIsDropDown(false);
@@ -28,6 +33,7 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
 
   async function selectUser(arg) {
     let token;
+    setCurrentUser(arg)
     if(arg === 'user1'){
       token = 'Ep9dgUtppo3dAjzf4GqDbWGG';
       console.log('User 1 is active');
@@ -51,9 +57,26 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
       <div className='absolute left-5 top-5'>
         <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => selectUser('user1')}>User 1</button>
         <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => selectUser('user2')}>User 2</button>
+        {/* <h1>
+         Logged in as : {currentUser}
+        </h1> */} 
       </div>
       <div>
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>
+        <button
+          className='text-slate-100 bg-green-900 flex justify-center items-center size-12 aspect-square border border-black rounded hover:bg-slate-600 '
+          onClick={() => setIsLoginOpen(true)}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-7">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </button>
+        <LoginRegisterModal 
+          isLoginOpen={isLoginOpen}
+          setIsLoginOpen={setIsLoginOpen}
+          isSignUpOpen={isSignUpOpen}
+          setSignUpOpen={setSignUpOpen}
+        />
         <SearchBar 
           searchInput={searchInput}
           setSearchInput={setSearchInput}
@@ -73,6 +96,7 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
           </button>
         </div>
 
+      
       </div>
     </header>
   );

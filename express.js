@@ -18,6 +18,7 @@ const userID = 1;
 app.use(cors());
 //Recieve data from req.header/body
 app.use(bodyParser.json());
+
 if (process.env.NODE_ENV === "production") {
   // Serve static files from the "dist" folder inside the "frontend" directory
   // In production, the frontend files (HTML, CSS, JavaScript, etc.) are often bundled and placed in a "dist" folder
@@ -63,6 +64,53 @@ function authMiddleware(req, res, next) {
 
   next();
 };
+
+app.post('/register', async (req, res) => {
+
+    const { email, userName, password ,confirmationPassword } = req.body
+
+    if(password != confirmationPassword ){
+        return res.status(400).send('password does not match confirmation password')
+    }
+    const existingUserName = await client.query('SELECT * FROM users WHERE username = $1', [userName])
+    const existingEmail = await client.query('SELECT * FROM users WHERE email = $1', [email])
+
+    if ( existingUserName.rows[0] ){
+      return res.status(400).json( {message: 'username already taken' })
+    } 
+    if (existingEmail.rows[0]) {
+      return res.status(400).json({ message: 'email already in use' })
+    }
+   
+    try {
+      const newUser = await client.query("INSERT INTO users( email, username, password ) VALUES ( $1, $2, $3)", [ email, userName, password])
+
+      return res.status(204).json({ message: 'user registered' })
+
+    } catch (error) {
+      
+
+    }
+
+});
+
+app.post('/login', async (req, res) => {
+
+    const { userNameEmail, password } = req.body
+
+    try {
+      
+      const result = await client.query("SELECT * FROM users WHERE userName = $1 AND password = $2", [userNameEmail, password]);
+
+      res.status(201).json( result.rows[0] );
+       
+    } catch (error) {
+      
+      res.status(400).send('no user found with those details')
+
+    }
+
+})
 
 app.get('/authenticate', authMiddleware, async (req, res) => {
   const data = req.header("authentication");

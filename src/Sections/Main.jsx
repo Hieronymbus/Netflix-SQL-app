@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MovieModal from '../Compontents/MovieModal';
 
-function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
+function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, searchInput, isSearching, setIsModalFor, isModalFor } ) {
 
     const [movieCount, setMovieCount] = useState();
     
