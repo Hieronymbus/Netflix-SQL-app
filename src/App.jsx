@@ -13,6 +13,7 @@ export default function App() {
   const [filterValue, setFilterValue] = useState();
   const [searchInput, setSearchInput] = useState('');
   const [isModalFor, setIsModalFor ] = useState("");
+  const [user, setUser] = useState("");
 
   const [token, setToken] = useState();
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
@@ -75,6 +76,8 @@ export default function App() {
           setSearchInput={setSearchInput}
           token={token}
           setToken={setToken}
+          user={user}
+          setUser={setUser}
         />
    
         <Main 
@@ -100,6 +103,8 @@ export default function App() {
           setSearchInput={setSearchInput}
           isModalFor={isModalFor}
           setIsModalFor={setIsModalFor}
+          user={user}
+          setUser={setUser}
         />
       </div>
     </>

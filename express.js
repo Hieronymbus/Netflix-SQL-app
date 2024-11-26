@@ -4,7 +4,9 @@ import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
-
+import cookieParser from "cookie-parser";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 const __dirname = path.resolve();
@@ -12,18 +14,23 @@ const __dirname = path.resolve();
 const { Client } = pkg;
 const app = express();
 const port = process.env.PORT || 3000;
+const  SECRET_KEY = "RC6i9Kww4/How+ot1WJjuAzg6ysF987XxgLsdiAaHhDjegdR2K91fS9gPzMeOZ0C"
 
-const userID = 1;
+app.use(cors({
+  origin:"http://localhost:5173",
+  credentials: true
+}
 
-app.use(cors());
+));
 //Recieve data from req.header/body
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 if (process.env.NODE_ENV === "production") {
   // Serve static files from the "dist" folder inside the "frontend" directory
   // In production, the frontend files (HTML, CSS, JavaScript, etc.) are often bundled and placed in a "dist" folder
   app.use(express.static(path.join(__dirname, "/dist")));
-}
+};
 
 let clientConfig;
 
@@ -64,6 +71,23 @@ function authMiddleware(req, res, next) {
 
   next();
 };
+function authCookieMiddleware(req, res, next) {
+    //Each fetch request grab token
+    const token = req.cookies.authToken;
+    if (!token) {
+      return res.status(401).send('acces denied');
+    };
+
+    try {
+      const decoded = jwt.verify(token, SECRET_KEY);
+      req.user = decoded;
+
+      next()
+    
+    } catch (error) {
+      res.status(400).send('Invalid token')
+    }
+};
 
 app.post('/register', async (req, res) => {
 
@@ -72,8 +96,11 @@ app.post('/register', async (req, res) => {
     if(password != confirmationPassword ){
         return res.status(400).send('password does not match confirmation password')
     }
-    const existingUserName = await client.query('SELECT * FROM users WHERE username = $1', [userName])
-    const existingEmail = await client.query('SELECT * FROM users WHERE email = $1', [email])
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const existingUserName = await client.query('SELECT * FROM users WHERE username = $1', [userName]);
+    const existingEmail = await client.query('SELECT * FROM users WHERE email = $1', [email]);
 
     if ( existingUserName.rows[0] ){
       return res.status(400).json( {message: 'username already taken' })
@@ -83,14 +110,14 @@ app.post('/register', async (req, res) => {
     }
    
     try {
-      await client.query("INSERT INTO users( email, username, password ) VALUES ( $1, $2, $3)", [ email, userName, password])
+      await client.query("INSERT INTO users( email, username, password ) VALUES ( $1, $2, $3)", [ email, userName, hashedPassword]);
 
-      res.status(201).json( { message: 'user registered' } )
+      res.status(201).json( { message: 'user registered' } );
 
     } catch (error) {
       
       res.status(400).json( {message: 'failed to create user'} )
-    }
+    };
 
 });
 
@@ -100,17 +127,40 @@ app.post('/login', async (req, res) => {
 
     try {
       
-      const result = await client.query("SELECT * FROM users WHERE userName = $1 AND password = $2", [userNameEmail, password]);
+      const result = await client.query("SELECT * FROM users WHERE userName = $1 OR email = $2", [userNameEmail, userNameEmail]);
+      const user = result.rows[0];
 
-      res.status(201).json( result.rows[0] );
-       
+      const match = await bcrypt.compare(password, user.password);
+
+      const userDataForToken = {
+        id: user.id ,
+        username: user.username ,
+        role: "user" 
+      }
+
+      if(match) {
+        //Generate token
+        const token = jwt.sign( userDataForToken, SECRET_KEY, {expiresIn: '1h' } );
+        //Assign token
+        res.cookie('authToken', token, {httpOnly: true });
+      
+      };
+
+      res.status(201).json( {message:'logged in', data: user});
     } catch (error) {
       
       res.status(400).send('no user found with those details')
 
     }
 
-})
+});
+
+app.post('/logout', async (req, res) => {
+
+  res.clearCookie('authToken');
+
+  res.status(400).send('logged Out')
+});
 
 app.get('/authenticate', authMiddleware, async (req, res) => {
   const data = req.header("authentication");
@@ -123,6 +173,7 @@ app.get("/allMovies", async (req, res) => {
     const result = await client.query(`SELECT * FROM netflix_shows LIMIT $1`, [
       itemCount,
     ]);
+
     res.json(result.rows);
   } catch (err) {
     console.error(err);

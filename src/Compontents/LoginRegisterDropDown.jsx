@@ -1,7 +1,7 @@
 import { stringify } from 'postcss'
 import React, { useState } from 'react'
 
-export const LoginRegisterModal = ( { isLoginOpen, setIsLoginOpen, isSignUpOpen, setSignUpOpen}) => {
+export const LoginRegisterDropDown = ( { isLoginOpen, setIsLoginOpen, isSignUpOpen, setSignUpOpen}) => {
 
     const [loginDetails, setLoginDetails] = useState({
         userNameEmail: "",
@@ -23,7 +23,8 @@ export const LoginRegisterModal = ( { isLoginOpen, setIsLoginOpen, isSignUpOpen,
                 headers: {
                     "Content-Type" : "application/json",
                 },
-                body: JSON.stringify(loginDetails)
+                body: JSON.stringify(loginDetails),
+                credentials: 'include'
             });
             const data = await response.json();
 
@@ -55,7 +56,8 @@ export const LoginRegisterModal = ( { isLoginOpen, setIsLoginOpen, isSignUpOpen,
                 headers : {
                     "Content-Type" : "application/json"
                 },
-                body: JSON.stringify(signUpDetails)
+                body: JSON.stringify(signUpDetails),
+                credentials: 'include'
             });
             const data = await response.json()
             alert(data.message)
