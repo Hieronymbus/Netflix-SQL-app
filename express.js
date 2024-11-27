@@ -138,6 +138,12 @@ app.post('/login', async (req, res) => {
         role: "user" 
       }
 
+      const userDataForFrontend = {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      }
+
       if(match) {
         //Generate token
         const token = jwt.sign( userDataForToken, SECRET_KEY, {expiresIn: '1h' } );
@@ -146,13 +152,32 @@ app.post('/login', async (req, res) => {
       
       };
 
-      res.status(201).json( {message:'logged in', data: user});
+      res.status(201).json( { message:'logged in', data: userDataForFrontend });
     } catch (error) {
       
       res.status(400).send('no user found with those details')
 
     }
 
+});
+
+app.get("/user", authCookieMiddleware,  async (req, res) => {
+
+    const {id, username, role} = req.user
+
+    try {
+      const data = client.query("SELECT FROM users WHERE id = $1", [id]);
+      const user = data.rows[0];
+      const userDataForFrontend = {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      }
+      res.status(200).json( {message:"User Found" , data: userDataForFrontend } );
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({message: error});
+    }
 });
 
 app.post('/logout', async (req, res) => {

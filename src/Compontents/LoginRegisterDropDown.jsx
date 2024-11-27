@@ -1,7 +1,7 @@
 import { stringify } from 'postcss'
 import React, { useState } from 'react'
 
-export const LoginRegisterDropDown = ( { isLoginOpen, setIsLoginOpen, isSignUpOpen, setSignUpOpen}) => {
+export const LoginRegisterDropDown = ( { isLoginOpen, setIsLoginOpen, isSignUpOpen, setSignUpOpen, setUser}) => {
 
     const [loginDetails, setLoginDetails] = useState({
         userNameEmail: "",
@@ -29,8 +29,8 @@ export const LoginRegisterDropDown = ( { isLoginOpen, setIsLoginOpen, isSignUpOp
             const data = await response.json();
 
             if(response.ok) {
-                console.log(data)
-                
+                console.log(data.data)
+                setUser(data.data)
             }
         } catch (error) {
             console.error(error)
@@ -39,11 +39,9 @@ export const LoginRegisterDropDown = ( { isLoginOpen, setIsLoginOpen, isSignUpOp
             setLoginDetails(prev => ({
                 userNameEmail: "",
                 password:""
-            }))
+            }))  
         }
-
-
-    
+   
     }
 
     const sendSignupData = async (e) => {

@@ -76,6 +76,7 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
           setIsLoginOpen={setIsLoginOpen}
           isSignUpOpen={isSignUpOpen}
           setSignUpOpen={setSignUpOpen}
+          setUser={setUser}
         />
         <SearchBar 
           searchInput={searchInput}

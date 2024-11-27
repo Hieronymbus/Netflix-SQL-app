@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Header from './Sections/Header.jsx';
 import Main from './Sections/Main.jsx';
 
@@ -35,8 +35,7 @@ export default function App() {
 
         for(const movie of searchData) {
             searchedForArr.push(movie.title);
-        };
-        
+        }; 
         setMovies( searchedForArr);
         console.log("yo")
     } catch (error) {
@@ -44,8 +43,22 @@ export default function App() {
     } finally {
         setLoading(false)
     }
+} 
+  const fetchUserData = async () => {
 
-}
+      const response = await fetch(`${import.meta.env.VITE_PORT}/user`,{
+        credentials: "include"
+      });
+      const data = await response.json();
+
+      console.log(data)
+      // if(data)
+      // setUser(data.data)
+  }
+  useEffect(() => {
+      fetchUserData()
+  }, [])
+
   return (
     <>
       {
