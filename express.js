@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 
 dotenv.config();
@@ -13,8 +14,6 @@ const __dirname = path.resolve();
 const { Client } = pkg;
 const app = express();
 const port = process.env.PORT || 3000;
-
-const userID = 1;
 
 app.use(cors());
 //Recieve data from req.header/body
@@ -77,18 +76,29 @@ app.post('/register', async(req, res) => {
   };
 
   try {
-      await client.query(`CREATE TABLE IF NOT EXISTS users 
-                        (user_id SERIAL PRIMARY KEY ,
-                        username TEXT NOT NULL UNIQUE,
-                        password TEXT NOT NULL,
-                        token TEXT)
-      `);
-    
-      await client.query(`INSERT INTO users
-        (username, password)
-        VALUES
-        ($1, $2)
-    `, [username, password]);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const existingUser = await client.query(`SELECT * FROM users
+                                            WHERE username = $1
+    `, [username]);
+
+    if(existingUser.rows[0]) {
+      console.log("Username already exists: ", existingUser.rows[0].username);
+      res.status(404).json({ message: 'Username already exists' });
+      return;
+    };
+
+    await client.query(`CREATE TABLE IF NOT EXISTS users 
+                      (user_id SERIAL PRIMARY KEY ,
+                      username TEXT NOT NULL UNIQUE,
+                      password TEXT NOT NULL,
+                      token TEXT)
+    `);
+  
+    await client.query(`INSERT INTO users
+      (username, password)
+      VALUES
+      ($1, $2)
+    `, [username, hashedPassword]);
   } catch(err) {
     console.error(err.stack);
   };
