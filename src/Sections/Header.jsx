@@ -1,12 +1,24 @@
 import { useState, useEffect } from "react";
 import FilterOptions from "../Compontents/FilterOptions";
 import SearchBar from "../Compontents/SearchBar";
+import Register_Login from '../Compontents/Register_Login.jsx';
 
 function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
   const [releaseYearValue, setReleaseYearValue] = useState();
+  const [registerLoginModal, setRegisterLoginModal] = useState(false);
+  const [isRegister, setIsRegister] = useState(false);
+  const [value, setValue] = useState({
+    username: "",
+    password: "",
+    confirmPassword: ""
+  });
+
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
   
   function closeDropDown(e) {
     e.preventDefault();
@@ -26,15 +38,14 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
     setIsDropDown(false);
   };
 
-  async function selectUser(arg) {
-    let token;
-    if(arg === 'user1'){
-      token = 'Ep9dgUtppo3dAjzf4GqDbWGG';
-      console.log('User 1 is active');
-    } else {
-      token = 'xKmUwizGSZm5dirMobXj6iQb';
-      console.log('User 2 is active');
-    };
+  function register() {
+    setRegisterLoginModal(true);
+    setIsRegister(true);
+  };
+
+  async function logIn() {
+    setRegisterLoginModal(true);
+    let token = 'Ep9dgUtppo3dAjzf4GqDbWGG';
 
     await fetch('http://localhost:3000/authenticate', {
       headers: {
@@ -46,11 +57,17 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
     setToken(token);
   };
 
+  function closeProfileModal() {
+    setRegisterLoginModal(false);
+    setIsRegister(false);
+  };
+
   return (
     <header className="w-full text-center ">
       <div className='absolute left-5 top-5'>
-        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => selectUser('user1')}>User 1</button>
-        <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => selectUser('user2')}>User 2</button>
+        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => register()}>Register</button>
+        <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => logIn()}>Log in</button>
+        {registerLoginModal && <Register_Login isRegister={isRegister} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
       </div>
       <div>
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>

@@ -66,6 +66,7 @@ function authMiddleware(req, res, next) {
 
 app.get('/authenticate', authMiddleware, async (req, res) => {
   const data = req.header("authentication");
+  console.log("authentication end point");
   console.log(data);
 });
   
