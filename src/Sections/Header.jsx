@@ -38,23 +38,50 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
     setIsDropDown(false);
   };
 
-  function register() {
+  function submitValues(e, type) {
+    e.preventDefault();
+    if(type != null && type == "register") {
+      if(value.password === value.confirmPassword) {
+        register();
+      } else {
+        alert('Passwords do not match');
+      };
+    } else {
+      login();
+    }
+  };
+
+  function openRegisterModal() {
     setRegisterLoginModal(true);
     setIsRegister(true);
   };
 
-  async function logIn() {
+  function openLoginModal() {
     setRegisterLoginModal(true);
-    let token = 'Ep9dgUtppo3dAjzf4GqDbWGG';
+    setIsRegister(false);
+  };
+
+  async function login() {
+    setRegisterLoginModal(false);
+    setIsRegister(false);
 
     await fetch('http://localhost:3000/authenticate', {
+      method: 'POST',
       headers: {
         "Content-Type": "application/json",
-        Authentication: `Bearer ${token}`
-      }
+      },
+      body: JSON.stringify({ username: value.username, password: value.password }),
     });
+  };
 
-    setToken(token);
+  async function register() {
+    await fetch('http://localhost:3000/register', {
+      method: 'POST',
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username: value.username, password: value.password, confirmPassword: value.confirmPassword })
+    });
   };
 
   function closeProfileModal() {
@@ -65,9 +92,9 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
   return (
     <header className="w-full text-center ">
       <div className='absolute left-5 top-5'>
-        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => register()}>Register</button>
-        <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => logIn()}>Log in</button>
-        {registerLoginModal && <Register_Login isRegister={isRegister} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
+        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => openRegisterModal()}>Register</button>
+        <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => openLoginModal()}>Log in</button>
+        {registerLoginModal && <Register_Login submitValues={submitValues} isRegister={isRegister} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
       </div>
       <div>
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>

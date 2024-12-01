@@ -4,6 +4,7 @@ import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
 
 
 dotenv.config();
@@ -47,27 +48,52 @@ client
   .then(() => console.log("Connected to PostgreSQL database"))
   .catch((err) => console.error("Connection error ", err.stack));
 
-//HardCoded user id
-let userId;
+// function authMiddleware(req, res, next) {
+//   const authenticationHeader = req.header("authentication");
 
-function authMiddleware(req, res, next) {
-  const authenticationHeader = req.header("authentication");
+//   if(!authenticationHeader || !authenticationHeader.startsWith("Bearer ")) {
+//     return res.status(401).json({ success: false, message: "Invalid authorization header" });
+//   };
 
-  if(!authenticationHeader || !authenticationHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ success: false, message: "Invalid authorization header" });
-  };
+//   const token = authenticationHeader.replace("Bearer ", "");
+//   userId = token;
+//   console.log('authMiddleware called and returning: ', token);
 
-  const token = authenticationHeader.replace("Bearer ", "");
-  userId = token;
-  console.log('authMiddleware called and returning: ', token);
+//   next();
+// };
 
-  next();
-};
-
-app.get('/authenticate', authMiddleware, async (req, res) => {
-  const data = req.header("authentication");
+app.post('/authenticate', async (req, res) => {
+  const data = req.body;
   console.log("authentication end point");
   console.log(data);
+});
+
+app.post('/register', async(req, res) => {
+  const { username, password, confirmPassword } = req.body;
+
+  if(!password || password !== confirmPassword) {
+    res.status(404).json({ message: 'Error with password' });
+    return;
+  };
+
+  try {
+      await client.query(`CREATE TABLE IF NOT EXISTS users 
+                        (user_id SERIAL PRIMARY KEY ,
+                        username TEXT NOT NULL UNIQUE,
+                        password TEXT NOT NULL,
+                        token TEXT)
+      `);
+    
+      await client.query(`INSERT INTO users
+        (username, password)
+        VALUES
+        ($1, $2)
+    `, [username, password]);
+  } catch(err) {
+    console.error(err.stack);
+  };
+
+
 });
   
 app.get("/allMovies", async (req, res) => {
@@ -171,11 +197,6 @@ app.post('/favourites', async(req, res) => {
                       user_id VARCHAR(100) NOT NULL
                       )`
   );
-
-  if(!userId) {
-    res.status(401);
-    return;
-  };
 
   await client.query(`INSERT INTO favourites (netflix_shows_id, user_id)
                      VALUES ('${data.show_id}', '${userId}')`
