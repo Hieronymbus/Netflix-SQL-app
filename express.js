@@ -61,10 +61,38 @@ client
 //   next();
 // };
 
-app.post('/authenticate', async (req, res) => {
-  const data = req.body;
-  console.log("authentication end point");
-  console.log(data);
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  if(!username || !password) {
+    res.status(404).json({ message: 'Missing data' });
+    return;
+  };
+
+  try {
+    const result = await client.query(`SELECT * FROM users
+                                      WHERE username = $1
+    `, [username]);
+    const user = result.rows[0];
+    const userData = {
+      userId: user.user_id,
+      username: user.username
+    };
+
+    const match = await bcrypt.compare(password, user.password);
+    
+    if(!match) {
+      console.error('Passwords do not match');
+      res.status(404).json({ message: 'Incorrect password' });
+      return;
+    };
+
+    const secretKey = 'secretKey';
+
+    const token = jwt.sign(userData, secretKey, { expiresIn: '1h' });
+    res.status(201).json({ message: `Logged in as: ${username}`, data: userData });
+  } catch(err) {
+    console.error(err.stack);
+  };
 });
 
 app.post('/register', async(req, res) => {

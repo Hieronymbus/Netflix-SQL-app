@@ -65,13 +65,15 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
     setRegisterLoginModal(false);
     setIsRegister(false);
 
-    await fetch('http://localhost:3000/authenticate', {
+    const response = await fetch('http://localhost:3000/login', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username: value.username, password: value.password }),
     });
+
+    console.log(await response.json());
   };
 
   async function register() {
