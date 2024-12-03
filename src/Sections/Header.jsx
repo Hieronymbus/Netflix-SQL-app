@@ -3,7 +3,7 @@ import FilterOptions from "../Compontents/FilterOptions";
 import SearchBar from "../Compontents/SearchBar";
 import Register_Login from '../Compontents/Register_Login.jsx';
 
-function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
+function Header({ setToken, token, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
@@ -16,6 +16,9 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
     password: "",
     confirmPassword: ""
   });
+
+  const [netflixUser, setNetflixUser] = useState();
+  const [authorizedMessage, setAuthorizedMessage] = useState('not Authorized');
 
   useEffect(() => {
     console.log(value);
@@ -76,6 +79,7 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
 
     const data = await response.json();
     const token = data.token;
+    setNetflixUser(data.username);
     setToken(token);
   };
 
@@ -96,6 +100,24 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
     setIsRegister(false);
   };
 
+  //Test token authentication 
+  async function authenticate() {
+    setAuthorizedMessage(false);
+    const response = await fetch('http://localhost:3000/authenticate', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        Authentication: `Bearer ${token}`
+      },
+    });
+
+    if(response.ok) {
+      setAuthorizedMessage(`User ${netflixUser} Is authorized`);
+    };
+    const data = await response.json();
+    console.log(data);
+  };
+
   return (
     <header className="w-full text-center ">
       <div className='absolute left-5 top-5'>
@@ -103,6 +125,11 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
         <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => openLoginModal()}>Log in</button>
         {registerLoginModal && <Register_Login submitValues={submitValues} isRegister={isRegister} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
       </div>
+      {/* Test authorization button for token / cookies */}
+      <button onClick={authenticate} className='absolute top-5 right-5 rounded bg-slate-600 text-white p-2.5'>
+        {authorizedMessage}
+      </button>
+      {/* ----------------------------------------------------- */}
       <div>
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>
         <SearchBar 
@@ -123,7 +150,6 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
             </svg>
           </button>
         </div>
-
       </div>
     </header>
   );

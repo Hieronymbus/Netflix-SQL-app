@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
+const SECRET_KEY = 'secretKey';
 
 dotenv.config();
 const __dirname = path.resolve();
@@ -47,19 +48,28 @@ client
   .then(() => console.log("Connected to PostgreSQL database"))
   .catch((err) => console.error("Connection error ", err.stack));
 
-// function authMiddleware(req, res, next) {
-//   const authenticationHeader = req.header("authentication");
+function authMiddleware(req, res, next) {
+  const authenticationHeader = req.header("authentication");
 
-//   if(!authenticationHeader || !authenticationHeader.startsWith("Bearer ")) {
-//     return res.status(401).json({ success: false, message: "Invalid authorization header" });
-//   };
+  if(!authenticationHeader || !authenticationHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ success: false, message: "Invalid authorization header" });
+  };
 
-//   const token = authenticationHeader.replace("Bearer ", "");
-//   userId = token;
-//   console.log('authMiddleware called and returning: ', token);
+  const token = authenticationHeader.replace("Bearer ", "");
 
-//   next();
-// };
+  if (!token) return res.status(401).json({ error: 'Access denied' });
+
+  const decoded = jwt.verify(token, SECRET_KEY);
+  console.log("decoded object: ", decoded);
+  console.log('authMiddleware called and returning: ', token);
+  next();
+};
+
+//Test authentication
+app.post('/authenticate', authMiddleware, async(req, res) => {
+  const token = req.header("authentication");
+  res.status(201).send({ data: token });
+});
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -84,10 +94,8 @@ app.post('/login', async (req, res) => {
       return;
     };
 
-    const secretKey = 'secretKey';
-
-    const token = jwt.sign(userData, secretKey, { expiresIn: '1h' });
-    res.status(201).json({ message: `Logged in as: ${username}`, data: userData, token: token });
+    const token = jwt.sign(userData, SECRET_KEY, { expiresIn: '1h' });
+    res.status(201).json({ message: `Logged in as: ${username}`, username: username, data: userData, token: token });
   } catch(err) {
     console.error(err.stack);
   };

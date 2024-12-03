@@ -13,12 +13,8 @@ export default function App() {
   const [filterValue, setFilterValue] = useState();
   const [searchInput, setSearchInput] = useState('');
   const [isModalFor, setIsModalFor ] = useState("");
-
   const [token, setToken] = useState();
 
-  useEffect(() => {
-    console.log('State value for token is: ' + token);
-  }, [token]);
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
   const fetchSearchedMovie = async (e) => {
          
