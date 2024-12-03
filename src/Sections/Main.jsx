@@ -24,14 +24,13 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
             fetchMoviesByFilter();
         } else if(isSearching) {
             fetchSearchedMovie()
-        } else if(fetchFavourites) {
-            fetchFavouriteMoves();
-            setFetchFavourites(false);
+        } else if(fetchFavourites && netflixUser) {
+            fetchFavouriteMovies();
         } else {
             fetchAllMovies();
         };
 
-    }, [itemCount, fetchFavourites, filterValue]);
+    }, [itemCount, netflixUser, fetchFavourites, filterValue]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
@@ -48,7 +47,7 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
         window.addEventListener('scroll', handleScroll);
     }, []);
 
-    async function fetchFavouriteMoves() {
+    async function fetchFavouriteMovies() {
         const response = await fetch(`http://localhost:${PORT}/get-favourites/${netflixUser.userId}`);
         const favMovieData = await response.json();
         let favMovieArr = [];

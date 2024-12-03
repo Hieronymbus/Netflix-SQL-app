@@ -3,7 +3,7 @@ import FilterOptions from "../Compontents/FilterOptions";
 import SearchBar from "../Compontents/SearchBar";
 import Register_Login from '../Compontents/Register_Login.jsx';
 
-function Header({ setFetchFavourites, setToken, setNetflixUser, netflixUser, token, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
+function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser, netflixUser, token, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
@@ -84,6 +84,12 @@ function Header({ setFetchFavourites, setToken, setNetflixUser, netflixUser, tok
     };
   };
 
+  function logout() {
+    setNetflixUser();
+    setFetchFavourites(false);
+    setToken();
+  };
+
   async function register() {
     setRegisterLoginModal(false);
     setIsRegister(false);
@@ -108,13 +114,16 @@ function Header({ setFetchFavourites, setToken, setNetflixUser, netflixUser, tok
     <header className="w-full text-center ">
       <div className='absolute left-5 top-5'>
         <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => openRegisterModal()}>Register</button>
-        <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => openLoginModal()}>Log in</button>
+        {!netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => openLoginModal()}>Log in</button>}
+        {netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={logout}>Log out</button>}
+        {netflixUser && <h2>Logged in as: {netflixUser.username}</h2>}
         {registerLoginModal && <Register_Login submitValues={submitValues} isRegister={isRegister} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
       </div>
       {/* Test authorization button for token / cookies */}
-      <button onClick={() => setFetchFavourites(true)} className='absolute top-5 right-5 rounded bg-slate-600 text-white p-2.5'>
-        favourites
+      {netflixUser && <button onClick={() => setFetchFavourites(!fetchFavourites)} className='absolute top-5 right-5 rounded bg-slate-600 text-white p-2.5'>
+        {fetchFavourites ? 'All' : 'favourites'}
       </button>
+      }
       {/* ----------------------------------------------------- */}
       <div>
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>

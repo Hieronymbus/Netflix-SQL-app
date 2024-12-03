@@ -80,6 +80,7 @@ export default function App() {
           netflixUser={netflixUser}
           setNetflixUser={setNetflixUser}
           setFetchFavourites={setFetchFavourites}
+          fetchFavourites={fetchFavourites}
         />
    
         <Main 
