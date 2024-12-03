@@ -6,20 +6,26 @@ function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, s
     const durationValues = ['1 Season', '2 Seasons', '125 min'];
 
     function setFilterValue(filterType, item) {
-        console.log(item + ' ' + filterType);
-        if(filterType === 'year') {
-            setReleaseYearValue(item);
-        } else if(filterType === 'duration') {
-            setDurationValue(item);
-        } else if(filterType === 'rating') {
-            setRatingValue(item);
+        switch(filterType) {
+            case 'year':
+                setReleaseYearValue(item);
+                break;
+            case 'duration':
+                setDurationValue(item);
+                break;
+            case 'rating':
+                setRatingValue(item);
+                break;
         };
     };
 
     function mapValues(arr, filterType) { 
         const mapArr = arr.map((item, index) => {
             return(
-                <p key={index} onClick={() => setFilterValue(filterType, item)} className='text-white hover:cursor-pointer active:bg-green-500 bg-gray-500 my-5'>
+                <p  key={index} 
+                    onClick={() => setFilterValue(filterType, item)} 
+                    className='text-white hover:cursor-pointer active:bg-green-500 bg-gray-500 my-5'
+                >
                     {item}
                 </p>
             )
@@ -59,4 +65,4 @@ function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, s
     )
 };
 
-export default FilterOptions;
+export default FilterOptions; 
