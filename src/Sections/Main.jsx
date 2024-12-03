@@ -150,7 +150,6 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
                             className='relative p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
                             onClick={()=>{setIsModalFor(movie)}}
                         >
-                            {fetchFavourites && <button className='absolute z-20 top-5 right-5'>Remove from favourites</button>}
                             <div>  
                                 <h1 className='text-2xl'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
                             </div>

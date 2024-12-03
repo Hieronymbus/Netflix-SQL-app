@@ -44,6 +44,10 @@ const SearchBar = ( { searchInput, setSearchInput, isSearching, setIsSearching, 
                     onChange={(e) => {
                       setIsSearching(true);
                       setSearchInput(e.target.value);
+                      if(e.target.value === '') {
+                        console.log('false');
+                        setIsSearching(false);
+                      }
                     }}
                 />
 
