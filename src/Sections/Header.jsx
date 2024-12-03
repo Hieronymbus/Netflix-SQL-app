@@ -74,7 +74,9 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
       body: JSON.stringify({ username: value.username, password: value.password }),
     });
 
-    console.log(await response.json());
+    const data = await response.json();
+    const token = data.token;
+    setToken(token);
   };
 
   async function register() {

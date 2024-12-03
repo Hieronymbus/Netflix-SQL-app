@@ -69,11 +69,8 @@ app.post('/login', async (req, res) => {
   };
 
   try {
-    const result = await client.query(`SELECT * FROM users
-                                      WHERE username = $1
-    `, [username]);
+    const result = await client.query(`SELECT * FROM users WHERE username = $1`, [username]);
     const user = result.rows[0];
-    console.log(user);
     const userData = {
       userId: user.user_id,
       username: user.username
@@ -90,7 +87,7 @@ app.post('/login', async (req, res) => {
     const secretKey = 'secretKey';
 
     const token = jwt.sign(userData, secretKey, { expiresIn: '1h' });
-    res.status(201).json({ message: `Logged in as: ${username}`, data: userData });
+    res.status(201).json({ message: `Logged in as: ${username}`, data: userData, token: token });
   } catch(err) {
     console.error(err.stack);
   };
@@ -113,9 +110,7 @@ app.post('/register', async(req, res) => {
       )`);
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const existingUser = await client.query(`SELECT * FROM users
-                                            WHERE username = $1
-    `, [username]);
+    const existingUser = await client.query(`SELECT * FROM users WHERE username = $1`, [username]);
 
     if(existingUser.rows[0]) {
       console.log("Username already exists: ", existingUser.rows[0].username);
