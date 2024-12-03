@@ -14,6 +14,8 @@ function Register_Login({ isRegister, setValue, value, closeProfileModal, submit
                 <button className='absolute top-0 right-0' onClick={closeProfileModal}>X</button>
                 <label>Enter username:</label>
                 <input type="text" value={value.username} onChange={(e) => handleValue(e, "username")} className='text-black pl-2.5' />
+                <label>Enter email:</label>
+                <input type="text" value={value.email} onChange={(e) => handleValue(e, "email")} className='text-black pl-2.5' />
                 <label>enter password:</label>
                 <input type="text" value={value.password} onChange={(e) => handleValue(e, "password")} className='text-black pl-2.5' />
                 {isRegister && <label>Confirm your password</label>}

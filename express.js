@@ -73,6 +73,7 @@ app.post('/login', async (req, res) => {
                                       WHERE username = $1
     `, [username]);
     const user = result.rows[0];
+    console.log(user);
     const userData = {
       userId: user.user_id,
       username: user.username
@@ -96,7 +97,7 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/register', async(req, res) => {
-  const { username, password, confirmPassword } = req.body;
+  const { username, password, confirmPassword, email } = req.body;
 
   if(!password || password !== confirmPassword) {
     res.status(404).json({ message: 'Error with password' });
@@ -104,6 +105,13 @@ app.post('/register', async(req, res) => {
   };
 
   try {
+    await client.query(`CREATE TABLE IF NOT EXISTS users 
+      (user_id SERIAL PRIMARY KEY,
+      username TEXT NOT NULL UNIQUE,
+      email TEXT NOT NULL UNIQUE,
+      password TEXT NOT NULL
+      )`);
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const existingUser = await client.query(`SELECT * FROM users
                                             WHERE username = $1
@@ -114,19 +122,12 @@ app.post('/register', async(req, res) => {
       res.status(404).json({ message: 'Username already exists' });
       return;
     };
-
-    await client.query(`CREATE TABLE IF NOT EXISTS users 
-                      (user_id SERIAL PRIMARY KEY ,
-                      username TEXT NOT NULL UNIQUE,
-                      password TEXT NOT NULL,
-                      token TEXT)
-    `);
   
     await client.query(`INSERT INTO users
-      (username, password)
+      (username, password, email)
       VALUES
-      ($1, $2)
-    `, [username, hashedPassword]);
+      ($1, $2, $3)
+    `, [username, hashedPassword, email]);
   } catch(err) {
     console.error(err.stack);
   };

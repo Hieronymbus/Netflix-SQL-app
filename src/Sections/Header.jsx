@@ -12,6 +12,7 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
   const [isRegister, setIsRegister] = useState(false);
   const [value, setValue] = useState({
     username: "",
+    email: "",
     password: "",
     confirmPassword: ""
   });
@@ -82,7 +83,7 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
       headers:{
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username: value.username, password: value.password, confirmPassword: value.confirmPassword })
+      body: JSON.stringify({ email: value.email, username: value.username, password: value.password, confirmPassword: value.confirmPassword })
     });
 
     console.log(await response.json());
