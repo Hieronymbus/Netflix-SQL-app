@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 
-const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
+const MovieModal = ( { netflixUser, token, setIsModalFor, isModalFor } ) => {
    const [isLoadingDetails, setIsLoadingDetails] = useState(false)
    const [movieDetails, setMovieDetails ] = useState({
       title:"",
@@ -61,8 +61,12 @@ const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
          method: 'POST',
          headers: {
             "Content-Type": "application/json",
+            Authentication: `Bearer ${token}`
          },       
-         body: JSON.stringify(movieDetails)
+         body: {
+            movieId: "s1",
+            username: netflixUser
+         }
       });
    };
  

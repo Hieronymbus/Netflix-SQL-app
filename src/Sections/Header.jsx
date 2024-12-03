@@ -3,7 +3,7 @@ import FilterOptions from "../Compontents/FilterOptions";
 import SearchBar from "../Compontents/SearchBar";
 import Register_Login from '../Compontents/Register_Login.jsx';
 
-function Header({ setToken, token, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
+function Header({ setToken, setNetflixUser, netflixUser, token, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
@@ -17,7 +17,6 @@ function Header({ setToken, token, setFilterValue, fetchSearchedMovie, setSearch
     confirmPassword: ""
   });
 
-  const [netflixUser, setNetflixUser] = useState();
   const [authorizedMessage, setAuthorizedMessage] = useState('not Authorized');
 
   useEffect(() => {

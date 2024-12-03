@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MovieModal from '../Compontents/MovieModal';
 
-function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
+function Main( { netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
 
     const [movieCount, setMovieCount] = useState();
     
@@ -117,6 +117,7 @@ function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount
                     setIsModalFor={setIsModalFor}
                     isModalFor={isModalFor}
                     token={token}
+                    netflixUser={netflixUser}
                 />
             }  
             

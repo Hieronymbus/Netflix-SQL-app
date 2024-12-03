@@ -59,9 +59,11 @@ function authMiddleware(req, res, next) {
 
   if (!token) return res.status(401).json({ error: 'Access denied' });
 
-  const decoded = jwt.verify(token, SECRET_KEY);
-  console.log("decoded object: ", decoded);
-  console.log('authMiddleware called and returning: ', token);
+  jwt.verify(token, SECRET_KEY, (err, user) => {
+    //user arg = serialized user object?
+    if(err) return res.status(403);
+    req.user = user;
+  });
   next();
 };
 
@@ -94,7 +96,7 @@ app.post('/login', async (req, res) => {
       return;
     };
 
-    const token = jwt.sign(userData, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign(userData, SECRET_KEY);
     res.status(201).json({ message: `Logged in as: ${username}`, username: username, data: userData, token: token });
   } catch(err) {
     console.error(err.stack);
@@ -131,6 +133,8 @@ app.post('/register', async(req, res) => {
       VALUES
       ($1, $2, $3)
     `, [username, hashedPassword, email]);
+
+    res.status(201).send({ message: `Created user ${user}`});
   } catch(err) {
     console.error(err.stack);
   };
@@ -231,21 +235,31 @@ app.get("/oneMovieDetails", async (req, res) => {
   }
 });
 
-app.post('/favourites', async(req, res) => {
-  const data = req.body;
-  console.log(await data);
-  await client.query(`CREATE TABLE IF NOT EXISTS favourites (
-                      netflix_shows_id VARCHAR(100) NOT NULL,
-                      user_id VARCHAR(100) NOT NULL
-                      )`
-  );
+app.post('/add-favourites', authMiddleware, async(req, res) => {
+  try {
+    const data = await req.body;
+    await client.query(`CREATE TABLE IF NOT EXISTS favourites (
+                        netflix_shows_id VARCHAR(100) NOT NULL,
+                        user_id VARCHAR(100) NOT NULL
+                        )`
+    );
+  
+    const user = await client.query(`SELECT * FROM users WHERE username = '${data.username}'`);
+    const userId = await user.rows[0].user_id;
+    const existingFavourite = await client.query(`SELECT * FROM favourites WHERE netflix_shows_id = '${data.movieId}' AND user_id = '${userId}'`);
 
-  await client.query(`INSERT INTO favourites (netflix_shows_id, user_id)
-                     VALUES ('${data.show_id}', '${userId}')`
-  );
-
-  const usersFavourites = await client.query(`SELECT * FROM favourites WHERE user_id = '${userId}'`);
-  console.log(usersFavourites.rows);
+    if(existingFavourite.rows.length > 0) return res.status(401).json({ message: "Show is already in favourites" });
+    
+    await client.query(`INSERT INTO favourites (netflix_shows_id, user_id)
+                       VALUES ('${data.movieId}', '${userId}')`
+    );
+  
+    const usersFavourites = await client.query(`SELECT * FROM favourites WHERE user_id = '${userId}'`);
+    console.log(usersFavourites.rows[0]);
+    res.status(201).json({ message: `Added movie with id ${data.movieId} to favourites` });
+  } catch(err) {
+    console.error('ERROR!: ', err);
+  };
 });
 
 app.listen(port, () => console.log(`Listening on localhost:${port}`));

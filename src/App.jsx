@@ -14,6 +14,7 @@ export default function App() {
   const [searchInput, setSearchInput] = useState('');
   const [isModalFor, setIsModalFor ] = useState("");
   const [token, setToken] = useState();
+  const [netflixUser, setNetflixUser] = useState();
 
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
   const fetchSearchedMovie = async (e) => {
@@ -75,6 +76,8 @@ export default function App() {
           setSearchInput={setSearchInput}
           token={token}
           setToken={setToken}
+          netflixUser={netflixUser}
+          setNetflixUser={setNetflixUser}
         />
    
         <Main 
@@ -100,6 +103,7 @@ export default function App() {
           setSearchInput={setSearchInput}
           isModalFor={isModalFor}
           setIsModalFor={setIsModalFor}
+          netflixUser={netflixUser}
         />
       </div>
     </>
