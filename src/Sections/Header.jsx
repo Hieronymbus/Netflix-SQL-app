@@ -3,7 +3,7 @@ import FilterOptions from "../Compontents/FilterOptions";
 import SearchBar from "../Compontents/SearchBar";
 import Register_Login from '../Compontents/Register_Login.jsx';
 
-function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser, netflixUser, token, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
+function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setNetflixUser, netflixUser, token, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
@@ -61,7 +61,6 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
 
   async function login() {
     setIsRegister(false);
-
     try{
       const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
@@ -84,7 +83,6 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
       };
 
       localStorage.setItem('user', JSON.stringify(data.user));
-      const savedUser = JSON.parse(localStorage.getItem('user'));
       setNetflixUser(data.user);
     } catch(err) {
       console.error(err);
@@ -121,6 +119,13 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
     setIsRegister(false);
   };
 
+  function handleFetchFavourites() {
+    setFetchFavourites(!fetchFavourites);
+    if(!fetchFavourites) {
+      setMovies([]);
+    };
+  };
+
   return (
     <header className="w-full text-center ">
       <div className='absolute left-5 top-5'>
@@ -131,7 +136,7 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
         {registerLoginModal && <Register_Login updateValues={updateValues} isRegister={isRegister} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
       </div>
       {/* Test authorization button for token / cookies */}
-      {netflixUser && <button onClick={() => setFetchFavourites(!fetchFavourites)} className='absolute top-5 right-5 rounded bg-slate-600 text-white p-2.5'>
+      {netflixUser && <button onClick={() => handleFetchFavourites()} className='absolute top-5 right-5 rounded bg-slate-600 text-white p-2.5'>
         {fetchFavourites ? 'All' : 'favourites'}
       </button>
       }

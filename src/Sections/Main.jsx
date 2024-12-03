@@ -7,17 +7,17 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
 
     const [movieCount, setMovieCount] = useState();
     
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+    }, []);
+    
     //Clear movies when applying filter
     useEffect(() => {
         setMovies([]);
         setMovieCount(movies.length); // Re render the page to load filtered movies
         setItemCount(12);
     }, [filterValue]);
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-    }, []);
-
+    
     useEffect(() => {
         setLoading(true);
         if(filterValue) {
@@ -43,10 +43,6 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
         };
     };
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-    }, []);
-
     async function fetchFavouriteMovies() {
         const response = await fetch(`http://localhost:${PORT}/get-favourites/${netflixUser.userId}`);
         const favMovieData = await response.json();
@@ -65,21 +61,15 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
 
     async function fetchAllMovies() {
         const response = await fetch(`${import.meta.env.VITE_PORT}/allMovies/?itemCount=${itemCount}`);
-            const movieData = await response.json(); 
-            let movieArr = [];
+        const movieData = await response.json(); 
+        let movieArr = [];
 
-            for(const movie of movieData) {
-                movieArr.push(movie.title);
-                
-            };
+        for(const movie of movieData) {movieArr.push(movie.title)};
             
-        let newMovies = movieArr.slice(itemCount - 12);
+        let newMovies = [...movies, ...movieArr.slice(itemCount - 12)];
 
-            setMovies(prev => [
-                ...prev,
-                ...newMovies
-            ]);
-            setLoading(false);
+        setMovies(newMovies);
+        setLoading(false);
     };
 
     async function fetchMoviesByFilter() {
@@ -113,11 +103,6 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
                 filteredArr.push(movie.title);
             };
 
-            // const newMovies = movieData.slice(-12).map(movie => {
-            //     return `${movie.title}`;
-            // });
-            // ...prev,  ...newMovies
-
             setMovies(prev => [ ...filteredArr]);
         } catch(err) {
             console.error('Error fetching movies ', err);
@@ -125,6 +110,7 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
             setLoading(false);
         };
     };
+
     return(
         <main className='w-full relative '>
             <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>
