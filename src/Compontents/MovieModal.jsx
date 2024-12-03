@@ -106,6 +106,7 @@ const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
                      <p>
                         {movieDetails.type} / {movieDetails.duration}
                      </p>
+                     
                   </div>
                   <div>
                      <button 
@@ -151,7 +152,13 @@ const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
                      <span className="text-xl">Date Added:  </span> 
                      { movieDetails.date_added ? <span>{movieDetails.date_added}</span>  : <span>N/A</span> } 
                   </h2>
+                  <button
+                        className="bg-slate-800 rounded p-1 text-2xl border  "
+                  >
+                     Add to favourites
+                  </button>
                </div>
+               
             </div>
          }
       </div>
