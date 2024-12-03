@@ -57,6 +57,7 @@ const MovieModal = ( { netflixUser, token, setIsModalFor, isModalFor } ) => {
    }, [isModalFor]);
 
    async function addToFavourites(id) {
+      setIsModalFor("");
       const response = await fetch('http://localhost:3000/add-favourites', {
          method: 'POST',
          headers: {
@@ -65,7 +66,7 @@ const MovieModal = ( { netflixUser, token, setIsModalFor, isModalFor } ) => {
          },       
          body: JSON.stringify({
             movieId: id,
-            username: netflixUser
+            username: netflixUser.username
          })
    });
 

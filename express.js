@@ -97,7 +97,7 @@ app.post('/login', async (req, res) => {
     };
 
     const token = jwt.sign(userData, SECRET_KEY);
-    res.status(201).json({ message: `Logged in as: ${username}`, username: username, data: userData, token: token });
+    res.status(201).json({ message: `Logged in as: ${username}`, user: userData, token: token });
   } catch(err) {
     console.error(err.stack);
   };
@@ -134,7 +134,7 @@ app.post('/register', async(req, res) => {
       ($1, $2, $3)
     `, [username, hashedPassword, email]);
 
-    res.status(201).send({ message: `Created user ${user}`});
+    res.status(201).send({ message: `Created user ${username}`});
   } catch(err) {
     console.error(err.stack);
   };
@@ -260,6 +260,10 @@ app.post('/add-favourites', authMiddleware, async(req, res) => {
   } catch(err) {
     console.error('ERROR!: ', err);
   };
+});
+
+app.get('/get-favourites:userId', async(req, res) => {
+
 });
 
 app.listen(port, () => console.log(`Listening on localhost:${port}`));

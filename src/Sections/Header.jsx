@@ -45,7 +45,7 @@ function Header({ setToken, setNetflixUser, netflixUser, token, setFilterValue, 
     e.preventDefault();
     if(type != null && type == "register") {
       if(value.password === value.confirmPassword) {
-        register();
+        register(); 
       } else {
         alert('Passwords do not match');
       };
@@ -78,11 +78,15 @@ function Header({ setToken, setNetflixUser, netflixUser, token, setFilterValue, 
 
     const data = await response.json();
     const token = data.token;
-    setNetflixUser(data.username);
+    setNetflixUser(data.user);
+    console.log(netflixUser);
     setToken(token);
   };
 
   async function register() {
+    setRegisterLoginModal(false);
+    setIsRegister(false);
+
     const response = await fetch('http://localhost:3000/register', {
       method: 'POST',
       headers:{
