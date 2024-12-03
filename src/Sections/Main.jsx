@@ -3,7 +3,7 @@ import MovieModal from '../Compontents/MovieModal';
 
 const PORT = 3000;
 
-function Main( { fetchFavourites, netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
+function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
 
     const [movieCount, setMovieCount] = useState();
     
@@ -26,6 +26,7 @@ function Main( { fetchFavourites, netflixUser, token, fetchSearchedMovie, itemCo
             fetchSearchedMovie()
         } else if(fetchFavourites) {
             fetchFavouriteMoves();
+            setFetchFavourites(false);
         } else {
             fetchAllMovies();
         };
@@ -48,7 +49,6 @@ function Main( { fetchFavourites, netflixUser, token, fetchSearchedMovie, itemCo
     }, []);
 
     async function fetchFavouriteMoves() {
-        console.log(netflixUser.userId);
         const response = await fetch(`http://localhost:${PORT}/get-favourites/${netflixUser.userId}`);
         const favMovieData = await response.json();
         let favMovieArr = [];

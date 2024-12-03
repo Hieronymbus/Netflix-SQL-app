@@ -107,6 +107,7 @@ export default function App() {
           setIsModalFor={setIsModalFor}
           netflixUser={netflixUser}
           fetchFavourites={fetchFavourites}
+          setFetchFavourites={setFetchFavourites}
         />
       </div>
     </>
