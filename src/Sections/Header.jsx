@@ -88,6 +88,7 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
             isUserProfileOpen={isUserProfileOpen}
             setIsUserProfileOpen={setIsUserProfileOpen}
             user={user}
+            setUser={setUser}
           />
           <LoginRegisterDropDown 
             isLoginOpen={isLoginOpen}

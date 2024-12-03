@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UserDropdown = ({isUserProfileOpen, setIsUserProfileOpen, user}) => {
+const UserDropdown = ({isUserProfileOpen, setIsUserProfileOpen, user, setUser}) => {
 
 
     async function sendLogoutRequest () {
@@ -15,6 +15,7 @@ const UserDropdown = ({isUserProfileOpen, setIsUserProfileOpen, user}) => {
         const data = await response.json()
         alert(data.message)
         setIsUserProfileOpen(false)
+        setUser("")
     }
 
   return (
