@@ -17,9 +17,13 @@ export default function App() {
   const [netflixUser, setNetflixUser] = useState();
   const [fetchFavourites, setFetchFavourites] = useState(false);
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setNetflixUser(user);
+  }, [fetchFavourites]);
+
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
   const fetchSearchedMovie = async (e) => {
-         
     let titleToSearch = encodeURIComponent(searchInput) ;
 
     try {

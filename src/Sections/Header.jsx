@@ -86,6 +86,10 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
 
       const data = await response.json();
       const token = data.token;
+
+      localStorage.setItem('user', JSON.stringify(data.user));
+      const savedUser = JSON.parse(localStorage.getItem('user'));
+      console.log(savedUser);
       setNetflixUser(data.user);
       setToken(token);
     } catch(err) {

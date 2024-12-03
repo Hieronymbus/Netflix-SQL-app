@@ -50,6 +50,10 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
     async function fetchFavouriteMovies() {
         const response = await fetch(`http://localhost:${PORT}/get-favourites/${netflixUser.userId}`);
         const favMovieData = await response.json();
+        if(favMovieData == []) {
+            fetchAllMovies();
+            return;
+        };
         let favMovieArr = [];
         for(const movie of favMovieData) {
             favMovieArr.push(movie.title);
@@ -143,11 +147,10 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
                     return (        
                         <li 
                             key={index} 
-                            className='p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
-                            onClick={()=>{
-                                setIsModalFor(movie)
-                            }}
+                            className='relative p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
+                            onClick={()=>{setIsModalFor(movie)}}
                         >
+                            {fetchFavourites && <button className='absolute z-20 top-5 right-5'>Remove from favourites</button>}
                             <div>  
                                 <h1 className='text-2xl'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
                             </div>
