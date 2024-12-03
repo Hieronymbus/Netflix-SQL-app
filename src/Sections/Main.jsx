@@ -3,7 +3,7 @@ import MovieModal from '../Compontents/MovieModal';
 
 const PORT = 3000;
 
-function Main( { netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
+function Main( { fetchFavourites, netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
 
     const [movieCount, setMovieCount] = useState();
     
@@ -24,11 +24,13 @@ function Main( { netflixUser, token, fetchSearchedMovie, itemCount, filterValue,
             fetchMoviesByFilter();
         } else if(isSearching) {
             fetchSearchedMovie()
+        } else if(fetchFavourites) {
+            fetchFavouriteMoves();
         } else {
             fetchAllMovies();
         };
 
-    }, [itemCount, filterValue]);
+    }, [itemCount, fetchFavourites, filterValue]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
@@ -46,17 +48,16 @@ function Main( { netflixUser, token, fetchSearchedMovie, itemCount, filterValue,
     }, []);
 
     async function fetchFavouriteMoves() {
-        const response = await fetch(`http://localhost:${PORT}/get-favourites/:${netflixUser.userId}`);
+        console.log(netflixUser.userId);
+        const response = await fetch(`http://localhost:${PORT}/get-favourites/${netflixUser.userId}`);
         const favMovieData = await response.json();
         let favMovieArr = [];
         for(const movie of favMovieData) {
             favMovieArr.push(movie.title);
         };
 
-        setMovies(prev => [
-            ...favMovieArr,
-            ...prev
-        ]);
+        setMovies(favMovieArr);
+        setLoading(false);
     };
 
     async function fetchAllMovies() {
