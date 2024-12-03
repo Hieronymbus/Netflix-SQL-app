@@ -1,5 +1,6 @@
-import { stringify } from 'postcss'
-import React, { useState } from 'react'
+import { stringify } from 'postcss';
+import React, { useState } from 'react';
+import UserDropdown from "../Compontents/UserDropdown";
 
 export const LoginRegisterDropDown = ( { isLoginOpen, setIsLoginOpen, isSignUpOpen, setSignUpOpen, setUser}) => {
 
@@ -29,7 +30,8 @@ export const LoginRegisterDropDown = ( { isLoginOpen, setIsLoginOpen, isSignUpOp
             const data = await response.json();
 
             if(response.ok) {
-                console.log(data.data)
+                alert(data.message)
+                console.log( data.data)
                 setUser(data.data)
             }
         } catch (error) {

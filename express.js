@@ -75,9 +75,9 @@ function authCookieMiddleware(req, res, next) {
     //Each fetch request grab token
     const token = req.cookies.authToken;
     if (!token) {
-      return res.status(401).send('acces denied');
+      return res.status(401).json({message:'Acces Denied'})
     };
-
+    
     try {
       const decoded = jwt.verify(token, SECRET_KEY);
       req.user = decoded;
@@ -85,7 +85,7 @@ function authCookieMiddleware(req, res, next) {
       next()
     
     } catch (error) {
-      res.status(400).send('Invalid token')
+      res.status(401).json({message:'Invalid token'})
     }
 };
 
@@ -166,7 +166,7 @@ app.get("/user", authCookieMiddleware,  async (req, res) => {
     const {id, username, role} = req.user
 
     try {
-      const data = client.query("SELECT FROM users WHERE id = $1", [id]);
+      const data = await client.query("SELECT * FROM users WHERE id = $1", [id]);
       const user = data.rows[0];
       const userDataForFrontend = {
         id: user.id,
@@ -176,7 +176,7 @@ app.get("/user", authCookieMiddleware,  async (req, res) => {
       res.status(200).json( {message:"User Found" , data: userDataForFrontend } );
     } catch (error) {
       console.error(error);
-      res.status(500).json({message: error});
+      res.status(500).json({message:"Server Error", error: error});
     }
 });
 
@@ -184,7 +184,7 @@ app.post('/logout', async (req, res) => {
 
   res.clearCookie('authToken');
 
-  res.status(400).send('logged Out')
+  res.status(200).json({message: 'logged Out'})
 });
 
 app.get('/authenticate', authMiddleware, async (req, res) => {

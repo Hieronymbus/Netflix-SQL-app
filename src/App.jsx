@@ -13,6 +13,7 @@ export default function App() {
   const [filterValue, setFilterValue] = useState();
   const [searchInput, setSearchInput] = useState('');
   const [isModalFor, setIsModalFor ] = useState("");
+  
   const [user, setUser] = useState("");
 
   const [token, setToken] = useState();
@@ -51,9 +52,11 @@ export default function App() {
       });
       const data = await response.json();
 
-      console.log(data)
-      // if(data)
-      // setUser(data.data)
+      console.log(data.message)
+      console.log(data.data)
+      if(data){
+        setUser(data.data)
+      }
   }
   useEffect(() => {
       fetchUserData()
