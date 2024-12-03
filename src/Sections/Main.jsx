@@ -141,6 +141,6 @@ function Main( { netflixUser, token, fetchSearchedMovie, itemCount, filterValue,
             </ul>
         </main>
     );
-}
+};
 
 export default Main;

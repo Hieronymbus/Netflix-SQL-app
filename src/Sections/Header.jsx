@@ -68,19 +68,22 @@ function Header({ setToken, setNetflixUser, netflixUser, token, setFilterValue, 
     setRegisterLoginModal(false);
     setIsRegister(false);
 
-    const response = await fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username: value.username, password: value.password }),
-    });
-
-    const data = await response.json();
-    const token = data.token;
-    setNetflixUser(data.user);
-    console.log(netflixUser);
-    setToken(token);
+    try{
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: value.username, password: value.password }),
+      });
+  
+      const data = await response.json();
+      const token = data.token;
+      setNetflixUser(data.user);
+      setToken(token);
+    } catch(err) {
+      console.error(err);
+    };
   };
 
   async function register() {

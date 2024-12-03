@@ -58,19 +58,24 @@ const MovieModal = ( { netflixUser, token, setIsModalFor, isModalFor } ) => {
 
    async function addToFavourites(id) {
       setIsModalFor("");
-      const response = await fetch('http://localhost:3000/add-favourites', {
-         method: 'POST',
-         headers: {
-            "Content-Type": "application/json",
-            Authentication: `Bearer ${token}`
-         },       
-         body: JSON.stringify({
-            movieId: id,
-            username: netflixUser.username
-         })
-   });
 
-   console.log(await response.json());   
+      if(!netflixUser) return;
+
+      try{
+         const response = await fetch('http://localhost:3000/add-favourites', {
+            method: 'POST',
+            headers: {
+               "Content-Type": "application/json",
+               Authentication: `Bearer ${token}`
+            },       
+            body: JSON.stringify({
+               movieId: id,
+               username: netflixUser.username
+            })
+         });
+      } catch(err) {
+         console.error(err);
+      };
    };
  
    return (
