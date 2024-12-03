@@ -63,7 +63,6 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
   };
 
   async function login() {
-    setRegisterLoginModal(false);
     setIsRegister(false);
 
     try{
@@ -74,7 +73,17 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
         },
         body: JSON.stringify({ username: value.username, password: value.password }),
       });
-  
+
+      if(response.ok) {
+        setValue(prev => {
+          const newValues = {};
+          Object.keys(prev).forEach((key) => prev[key] = '');
+          return newValues;
+        });
+
+        setRegisterLoginModal(false);
+      };
+
       const data = await response.json();
       const token = data.token;
       setNetflixUser(data.user);
@@ -99,8 +108,15 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
       headers:{
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: value.email, username: value.username, password: value.password, confirmPassword: value.confirmPassword })
+      body: JSON.stringify(value)
     });
+
+      setValue(prev => {
+        const newValues = {};
+        Object.keys(prev).forEach((key) => newValues[key] = "");
+        return newValues;
+      });
+      console.log(value);
 
     console.log(await response.json());
   };
