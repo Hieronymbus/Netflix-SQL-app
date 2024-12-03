@@ -56,18 +56,20 @@ const MovieModal = ( { netflixUser, token, setIsModalFor, isModalFor } ) => {
 
    }, [isModalFor]);
 
-   async function addToFavourites() {
-      await fetch('http://localhost:3000/favourites', {
+   async function addToFavourites(id) {
+      const response = await fetch('http://localhost:3000/add-favourites', {
          method: 'POST',
          headers: {
             "Content-Type": "application/json",
             Authentication: `Bearer ${token}`
          },       
-         body: {
-            movieId: "s1",
+         body: JSON.stringify({
+            movieId: id,
             username: netflixUser
-         }
-      });
+         })
+   });
+
+   console.log(await response.json());   
    };
  
    return (
@@ -112,6 +114,11 @@ const MovieModal = ( { netflixUser, token, setIsModalFor, isModalFor } ) => {
                      </p>
                   </div>
                   <div>
+
+                  <button onClick={() => addToFavourites(movieDetails.show_id)} className='bg-slate-950 rounded p-1 text-2xl border border-black'>
+                        Add to favourites
+                     </button>
+
                      <button 
                         className="bg-slate-950 rounded p-1 text-2xl border border-black "
                         onClick={ () => setIsModalFor("") }
