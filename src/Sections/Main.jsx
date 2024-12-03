@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import MovieModal from '../Compontents/MovieModal';
 
+const PORT = 3000;
+
 function Main( { netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
 
     const [movieCount, setMovieCount] = useState();
@@ -42,6 +44,20 @@ function Main( { netflixUser, token, fetchSearchedMovie, itemCount, filterValue,
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
     }, []);
+
+    async function fetchFavouriteMoves() {
+        const response = await fetch(`http://localhost:${PORT}/get-favourites/:${netflixUser.userId}`);
+        const favMovieData = await response.json();
+        let favMovieArr = [];
+        for(const movie of favMovieData) {
+            favMovieArr.push(movie.title);
+        };
+
+        setMovies(prev => [
+            ...favMovieArr,
+            ...prev
+        ]);
+    };
 
     async function fetchAllMovies() {
         const response = await fetch(`${import.meta.env.VITE_PORT}/allMovies/?itemCount=${itemCount}`);

@@ -262,10 +262,11 @@ app.post('/add-favourites', authMiddleware, async(req, res) => {
   };
 });
 
-app.get('/get-favourites', async(req, res) => {
+app.get('/get-favourites/:userId', async(req, res) => {
+  const userId = `'${req.params.userId}'`;
   try{
-    const favMovies = await client.query(`SELECT netflix_shows_id FROM favourites WHERE user_id = '2'`);
-    const arr = favMovies.rows;
+    const favMovies = await client.query(`SELECT netflix_shows_id FROM favourites WHERE user_id = ${userId}`);
+    const arr = favMovies.rows; 
     const favMovieIds = arr.map(obj => `'${obj.netflix_shows_id}'`);
     let whereClauseValues = favMovieIds.join(", ");
     const favouriteMovieDetails = await client.query(`SELECT * FROM netflix_shows WHERE show_id IN (${whereClauseValues})`);
