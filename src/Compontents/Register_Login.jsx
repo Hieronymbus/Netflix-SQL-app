@@ -1,6 +1,6 @@
 
 
-function Register_Login({ isRegister, setValue, value, closeProfileModal, submitValues }) {
+function Register_Login({ isRegister, setValue, value, closeProfileModal, updateValues }) {
     function handleValue(e, type) {
         setValue(prev => ({
             ...prev,
@@ -20,7 +20,7 @@ function Register_Login({ isRegister, setValue, value, closeProfileModal, submit
                 <input type="text" value={value.password} onChange={(e) => handleValue(e, "password")} className='text-black pl-2.5' />
                 {isRegister && <label>Confirm your password</label>}
                 {isRegister && <input type="text" value={value.confirmPassword} onChange={(e) => handleValue(e, "confirmPassword")} className='text-black pl-2.5' /> }
-                <button type='submit' className='bg-slate-800' onClick={(e) => submitValues(e, isRegister && 'register')}>{isRegister ? "Register" : "Log in"}</button>
+                <button type='submit' className='bg-slate-800' onClick={(e) => updateValues(e, isRegister && 'register')}>{isRegister ? "Register" : "Log in"}</button>
             </form>
         </div>
     );

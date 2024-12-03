@@ -16,16 +16,13 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
     password: "",
     confirmPassword: ""
   });
-
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
   
   function closeDropDown(e) {
     e.preventDefault();
     setIsDropDown(false);
   };
 
+  //generate values for Filter values
   function generateValue() {
     setFilterValue({
       durationValue: durationValue || null,
@@ -39,7 +36,8 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
     setIsDropDown(false);
   };
 
-  function submitValues(e, type) {
+  //Submit registration form values
+  function updateValues(e, type) {
     e.preventDefault();
     if(type != null && type == "register") {
       if(value.password === value.confirmPassword) {
@@ -52,14 +50,13 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
     }
   };
 
-  function openRegisterModal() {
+  function openRegister_LoginModal(modal) {
     setRegisterLoginModal(true);
-    setIsRegister(true);
-  };
-
-  function openLoginModal() {
-    setRegisterLoginModal(true);
-    setIsRegister(false);
+    if(modal === 'register') {
+      setIsRegister(true);
+    } else {
+      setIsRegister(false);
+    };
   };
 
   async function login() {
@@ -73,7 +70,9 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
         },
         body: JSON.stringify({ username: value.username, password: value.password }),
       });
+      const data = await response.json();
 
+      //Reset form values
       if(response.ok) {
         setValue(prev => {
           const newValues = {};
@@ -84,14 +83,9 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
         setRegisterLoginModal(false);
       };
 
-      const data = await response.json();
-      const token = data.token;
-
       localStorage.setItem('user', JSON.stringify(data.user));
       const savedUser = JSON.parse(localStorage.getItem('user'));
-      console.log(savedUser);
       setNetflixUser(data.user);
-      setToken(token);
     } catch(err) {
       console.error(err);
     };
@@ -120,9 +114,6 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
         Object.keys(prev).forEach((key) => newValues[key] = "");
         return newValues;
       });
-      console.log(value);
-
-    console.log(await response.json());
   };
 
   function closeProfileModal() {
@@ -133,11 +124,11 @@ function Header({ setFetchFavourites, fetchFavourites, setToken, setNetflixUser,
   return (
     <header className="w-full text-center ">
       <div className='absolute left-5 top-5'>
-        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => openRegisterModal()}>Register</button>
-        {!netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => openLoginModal()}>Log in</button>}
+        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => openRegister_LoginModal('register')}>Register</button>
+        {!netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => openRegister_LoginModal()}>Log in</button>}
         {netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={logout}>Log out</button>}
         {netflixUser && <h2>Logged in as: {netflixUser.username}</h2>}
-        {registerLoginModal && <Register_Login submitValues={submitValues} isRegister={isRegister} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
+        {registerLoginModal && <Register_Login updateValues={updateValues} isRegister={isRegister} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
       </div>
       {/* Test authorization button for token / cookies */}
       {netflixUser && <button onClick={() => setFetchFavourites(!fetchFavourites)} className='absolute top-5 right-5 rounded bg-slate-600 text-white p-2.5'>

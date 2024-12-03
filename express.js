@@ -255,7 +255,7 @@ app.post('/add-favourites', authMiddleware, async(req, res) => {
     );
   
     const usersFavourites = await client.query(`SELECT * FROM favourites WHERE user_id = '${userId}'`);
-    console.log(usersFavourites.rows[0]);
+    console.log('favourites: ', usersFavourites.rows[0]);
     res.status(201).json({ message: `Added movie with id ${data.movieId} to favourites` });
   } catch(err) {
     console.error('ERROR!: ', err);
