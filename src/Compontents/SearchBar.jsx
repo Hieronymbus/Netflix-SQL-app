@@ -23,7 +23,7 @@ const SearchBar = ({ searchInput, setSearchInput, isSearching, setIsSearching, s
   }, [debounceSearch]);
 
   return (
-    <div>
+    <div className="mt-10">
       <form
         className="flex my-5 relative"
         onSubmit={(e) => {

@@ -128,16 +128,15 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
     const firstChar = netflixUser.username[0];
     settingModalText = firstChar.toUpperCase();
   } else {
-    settingModalText = '?';
+    settingModalText = 'D';
   };
 
   return (
-    <header className="w-full text-center ">
-      <button className='z-20 size-20 text-3xl absolute left-5 rounded-full bg-slate-600 text-white' onClick={() => setSettingModal(true)}>{settingModalText}</button>
+    <header className="relative w-full text-center">
+      <button className='z-20 size-20 text-3xl absolute left-5 rounded-full bg-slate-600 text-white cursor-pointer' onClick={() => setSettingModal(true)}>{settingModalText}</button>
       {settingModal && <SettingModal netflixUser={netflixUser} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} handleFetchFavourites={handleFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} />}
       {signup && <Register_Login value={value} setValue={setValue} updateValues={updateValues} signup={signup} closeProfileModal={closeProfileModal} />}
       {loginForm && <Register_Login value={value} setValue={setValue} updateValues={updateValues} closeProfileModal={closeProfileModal} />}
-      {netflixUser && <h2>Logged in as: {netflixUser.username}</h2>}
       <div>
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>
         <SearchBar 
