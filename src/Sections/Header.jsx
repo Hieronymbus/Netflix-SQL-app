@@ -10,13 +10,15 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
   const [ratingValue, setRatingValue] = useState();
   const [releaseYearValue, setReleaseYearValue] = useState();
   const [registerLoginModal, setRegisterLoginModal] = useState(false);
-  const [signup, setsignup] = useState(false);
+  const [signup, setSignup] = useState(false);
+  const [loginForm, setLoginForm] = useState(false);
   const [value, setValue] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
+  const [settingModal, setSettingModal] = useState();
   
   function closeDropDown(e) {
     e.preventDefault();
@@ -40,6 +42,7 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
   //Submit registration form values
   function updateValues(e, type) {
     e.preventDefault();
+    setSettingModal(false);
     if(type != null && type == "signup") {
       if(value.password === value.confirmPassword) {
         register(); 
@@ -51,17 +54,8 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
     }
   };
 
-  function openRegister_LoginModal(modal) {
-    setRegisterLoginModal(true);
-    if(modal === 'signup') {
-      setsignup(true);
-    } else {
-      setsignup(false);
-    };
-  };
-
   async function login() {
-    setsignup(false);
+    setLoginForm(false);
     try{
       const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
@@ -92,13 +86,14 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
 
   function logout() {
     setNetflixUser();
+    setSettingModal(false);
     setFetchFavourites(false);
     setToken();
   };
 
   async function register() {
     setRegisterLoginModal(false);
-    setsignup(false);
+    setSignup(false);
 
     const response = await fetch('http://localhost:3000/register', {
       method: 'POST',
@@ -117,7 +112,8 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
 
   function closeProfileModal() {
     setRegisterLoginModal(false);
-    setsignup(false);
+    setSignup(false);
+    setLoginForm(false);
   };
 
   function handleFetchFavourites() {
@@ -127,22 +123,21 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
     };
   };
 
+  let settingModalText;
+  if(netflixUser) {
+    const firstChar = netflixUser.username[0];
+    settingModalText = firstChar.toUpperCase();
+  } else {
+    settingModalText = '?';
+  };
+
   return (
     <header className="w-full text-center ">
-      <SettingModal fetchFavourites={fetchFavourites} handleFetchFavourites={handleFetchFavourites} />
-      {/* <div className='absolute left-5 top-5'>
-        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => openRegister_LoginModal('signup')}>Sign up</button>
-        {!netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => openRegister_LoginModal()}>Log in</button>}
-        {netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={logout}>Log out</button>}
-        {netflixUser && <h2>Logged in as: {netflixUser.username}</h2>}
-        {registerLoginModal && <Register_Login updateValues={updateValues} signup={signup} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
-      </div> */}
-      {/* Test authorization button for token / cookies */}
-      {netflixUser && <button onClick={() => handleFetchFavourites()} className='absolute top-5 right-5 rounded bg-slate-600 text-white p-2.5'>
-        {fetchFavourites ? 'All' : 'favourites'}
-      </button>
-      }
-      {/* ----------------------------------------------------- */}
+      <button className='z-20 size-20 text-3xl absolute left-5 rounded-full bg-slate-600 text-white' onClick={() => setSettingModal(true)}>{settingModalText}</button>
+      {settingModal && <SettingModal netflixUser={netflixUser} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} handleFetchFavourites={handleFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} />}
+      {signup && <Register_Login value={value} setValue={setValue} updateValues={updateValues} signup={signup} closeProfileModal={closeProfileModal} />}
+      {loginForm && <Register_Login value={value} setValue={setValue} updateValues={updateValues} closeProfileModal={closeProfileModal} />}
+      {netflixUser && <h2>Logged in as: {netflixUser.username}</h2>}
       <div>
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>
         <SearchBar 

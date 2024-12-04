@@ -4,7 +4,7 @@ function Register_Login({ signup, setValue, value, closeProfileModal, updateValu
     function handleValue(e, type) {
         setValue(prev => ({
             ...prev,
-            [type]: e.target.value
+            [type]: e.target.value 
         }));
     };
 
