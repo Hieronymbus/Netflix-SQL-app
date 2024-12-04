@@ -3,7 +3,7 @@ import MovieModal from '../Compontents/MovieModal';
 
 const PORT = 3000;
 
-function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
+function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
 
     const [movieCount, setMovieCount] = useState();
     
@@ -17,6 +17,8 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
         setMovieCount(movies.length); // Re render the page to load filtered movies
         setItemCount(12);
     }, [filterValue]);
+
+    useEffect(() => setMovies([]), [fetchFavourites]);//Don't know if this prevents favourite movies from sppending to all movies arr
     
     useEffect(() => {
         setLoading(true);
@@ -124,6 +126,7 @@ function Main( { fetchFavourites, setFetchFavourites, netflixUser, token, fetchS
                     isModalFor={isModalFor}
                     token={token}
                     netflixUser={netflixUser}
+                    fetchFavourites={fetchFavourites}
                 />
             }  
             

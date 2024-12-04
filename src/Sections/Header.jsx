@@ -74,6 +74,8 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
           return newValues;
         });
 
+        console.log(data);
+
         setRegisterLoginModal(false);
       };
 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-const MovieModal = ({ netflixUser, token, setIsModalFor, isModalFor }) => {
+const PORT = 3000;
+
+const MovieModal = ({ fetchFavourites, netflixUser, token, setIsModalFor, isModalFor }) => {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [movieDetails, setMovieDetails] = useState({
     title: "",
@@ -53,7 +55,23 @@ const MovieModal = ({ netflixUser, token, setIsModalFor, isModalFor }) => {
     } catch (err) {
       console.error(err);
     }
-  }
+  };
+
+  async function removeFromFavourites(id) {
+    if(!id) {
+      console.error('No show id');
+      return;
+    };
+
+    const response = await fetch(`http://localhost:${PORT}/remove-favourite/${id}/${netflixUser.userId}`, {
+      method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log('Remove from favourites response: ', data);
+  };
 
   return (
     <div
@@ -85,10 +103,11 @@ const MovieModal = ({ netflixUser, token, setIsModalFor, isModalFor }) => {
               </p>
             </div>
             <div>
-              <button onClick={() => addToFavourites(movieDetails.show_id)} className="bg-slate-950 rounded p-1 text-2xl border border-black">
-                Add to favourites
-              </button>
-
+              {fetchFavourites && <button onClick={() => removeFromFavourites(movieDetails.show_id)} className="bg-slate-950 rounded p-1 text-2xl border border-black">remove from favourites</button>}
+              {!fetchFavourites && <button onClick={() => addToFavourites(movieDetails.show_id)} className="bg-slate-950 rounded p-1 text-2xl border border-black">
+                  Add to favourites
+                </button>
+              }  
               <button className="bg-slate-950 rounded p-1 text-2xl border border-black " onClick={() => setIsModalFor("")}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />

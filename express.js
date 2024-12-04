@@ -263,6 +263,18 @@ app.post('/add-favourites', authMiddleware, async(req, res) => {
   };
 });
 
+app.delete('/remove-favourite/:showId', async(req, res) => {
+  if(!req.params.showId) {
+    res.status(404).send({ Error: 'Show ID not found'});
+    return;
+  };
+
+  console.log('remove favourite route handler');
+  // const result = await client.query(`
+  //   DELETE FROM TABLE favourites WHERE
+  // `)
+});
+
 app.get('/get-favourites/:userId', async(req, res) => {
   const userId = `'${req.params.userId}'`;
   try{
