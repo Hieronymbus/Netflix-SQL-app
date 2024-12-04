@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import FilterOptions from "../Compontents/FilterOptions";
 import SearchBar from "../Compontents/SearchBar";
 import Register_Login from '../Compontents/Register_Login.jsx';
+import SettingModal from "../Compontents/SettingModal.jsx";
 
 function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setNetflixUser, netflixUser, token, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
@@ -128,13 +129,14 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
 
   return (
     <header className="w-full text-center ">
-      <div className='absolute left-5 top-5'>
+      <SettingModal fetchFavourites={fetchFavourites} handleFetchFavourites={handleFetchFavourites} />
+      {/* <div className='absolute left-5 top-5'>
         <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => openRegister_LoginModal('signup')}>Sign up</button>
         {!netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => openRegister_LoginModal()}>Log in</button>}
         {netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={logout}>Log out</button>}
         {netflixUser && <h2>Logged in as: {netflixUser.username}</h2>}
         {registerLoginModal && <Register_Login updateValues={updateValues} signup={signup} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
-      </div>
+      </div> */}
       {/* Test authorization button for token / cookies */}
       {netflixUser && <button onClick={() => handleFetchFavourites()} className='absolute top-5 right-5 rounded bg-slate-600 text-white p-2.5'>
         {fetchFavourites ? 'All' : 'favourites'}
