@@ -1,6 +1,6 @@
 
 
-function Register_Login({ isRegister, setValue, value, closeProfileModal, updateValues }) {
+function Register_Login({ signup, setValue, value, closeProfileModal, updateValues }) {
     function handleValue(e, type) {
         setValue(prev => ({
             ...prev,
@@ -14,13 +14,13 @@ function Register_Login({ isRegister, setValue, value, closeProfileModal, update
                 <button className='absolute top-0 right-0' onClick={closeProfileModal}>X</button>
                 <label>Enter username:</label>
                 <input type="text" value={value.username} onChange={(e) => handleValue(e, "username")} className='text-black pl-2.5' />
-                {isRegister && <label>Enter email:</label>}
-                {isRegister && <input type="text" value={value.email} onChange={(e) => handleValue(e, "email")} className='text-black pl-2.5' />}
+                {signup && <label>Enter email:</label>}
+                {signup && <input type="text" value={value.email} onChange={(e) => handleValue(e, "email")} className='text-black pl-2.5' />}
                 <label>enter password:</label>
                 <input type="text" value={value.password} onChange={(e) => handleValue(e, "password")} className='text-black pl-2.5' />
-                {isRegister && <label>Confirm your password</label>}
-                {isRegister && <input type="text" value={value.confirmPassword} onChange={(e) => handleValue(e, "confirmPassword")} className='text-black pl-2.5' /> }
-                <button type='submit' className='bg-slate-800' onClick={(e) => updateValues(e, isRegister && 'register')}>{isRegister ? "Register" : "Log in"}</button>
+                {signup && <label>Confirm your password</label>}
+                {signup && <input type="text" value={value.confirmPassword} onChange={(e) => handleValue(e, "confirmPassword")} className='text-black pl-2.5' /> }
+                <button type='submit' className='bg-slate-800' onClick={(e) => updateValues(e, signup && 'signup')}>{signup ? "Sign up" : "Log in"}</button>
             </form>
         </div>
     );

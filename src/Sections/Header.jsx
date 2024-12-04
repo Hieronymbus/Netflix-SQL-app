@@ -9,7 +9,7 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
   const [ratingValue, setRatingValue] = useState();
   const [releaseYearValue, setReleaseYearValue] = useState();
   const [registerLoginModal, setRegisterLoginModal] = useState(false);
-  const [isRegister, setIsRegister] = useState(false);
+  const [signup, setsignup] = useState(false);
   const [value, setValue] = useState({
     username: "",
     email: "",
@@ -39,7 +39,7 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
   //Submit registration form values
   function updateValues(e, type) {
     e.preventDefault();
-    if(type != null && type == "register") {
+    if(type != null && type == "signup") {
       if(value.password === value.confirmPassword) {
         register(); 
       } else {
@@ -52,15 +52,15 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
 
   function openRegister_LoginModal(modal) {
     setRegisterLoginModal(true);
-    if(modal === 'register') {
-      setIsRegister(true);
+    if(modal === 'signup') {
+      setsignup(true);
     } else {
-      setIsRegister(false);
+      setsignup(false);
     };
   };
 
   async function login() {
-    setIsRegister(false);
+    setsignup(false);
     try{
       const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
@@ -97,7 +97,7 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
 
   async function register() {
     setRegisterLoginModal(false);
-    setIsRegister(false);
+    setsignup(false);
 
     const response = await fetch('http://localhost:3000/register', {
       method: 'POST',
@@ -116,7 +116,7 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
 
   function closeProfileModal() {
     setRegisterLoginModal(false);
-    setIsRegister(false);
+    setsignup(false);
   };
 
   function handleFetchFavourites() {
@@ -129,11 +129,11 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
   return (
     <header className="w-full text-center ">
       <div className='absolute left-5 top-5'>
-        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => openRegister_LoginModal('register')}>Register</button>
+        <button className='rounded bg-slate-600 text-white p-2.5 mr-5' onClick={() => openRegister_LoginModal('signup')}>Sign up</button>
         {!netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={() => openRegister_LoginModal()}>Log in</button>}
         {netflixUser && <button className='rounded bg-slate-600 text-white p-2.5' onClick={logout}>Log out</button>}
         {netflixUser && <h2>Logged in as: {netflixUser.username}</h2>}
-        {registerLoginModal && <Register_Login updateValues={updateValues} isRegister={isRegister} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
+        {registerLoginModal && <Register_Login updateValues={updateValues} signup={signup} setValue={setValue} value={value} closeProfileModal={closeProfileModal} />}
       </div>
       {/* Test authorization button for token / cookies */}
       {netflixUser && <button onClick={() => handleFetchFavourites()} className='absolute top-5 right-5 rounded bg-slate-600 text-white p-2.5'>

@@ -83,6 +83,7 @@ app.post('/login', async (req, res) => {
   try {
     const result = await client.query(`SELECT * FROM users WHERE username = $1`, [username]);
     const user = result.rows[0];
+    console.log(username);
     const userData = {
       userId: user.user_id,
       username: user.username
