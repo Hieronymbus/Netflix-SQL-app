@@ -263,16 +263,20 @@ app.post('/add-favourites', authMiddleware, async(req, res) => {
   };
 });
 
-app.delete('/remove-favourite/:showId', async(req, res) => {
+app.delete('/remove-favourite/:showId/:userId', async(req, res) => {
   if(!req.params.showId) {
-    res.status(404).send({ Error: 'Show ID not found'});
+    res.status(404).send({ "Error": 'Show ID not found'});
     return;
   };
 
-  console.log('remove favourite route handler');
-  // const result = await client.query(`
-  //   DELETE FROM TABLE favourites WHERE
-  // `)
+  try{
+    const favouriteTitle = await client.query(`SELECT title FROM netflix_shows WHERE show_id = '${req.params.showId}'`);
+    const result = await client.query(`DELETE FROM favourites WHERE user_id = $1 AND netflix_shows_id = $2`, [req.params.userId, req.params.showId]);
+    console.log('Removed movie from favourites: ', favouriteTitle.rows[0]);
+    res.status(201).send({ data: favouriteTitle.rows[0] });
+  } catch(err) {
+    console.error(err);
+  };
 });
 
 app.get('/get-favourites/:userId', async(req, res) => {

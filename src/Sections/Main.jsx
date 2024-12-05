@@ -127,6 +127,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                     token={token}
                     netflixUser={netflixUser}
                     fetchFavourites={fetchFavourites}
+                    fetchFavouriteMovies={fetchFavouriteMovies}
                 />
             }  
             

@@ -130,7 +130,7 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
     const firstChar = netflixUser.username[0];
     settingModalText = firstChar.toUpperCase();
   } else {
-    settingModalText = 'D';
+    settingModalText = '?';
   };
 
   return (

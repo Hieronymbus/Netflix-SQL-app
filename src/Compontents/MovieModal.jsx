@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const PORT = 3000;
 
-const MovieModal = ({ fetchFavourites, netflixUser, token, setIsModalFor, isModalFor }) => {
+const MovieModal = ({ fetchFavouriteMovies, fetchFavourites, netflixUser, token, setIsModalFor, isModalFor }) => {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [movieDetails, setMovieDetails] = useState({
     title: "",
@@ -58,19 +58,17 @@ const MovieModal = ({ fetchFavourites, netflixUser, token, setIsModalFor, isModa
   };
 
   async function removeFromFavourites(id) {
+    setIsModalFor("");
     if(!id) {
       console.error('No show id');
       return;
     };
-
-    const response = await fetch(`http://localhost:${PORT}/remove-favourite/${id}/${netflixUser.userId}`, {
-      method: 'DELETE',
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    console.log('Remove from favourites');
+    const response = await fetch(`http://localhost:${PORT}/remove-favourite/${id}/${netflixUser.userId}`, {method: 'DELETE'});
+        await fetchFavouriteMovies();
     const data = await response.json();
     console.log('Remove from favourites response: ', data);
+    console.log('yo');                         
   };
 
   return (
