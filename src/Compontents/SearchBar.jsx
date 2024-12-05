@@ -9,17 +9,20 @@ const SearchBar = ({ searchInput, setSearchInput, isSearching, setIsSearching, s
       }, delay);
 
       return () => clearTimeout(timeout);
-    }, [value]);
+    }, [value]); 
 
     return debounceValue;
   };
   const debounceSearch = useDebounce(searchInput);
 
   useEffect(() => {
+    if(debounceSearch.trim() === "" || searchInput.trim() === "") {
+      setIsSearching(false);
+    };
     if (isSearching) {
       fetchSearchedMovie();
       setItemCount(12); //keep this
-    }
+    };
   }, [debounceSearch]);
 
   return (
@@ -29,8 +32,7 @@ const SearchBar = ({ searchInput, setSearchInput, isSearching, setIsSearching, s
         onSubmit={(e) => {
           e.preventDefault();
           setIsSearching(true);
-          setItemCount(12);
-        }}
+          setItemCount(12);}}
       >
         <input
           type="text"
@@ -42,10 +44,10 @@ const SearchBar = ({ searchInput, setSearchInput, isSearching, setIsSearching, s
             setSearchInput(e.target.value);
             if (e.target.value === "") {
               setIsSearching(false);
-            }
+              console.log(isSearching);
+            };
           }}
         />
-
         <button type="submit" className="text-slate-100 bg-cyan-600  flex justify-center items-center  border border-black hover:bg-slate-600  size-12 aspect-square rounded ">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />

@@ -24,43 +24,28 @@ export default function App() {
 
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
   const fetchSearchedMovie = async (e) => {
-    let titleToSearch = encodeURIComponent(searchInput) ;
-
-    try {
-        
+    let titleToSearch = encodeURIComponent(searchInput);
+    let searchedForArr = []
+    try { 
         const response = await fetch(`${import.meta.env.VITE_PORT}/search?searchFor=${titleToSearch}&itemCount=${itemCount}`);
-
         if(!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         };
-
         const searchData = await response.json();
-        
-        let searchedForArr = []
 
         for(const movie of searchData) {
             searchedForArr.push(movie.title);
         };
-        
         setMovies( searchedForArr);
-        console.log("yo")
     } catch (error) {
         console.error(error)
     } finally {
         setLoading(false)
-    }
-
+    };
 }
   return (
     <>
-      {
-        isModalFor 
-        &&
-        <div
-          className='w-screen h-screen z-10 bg-slate-950 fixed opacity-50'
-        >
-        </div>
-      }
+      {isModalFor && <div className='w-screen h-screen z-10 bg-slate-950 fixed opacity-50'></div>}
       <div className='p-5 mx-auto bg-gray-200 flex flex-col  gap-10 '>
         <Header 
           setFilterValue={setFilterValue}
