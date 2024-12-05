@@ -5,7 +5,7 @@ import { LoginRegisterDropDown } from "../Compontents/LoginRegisterDropDown";
 import UserDropdown from "../Compontents/UserDropdown";
 
 
-function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount, user, setUser }) {
+function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount, user, setUser, showFavs, setShowFavs,fetchUserFavourites}) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
@@ -89,6 +89,8 @@ function Header({ setToken, setFilterValue, fetchSearchedMovie, setSearchInput, 
             setIsUserProfileOpen={setIsUserProfileOpen}
             user={user}
             setUser={setUser}
+            setShowFavs={setShowFavs}
+            fetchUserFavourites={fetchUserFavourites}
           />
           <LoginRegisterDropDown 
             isLoginOpen={isLoginOpen}

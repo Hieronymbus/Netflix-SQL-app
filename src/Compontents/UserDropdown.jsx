@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UserDropdown = ({isUserProfileOpen, setIsUserProfileOpen, user, setUser}) => {
+const UserDropdown = ({isUserProfileOpen, setIsUserProfileOpen, user, setUser, setShowFavs,fetchUserFavourites}) => {
 
 
     async function sendLogoutRequest () {
@@ -40,7 +40,12 @@ const UserDropdown = ({isUserProfileOpen, setIsUserProfileOpen, user, setUser}) 
                     {user.username}
                 </h2>
 
-                <button>
+                <button
+                    onClick={()=>{
+                        fetchUserFavourites()
+                        setShowFavs(true)
+                    }}
+                >
                   View Your Favourites
                 </button>
                 <br />

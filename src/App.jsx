@@ -13,7 +13,7 @@ export default function App() {
   const [filterValue, setFilterValue] = useState();
   const [searchInput, setSearchInput] = useState('');
   const [isModalFor, setIsModalFor ] = useState("");
-  
+  const [showFavs, setShowFavs] = useState(false);
   const [user, setUser] = useState("");
 
   const [token, setToken] = useState();
@@ -45,10 +45,27 @@ export default function App() {
         setLoading(false)
     }
 } 
+
+const fetchUserFavourites = async (params) => {
+    console.log(user.id)
+    const response = await fetch(`${import.meta.env.VITE_PORT}/favourites?id=${user.id}&itemCount=${itemCount}`)
+
+    const favouritesData = await response.json()
+
+    console.log(favouritesData)
+    const favsArr = [];
+    for(const movie of favouritesData.data) {
+      favsArr.push(movie.title)
+    }
+    setMovies(favsArr)
+
+    setLoading(false)
+
+}
   const fetchUserData = async () => {
 
       const response = await fetch(`${import.meta.env.VITE_PORT}/user`,{
-        credentials: "include"
+          credentials: "include"
       });
       const data = await response.json();
 
@@ -59,7 +76,7 @@ export default function App() {
       }
   }
   useEffect(() => {
-      fetchUserData()
+      fetchUserData()     
   }, [])
 
   return (
@@ -94,6 +111,10 @@ export default function App() {
           setToken={setToken}
           user={user}
           setUser={setUser}
+          fetchUserData={fetchUserData}
+          showFavs={showFavs}
+          setShowFavs={setShowFavs}
+          fetchUserFavourites={fetchUserFavourites}
         />
    
         <Main 
@@ -121,6 +142,9 @@ export default function App() {
           setIsModalFor={setIsModalFor}
           user={user}
           setUser={setUser}
+          showFavs={showFavs}
+          setShowFavs={setShowFavs}
+          fetchUserFavourites={fetchUserFavourites}
         />
       </div>
     </>

@@ -286,26 +286,54 @@ app.get("/oneMovieDetails", async (req, res) => {
   }
 });
 
-app.post('/favourites', async(req, res) => {
+app.post('/favourites/add_favourites', async(req, res) => {
   const data = req.body;
   console.log(await data);
-  await client.query(`CREATE TABLE IF NOT EXISTS favourites (
-                      netflix_shows_id VARCHAR(100) NOT NULL,
-                      user_id VARCHAR(100) NOT NULL
-                      )`
-  );
 
-  if(!userId) {
-    res.status(401);
-    return;
-  };
+  try {
+    
 
-  await client.query(`INSERT INTO favourites (netflix_shows_id, user_id)
-                     VALUES ('${data.show_id}', '${userId}')`
-  );
+    await client.query(`CREATE TABLE IF NOT EXISTS favourites (
+                        netflix_shows_id VARCHAR(100) NOT NULL,
+                        user_id VARCHAR(100) NOT NULL
+                        )`
+                      );
+  
+    await client.query(`INSERT INTO favourites (netflix_show_id, user_id)
+                        VALUES ('${data.show_id}', '${data.user_id}')`
+                      );
 
-  const usersFavourites = await client.query(`SELECT * FROM favourites WHERE user_id = '${userId}'`);
-  console.log(usersFavourites.rows);
+    res.status(200).json({message:"succesfully added to favourites"})
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({message:"server error failed to add to favourites"})
+  }
+
+
+  
 });
+
+app.get('/favourites',async (req, res) => {
+
+    const {id,itemCount} = req.query
+
+    try {
+        const favourites = await client.query(`
+                                              SELECT * 
+                                              FROM favourites 
+                                              JOIN netflix_shows ON netflix_shows.show_id = favourites.netflix_show_id
+                                              WHERE user_id = $1
+                                              LIMIT $2
+                                              `, [id, itemCount]);
+                               
+        res.status(200).json({message:"favourites found", data: favourites.rows});
+        
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:"server error"})
+    }
+
+})
 
 app.listen(port, () => console.log(`Listening on localhost:${port}`));

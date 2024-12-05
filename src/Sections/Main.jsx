@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MovieModal from '../Compontents/MovieModal';
 
-function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, searchInput, isSearching, setIsModalFor, isModalFor } ) {
+function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, searchInput, isSearching, setIsModalFor, isModalFor, user,showFavs,setShowFavs,fetchUserFavourites } ) {
 
     const [movieCount, setMovieCount] = useState();
     
@@ -22,9 +22,12 @@ function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount
             fetchMoviesByFilter();
         } else if(isSearching) {
             fetchSearchedMovie()
+        } else if(showFavs){
+            fetchUserFavourites()
         } else {
             fetchAllMovies();
         };
+         
 
     }, [itemCount, filterValue]);
 
@@ -117,6 +120,8 @@ function Main( { token, fetchSearchedMovie, itemCount, filterValue, setItemCount
                     setIsModalFor={setIsModalFor}
                     isModalFor={isModalFor}
                     token={token}
+                    user={user}
+                    setShowFavs={setShowFavs}
                 />
             }  
             

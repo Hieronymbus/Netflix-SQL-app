@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, user } from "react";
 
 
-const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
+const MovieModal = ( { token, setIsModalFor, isModalFor, user,setShowFavs } ) => {
    const [isLoadingDetails, setIsLoadingDetails] = useState(false)
    const [movieDetails, setMovieDetails ] = useState({
       title:"",
@@ -66,6 +66,24 @@ const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
       });
    };
  
+
+   async function addMovieToFavourites (showId) {
+
+         const body ={
+            show_id: showId,
+            user_id: user.id
+         }
+
+         await fetch(`${import.meta.env.VITE_PORT}/favourites/add_favourites`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+         })
+    
+
+   }
    return (
       
       <div 
@@ -88,7 +106,7 @@ const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
                   <div>
                      <button 
                         className="bg-slate-950 rounded p-1 text-2xl border border-black "
-                        onClick={ () => setIsModalFor("") }
+                        onClick={ () => {setIsModalFor("")} }
                      > 
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -152,11 +170,19 @@ const MovieModal = ( { token, setIsModalFor, isModalFor } ) => {
                      <span className="text-xl">Date Added:  </span> 
                      { movieDetails.date_added ? <span>{movieDetails.date_added}</span>  : <span>N/A</span> } 
                   </h2>
-                  <button
-                        className="bg-slate-800 rounded p-1 text-2xl border  "
-                  >
-                     Add to favourites
-                  </button>
+                  {
+                     user
+                     &&
+                     <button
+                           className="bg-slate-800 rounded p-1 text-2xl border  "
+                           onClick={()=>{
+                              addMovieToFavourites(movieDetails.show_id)
+                              
+                           }}
+                     >
+                        Add to favourites
+                     </button>
+                  }
                </div>
                
             </div>
