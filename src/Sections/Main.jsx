@@ -74,6 +74,13 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
         setLoading(false);
     };
 
+    async function fetchTvShows() {
+        const response = await fetch(`http://localhost:${PORT}/tv-shows`);
+        const tvShows = await response.json();
+
+        console.log(tvShows);
+    }
+
     async function fetchMoviesByFilter() {
         console.log(filterValue);
         const searchValue = encodeURIComponent(searchInput);

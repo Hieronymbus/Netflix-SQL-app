@@ -156,6 +156,17 @@ app.get("/allMovies", async (req, res) => {
   }
 });
 
+app.get("/tv-shows", async(req, res) => {
+  const result = await client.query(
+    `
+      SELECT * FROM netflix_shows WHERE type = 'TV Show'
+    `
+  );
+
+  const tvShows = result.rows;
+  console.log(tvShows);
+});
+
 app.get("/filter", async (req, res) => {
   const itemCount = parseInt(req.query.itemCount) || 12;
   const releaseYear = parseInt(req.query.releaseYear) || null;
