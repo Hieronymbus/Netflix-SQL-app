@@ -135,22 +135,14 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
 
   return (
     <header className="relative w-full text-center">
-      <button className='z-20 size-20 text-3xl absolute left-5 rounded-full bg-slate-600 text-white cursor-pointer' onClick={() => setSettingModal(true)}>{settingModalText}</button>
-      {settingModal && <SettingModal netflixUser={netflixUser} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} handleFetchFavourites={handleFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} />}
-      {signup && <Register_Login value={value} setValue={setValue} updateValues={updateValues} signup={signup} closeProfileModal={closeProfileModal} />}
-      {loginForm && <Register_Login value={value} setValue={setValue} updateValues={updateValues} closeProfileModal={closeProfileModal} />}
-      <div>
+      <div className='flex w-full justify-between'>
+        <button className='size-20 text-3xl rounded-full bg-slate-600 text-white cursor-pointer' onClick={() => setSettingModal(true)}>{settingModalText}</button>
+        {settingModal && <SettingModal netflixUser={netflixUser} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} handleFetchFavourites={handleFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} />}
+        {signup && <Register_Login value={value} setValue={setValue} updateValues={updateValues} signup={signup} closeProfileModal={closeProfileModal} />}
+        {loginForm && <Register_Login value={value} setValue={setValue} updateValues={updateValues} closeProfileModal={closeProfileModal} />}
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>
-        <SearchBar 
-          searchInput={searchInput}
-          setSearchInput={setSearchInput}
-          isSearching={isSearching}
-          setIsSearching={setIsSearching}
-          setItemCount={setItemCount}
-          fetchSearchedMovie={fetchSearchedMovie}
-        />
         <div className="relative">
-          <div name="dropDownContainer" className={`${isDropDown ? '' : 'hidden'} absolute top-12 z-50 pb-10 p-10 h-fit bg-slate-600 rounded border border-black flex w-full gap-2.5`}>
+          <div name="dropDownContainer" className={`${isDropDown ? '' : 'hidden'} absolute z-20 pb-10 p-10 h-fit right-full top-0 bg-slate-600 rounded border border-black flex w-screen gap-2.5`}>
               <FilterOptions onHandleCloseDropDown={closeDropDown} generateValue={generateValue} setDurationValue={setDurationValue} setRatingValue={setRatingValue} setReleaseYearValue={setReleaseYearValue} />
           </div>
           <button type="submit" onClick={() => setIsDropDown(!isDropDown)} className="text-slate-100 bg-cyan-600 flex justify-center items-center size-12 aspect-square border border-black rounded hover:bg-slate-600 ">
@@ -160,6 +152,14 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
           </button>
         </div>
       </div>
+      <SearchBar 
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        isSearching={isSearching}
+        setIsSearching={setIsSearching}
+        setItemCount={setItemCount}
+        fetchSearchedMovie={fetchSearchedMovie}
+      />
     </header>
   );
 }

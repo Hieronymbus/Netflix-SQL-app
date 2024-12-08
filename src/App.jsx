@@ -7,7 +7,10 @@ export default function App() {
   const [isReleaseYearFilter, setReleaseYearFilter] = useState(false);
   const [isRatingFilter, setRatingFilter] = useState(false);
   const [itemCount, setItemCount] = useState(12);
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState({
+    movies: [],
+    shows: [],
+  });
   const [loading, setLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [filterValue, setFilterValue] = useState();
@@ -46,7 +49,7 @@ export default function App() {
   return (
     <>
       {isModalFor && <div className='w-screen h-screen z-10 bg-slate-950 fixed opacity-50'></div>}
-      <div className='p-5 mx-auto bg-gray-200 flex flex-col  gap-10 '>
+      <div className='p-5 mx-auto bg-gray-200 flex flex-col w-full gap-10 '>
         <Header 
           setFilterValue={setFilterValue}
           filterValue={filterValue}

@@ -164,7 +164,7 @@ app.get("/tv-shows", async(req, res) => {
   );
 
   const tvShows = result.rows;
-  console.log(tvShows);
+  res.status(201).json(tvShows);
 });
 
 app.get("/filter", async (req, res) => {
@@ -241,7 +241,7 @@ app.get("/oneMovieDetails", async (req, res) => {
       [movieTitle]
     );
     res.json(result.rows);
-  } catch (error) {
+  } catch(err) {
     console.error(err);
     res.status(500).send("server error");
   }

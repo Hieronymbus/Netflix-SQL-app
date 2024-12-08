@@ -15,7 +15,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
     useEffect(() => {
         setMovies([]);
         setMovieCount(movies.length); // Re render the page to load filtered movies
-        setItemCount(12);
+        setItemCount(4);
     }, [filterValue]);
 
     useEffect(() => setMovies([]), [fetchFavourites]);//Don't know if this prevents favourite movies from sppending to all movies arr
@@ -40,9 +40,9 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
         // console.log('WINDOW: ', window.innerHeight);
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
-        if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
-                setItemCount(prev => prev + 12);  
-        };
+        // if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
+        //         setItemCount(prev => prev + 12);  
+        // };
     };
 
     async function fetchFavouriteMovies() {
@@ -68,18 +68,37 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
 
         for(const movie of movieData) {movieArr.push(movie.title)};
             
-        let newMovies = [...movies, ...movieArr.slice(itemCount - 12)];
+        let newMovies = [...movies.movies, ...movieArr.slice(itemCount - 8)];
 
-        setMovies(newMovies);
+        setMovies(prev => ({
+                ...prev,
+                movies: newMovies
+        }));
         setLoading(false);
     };
 
     async function fetchTvShows() {
-        const response = await fetch(`http://localhost:${PORT}/tv-shows`);
-        const tvShows = await response.json();
+        try {
+            const response = await fetch(`http://localhost:${PORT}/tv-shows`);
+            const tvShowData = await response.json();
+            const tvShows = [];
+            const newTvShows = [];
+            console.log(tvShowData);
 
-        console.log(tvShows);
+            for(const show of tvShowData) tvShows.push(show.title);
+            if(tvShows.length > 0) {
+                newTvShows.push(...movies.tvShows, ...tvShows.slice(itemCount - 12));
+                setMovies(prev => ({
+                    ...prev, 
+                    tvShows: newTvShows
+                }));
+            };
+        } catch(err) {
+            console.error(err.stack);
+        }
     }
+
+    fetchTvShows();
 
     async function fetchMoviesByFilter() {
         console.log(filterValue);
@@ -121,7 +140,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
     };
 
     return(
-        <main className='w-full relative '>
+        <main className='w-full relative text-center'>
             <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>
                 {loading && 'loading...'}
             </h1>
@@ -137,23 +156,42 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                     fetchFavouriteMovies={fetchFavouriteMovies}
                 />
             }  
-            
-            <ul className='grid grid-cols-1 md:grid-cols-4 gap-2.5'>
-                {movies.map((movie, index) => {
-
-                    return (        
-                        <li 
-                            key={index} 
-                            className='relative p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
-                            onClick={()=>{setIsModalFor(movie)}}
-                        >
-                            <div>  
-                                <h1 className='text-2xl'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
-                            </div>
-                        </li>
-                    )
-                })}
-            </ul>
+            <div>
+                <h2 className='text-3xl text-black mb-5'>Movies</h2>
+                <ul className='grid grid-cols-1 md:grid-cols-4 gap-2.5'>
+                    {movies.movies?.length > 0 && movies.movies.map((movie, index) => {
+                        return (        
+                            <li 
+                                key={index} 
+                                className='relative p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
+                                onClick={()=>{setIsModalFor(movie)}}
+                            >
+                                <div>  
+                                    <h1 className='text-2xl'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
+                                </div>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
+            <div>
+                <h2 className='text-3xl text-black my-5'>Tv-Shows</h2>
+                <ul className='grid grid-cols-1 md:grid-cols-4 gap-2.5'>
+                    {movies.tvShows?.length > 0 && movies.tvShows.map((movie, index) => {
+                        return (        
+                            <li 
+                                key={index} 
+                                className='relative p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
+                                onClick={()=>{setIsModalFor(movie)}}
+                            >
+                                <div>  
+                                    <h1 className='text-2xl'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
+                                </div>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
         </main>
     );
 };
