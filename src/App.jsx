@@ -6,7 +6,7 @@ export default function App() {
   const [isDurationFilter, setDurationFilter] = useState(false);
   const [isReleaseYearFilter, setReleaseYearFilter] = useState(false);
   const [isRatingFilter, setRatingFilter] = useState(false);
-  const [itemCount, setItemCount] = useState(12);
+  const [itemCount, setItemCount] = useState(4);
   const [movies, setMovies] = useState({
     movies: [],
     shows: [],
@@ -24,6 +24,10 @@ export default function App() {
     const user = JSON.parse(localStorage.getItem("user"));
     setNetflixUser(user);
   }, [fetchFavourites]);
+
+  useEffect(() => {
+    console.log('ItemCount state has changed and is now rendering the page with the value of: ' + itemCount)
+  }, [itemCount]);
 
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
   const fetchSearchedMovie = async (e) => {

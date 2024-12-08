@@ -30,14 +30,18 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             fetchFavouriteMovies();
         } else {
             fetchAllMovies();
+            fetchTvShows();
         };
-
     }, [itemCount, netflixUser, fetchFavourites, filterValue]);
 
     function handleScroll() {
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
         // console.log('TOP: ', document.documentElement.scrollTop);
         // console.log('WINDOW: ', window.innerHeight);
+
+        // console.log('Width: ' + document.documentElement.scrollWidth);
+        // console.log('Height: ' + document.documentElement.scrollHeight);
+        // console.log('Window: ' + window.innerWidth);
 
         // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
         // if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
@@ -62,18 +66,20 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
     };
 
     async function fetchAllMovies() {
-        const response = await fetch(`${import.meta.env.VITE_PORT}/allMovies/?itemCount=${itemCount}`);
+        const response = await fetch(`${import.meta.env.VITE_PORT}/allMovies/?itemCount=${4}`);
         const movieData = await response.json(); 
         let movieArr = [];
 
-        for(const movie of movieData) {movieArr.push(movie.title)};
-            
-        let newMovies = [...movies.movies, ...movieArr.slice(itemCount - 8)];
+        for(const movie of movieData) {movieArr.push(movie)};
+        if(movieArr.length > 0) {
+            let newMovies = [...(movies?.movies || []), ...movieArr];
 
-        setMovies(prev => ({
-                ...prev,
-                movies: newMovies
-        }));
+            setMovies(prev => ({
+                    ...prev,
+                    movies: newMovies
+            }));
+        };
+
         setLoading(false);
     };
 
@@ -83,22 +89,19 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             const tvShowData = await response.json();
             const tvShows = [];
             const newTvShows = [];
-            console.log(tvShowData);
 
-            for(const show of tvShowData) tvShows.push(show.title);
+            for(const show of tvShowData) tvShows.push(show);
             if(tvShows.length > 0) {
-                newTvShows.push(...movies.tvShows, ...tvShows.slice(itemCount - 12));
+                newTvShows.push(...(movies?.shows || []), ...tvShows.slice(itemCount - 12));
                 setMovies(prev => ({
                     ...prev, 
-                    tvShows: newTvShows
+                    shows: newTvShows
                 }));
             };
-        } catch(err) {
+            } catch(err) {
             console.error(err.stack);
         }
-    }
-
-    fetchTvShows();
+    };
 
     async function fetchMoviesByFilter() {
         console.log(filterValue);
@@ -158,17 +161,21 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             }  
             <div>
                 <h2 className='text-3xl text-black mb-5'>Movies</h2>
-                <ul className='grid grid-cols-1 md:grid-cols-4 gap-2.5'>
+                <ul className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto'>
                     {movies.movies?.length > 0 && movies.movies.map((movie, index) => {
                         return (        
                             <li 
                                 key={index} 
-                                className='relative p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
-                                onClick={()=>{setIsModalFor(movie)}}
+                                className='basis-3/12 flex-none relative p-5 h-96 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded cursor-pointer'
+                                onClick={()=>{setIsModalFor(movie.title)}}
                             >
-                                <div>  
-                                    <h1 className='text-2xl'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
-                                </div>
+                                <div className='w-full flex flex-col justify-between h-full'>  
+                                    <h1 className='text-2xl text-center my-auto'>{movie.title.length >= 40 ? movie.title.slice(0, 40) + "..." : movie.title }</h1>
+                                    <div className='flex justify-between w-full'>
+                                        <p>{movie.duration}</p>
+                                        <p>{movie.rating}</p>
+                                    </div>
+                                </div> 
                             </li>
                         )
                     })}
@@ -177,16 +184,20 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             <div>
                 <h2 className='text-3xl text-black my-5'>Tv-Shows</h2>
                 <ul className='grid grid-cols-1 md:grid-cols-4 gap-2.5'>
-                    {movies.tvShows?.length > 0 && movies.tvShows.map((movie, index) => {
+                    {movies.shows?.length > 0 && movies.shows.map((show, index) => {
                         return (        
                             <li 
                                 key={index} 
                                 className='relative p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
-                                onClick={()=>{setIsModalFor(movie)}}
+                                onClick={()=>{setIsModalFor(show.title)}}
                             >
-                                <div>  
-                                    <h1 className='text-2xl'>{movie.length >= 40 ? movie.slice(0, 40) + "..." : movie }</h1>
-                                </div>
+                                <div className='w-full flex flex-col justify-end h-full'>  
+                                    <h1 className='text-2xl mb-10'>{show.title.length >= 40 ? show.title.slice(0, 40) + "..." : show.title }</h1>
+                                    <div className='flex justify-between w-full'>
+                                        <p>{show.duration}</p>
+                                        <p>{show.rating}</p>
+                                    </div>
+                                </div> 
                             </li>
                         )
                     })}
