@@ -21,7 +21,11 @@ const SearchBar = ({ searchInput, setSearchInput, isSearching, setIsSearching, s
     };
     if (isSearching) {
       fetchSearchedMovie();
-      setItemCount(12); //keep this
+      setItemCount(prev => ({
+        searchcount: 12,
+        movieCount: prev.movieCount,
+        showCount: prev.showcount
+      })); //keep this
     };
   }, [debounceSearch]);
 
@@ -32,7 +36,12 @@ const SearchBar = ({ searchInput, setSearchInput, isSearching, setIsSearching, s
         onSubmit={(e) => {
           e.preventDefault();
           setIsSearching(true);
-          setItemCount(12);}}
+          setItemCount(prev => ({
+            searchcount: 12,
+            movieCount: prev.movieCount,
+            showCount: prev.showcount
+          }));
+        }}
       >
         <input
           type="text"

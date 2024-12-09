@@ -15,7 +15,11 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
     useEffect(() => {
         setMovies([]);
         setMovieCount(movies.length); // Re render the page to load filtered movies
-        setItemCount(4);
+        setItemCount({
+            movieCount: 4,
+            showCount: 4,
+            searchCount: 0
+        });
     }, [filterValue]);
 
     useEffect(() => setMovies([]), [fetchFavourites]);//Don't know if this prevents favourite movies from sppending to all movies arr
@@ -35,18 +39,26 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
     }, [itemCount, netflixUser, fetchFavourites, filterValue]);
 
     function handleScroll(e) {
-        const rect = document.getElementById('last').getBoundingClientRect();
+        const movieRect = document.getElementById('lastMovie').getBoundingClientRect();
+        const showRect = document.getElementById('lastShow').getBoundingClientRect();
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
         // console.log('TOP: ', document.documentElement.scrollTop);
         // console.log('WINDOW: ', window.innerHeight);
         // console.log(e);
         // console.log('VIEWPORT WIDTH: ' + document.documentElement.scrollWidth);
         // console.log('LAST ELEMENTS RIGHT POSITION: ' + rect.right);
-        if(rect.right < document.documentElement.scrollWidth) {
-            console.log('RECT: ', rect.right);
-            console.log('VIEWPORT WIDTH: ', document.documentElement.scrollWidth);
-            setItemCount(prev => prev += 4);
-            console.log(itemCount);
+        if(movieRect.right < document.documentElement.scrollWidth) {
+            setItemCount(prev => ({
+                showCount: prev.showCount,
+                movieCount: prev.movieCount += 4
+            }));
+        };
+
+        if(showRect.right < document.documentElement.scrollWidth) {
+            setItemCount(prev => ({
+                movieCount: prev.movieCount,
+                showCount: prev.showCount += 4
+            }));
         }
     };
 
@@ -67,40 +79,30 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
     };
 
     async function fetchAllMovies() {
-        const response = await fetch(`${import.meta.env.VITE_PORT}/allMovies/?itemCount=${itemCount}`);
+        const response = await fetch(`${import.meta.env.VITE_PORT}/movies/?itemCount=${itemCount.movieCount}`);
         const movieData = await response.json(); 
-        let movieArr = [];
-        movieData.slice(0).map(movie => movieArr.push(movie));
-
-        // for(const movie of movieData) {movieArr.push(movie)};
-        // if(movieArr.length > 0) {
-        //     let newMovies = [...(movies?.movies || []), ...movieArr];
-        if(movieArr.length > 0) {
+        if(movieData.length > 0) {
             setMovies(prev => ({
                 ...prev,
-                movies: movieArr
+                movies: [...prev.movies || [], ...movieData]
             }));
-        }
-        // };
+        };
 
-        // setLoading(false);
+        setLoading(false);
     };
 
     async function fetchTvShows() {
         try {
-            const response = await fetch(`http://localhost:${PORT}/tv-shows`);
+            const response = await fetch(`http://localhost:${PORT}/tv-shows/?itemCount=${itemCount.showCount}`);
             const tvShowData = await response.json();
-            const tvShows = [];
-            const newTvShows = [];
-
-            for(const show of tvShowData) tvShows.push(show);
-            if(tvShows.length > 0) {
-                newTvShows.push(...(movies?.shows || []), ...tvShows.slice(itemCount - 12));
+            if(tvShowData.length > 0) {
                 setMovies(prev => ({
                     ...prev, 
-                    shows: newTvShows
+                    shows: [...prev.shows || [], ...tvShowData]
                 }));
             };
+
+            console.log(tvShowData);
             } catch(err) {
             console.error(err.stack);
         }
@@ -169,7 +171,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                         return (        
                             <li 
                                 key={index}
-                                id={index + 1 === movies.movies.length ? 'last' : 'notLast'}// Generate an ID to select the element for position measurements
+                                id={index + 1 === movies.movies.length ? 'lastMovie' : 'notLastMovie'}// Generate an ID to select the element for position measurements
                                 className='basis-3/12 flex-none relative p-5 h-96 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded cursor-pointer'
                                 onClick={()=>{setIsModalFor(movie.title)}}
                             >
@@ -187,11 +189,12 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             </div>
             <div>
                 <h2 className='text-3xl text-black my-5'>Tv-Shows</h2>
-                <ul className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
+                <ul onScroll={(e) => handleScroll(e.target)} className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
                     {movies.shows?.length > 0 && movies.shows.map((show, index) => {
                         return (        
                             <li 
                                 key={index} 
+                                id={index + 1 === movies.shows.length ? 'lastShow' : 'notLastShow'}
                                 className='basis-3/12 flex-none relative p-5 h-96 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded cursor-pointer'
                                 onClick={()=>{setIsModalFor(show.title)}}
                             >

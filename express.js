@@ -143,13 +143,16 @@ app.post('/register', async(req, res) => {
 
 });
   
-app.get("/allMovies", async (req, res) => {
+app.get("/movies", async (req, res) => {
   try {
-    const itemCount = parseInt(req.query.itemCount) || 12;
-    const result = await client.query(`SELECT * FROM netflix_shows WHERE type = 'Movie' LIMIT $1`, [
-      itemCount,
-    ]);
-    res.json(result.rows);
+    const result = await client.query(
+      `
+      SELECT * FROM netflix_shows 
+      WHERE type = 'Movie' 
+      ORDER BY release_year DESC LIMIT $1`
+      , [req.query.itemCount]);
+      const movies = result.rows.slice(0, 4);
+    res.status(201).json(movies);
   } catch (err) {
     console.error(err);
     res.status(500).send("server error");
@@ -157,14 +160,20 @@ app.get("/allMovies", async (req, res) => {
 });
 
 app.get("/tv-shows", async(req, res) => {
-  const result = await client.query(
-    `
-      SELECT * FROM netflix_shows WHERE type = 'TV Show'
-    `
-  );
-
-  const tvShows = result.rows;
-  res.status(201).json(tvShows);
+  try {
+    const result = await client.query(
+      `
+        SELECT * FROM netflix_shows WHERE type = 'TV Show'
+        ORDER BY release_year DESC
+        LIMIT $1
+      `, [req.query.itemCount]
+    );
+  
+    const tvShows = result.rows.slice(0, 4);
+    res.status(201).json(tvShows);
+  } catch(err) {
+    console.error(err);
+  }
 });
 
 app.get("/filter", async (req, res) => {
