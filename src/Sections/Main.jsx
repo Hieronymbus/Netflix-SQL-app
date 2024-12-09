@@ -161,7 +161,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             }  
             <div>
                 <h2 className='text-3xl text-black mb-5'>Movies</h2>
-                <ul className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto'>
+                <ul className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
                     {movies.movies?.length > 0 && movies.movies.map((movie, index) => {
                         return (        
                             <li 
@@ -183,12 +183,12 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             </div>
             <div>
                 <h2 className='text-3xl text-black my-5'>Tv-Shows</h2>
-                <ul className='grid grid-cols-1 md:grid-cols-4 gap-2.5'>
+                <ul className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
                     {movies.shows?.length > 0 && movies.shows.map((show, index) => {
                         return (        
                             <li 
                                 key={index} 
-                                className='relative p-5 w-full h-32 md:h-64  text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded flex justify-center items-center text-center cursor-pointer'
+                                className='basis-3/12 flex-none relative p-5 h-96 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded cursor-pointer'
                                 onClick={()=>{setIsModalFor(show.title)}}
                             >
                                 <div className='w-full flex flex-col justify-end h-full'>  
