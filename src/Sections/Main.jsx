@@ -199,7 +199,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                                 onClick={()=>{setIsModalFor(show.title)}}
                             >
                                 <div className='w-full flex flex-col justify-end h-full'>  
-                                    <h1 className='text-2xl mb-10'>{show.title.length >= 40 ? show.title.slice(0, 40) + "..." : show.title }</h1>
+                                    <h1 className='text-2xl mb-auto mt-auto'>{show.title.length >= 40 ? show.title.slice(0, 40) + "..." : show.title }</h1>
                                     <div className='flex justify-between w-full'>
                                         <p>{show.duration}</p>
                                         <p>{show.rating}</p>
