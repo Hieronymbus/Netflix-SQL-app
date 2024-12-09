@@ -7,9 +7,9 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
 
     const [movieCount, setMovieCount] = useState();
     
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-    }, []);
+    // useEffect(() => {
+    //     window.addEventListener('scroll', handleScroll);
+    // }, []);
     
     //Clear movies when applying filter
     useEffect(() => {
@@ -34,19 +34,20 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
         };
     }, [itemCount, netflixUser, fetchFavourites, filterValue]);
 
-    function handleScroll() {
+    function handleScroll(e) {
+        const rect = document.getElementById('last').getBoundingClientRect();
         // console.log('HEIGHT: ', document.documentElement.scrollHeight);
         // console.log('TOP: ', document.documentElement.scrollTop);
         // console.log('WINDOW: ', window.innerHeight);
-
-        // console.log('Width: ' + document.documentElement.scrollWidth);
-        // console.log('Height: ' + document.documentElement.scrollHeight);
-        // console.log('Window: ' + window.innerWidth);
-
-        // + 1 sum to account for some browsers inner height and scroll top values not equalling scroll heights value
-        // if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {       
-        //         setItemCount(prev => prev + 12);  
-        // };
+        // console.log(e);
+        // console.log('VIEWPORT WIDTH: ' + document.documentElement.scrollWidth);
+        // console.log('LAST ELEMENTS RIGHT POSITION: ' + rect.right);
+        if(rect.right < document.documentElement.scrollWidth) {
+            console.log('RECT: ', rect.right);
+            console.log('VIEWPORT WIDTH: ', document.documentElement.scrollWidth);
+            setItemCount(prev => prev += 4);
+            console.log(itemCount);
+        }
     };
 
     async function fetchFavouriteMovies() {
@@ -66,21 +67,23 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
     };
 
     async function fetchAllMovies() {
-        const response = await fetch(`${import.meta.env.VITE_PORT}/allMovies/?itemCount=${4}`);
+        const response = await fetch(`${import.meta.env.VITE_PORT}/allMovies/?itemCount=${itemCount}`);
         const movieData = await response.json(); 
         let movieArr = [];
+        movieData.slice(0).map(movie => movieArr.push(movie));
 
-        for(const movie of movieData) {movieArr.push(movie)};
+        // for(const movie of movieData) {movieArr.push(movie)};
+        // if(movieArr.length > 0) {
+        //     let newMovies = [...(movies?.movies || []), ...movieArr];
         if(movieArr.length > 0) {
-            let newMovies = [...(movies?.movies || []), ...movieArr];
-
             setMovies(prev => ({
-                    ...prev,
-                    movies: newMovies
+                ...prev,
+                movies: movieArr
             }));
-        };
+        }
+        // };
 
-        setLoading(false);
+        // setLoading(false);
     };
 
     async function fetchTvShows() {
@@ -161,11 +164,12 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             }  
             <div>
                 <h2 className='text-3xl text-black mb-5'>Movies</h2>
-                <ul className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
+                <ul onScroll={(e) => handleScroll(e.target)} className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
                     {movies.movies?.length > 0 && movies.movies.map((movie, index) => {
                         return (        
                             <li 
-                                key={index} 
+                                key={index}
+                                id={index + 1 === movies.movies.length ? 'last' : 'notLast'}// Generate an ID to select the element for position measurements
                                 className='basis-3/12 flex-none relative p-5 h-96 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded cursor-pointer'
                                 onClick={()=>{setIsModalFor(movie.title)}}
                             >

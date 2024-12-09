@@ -146,7 +146,7 @@ app.post('/register', async(req, res) => {
 app.get("/allMovies", async (req, res) => {
   try {
     const itemCount = parseInt(req.query.itemCount) || 12;
-    const result = await client.query(`SELECT * FROM netflix_shows LIMIT $1`, [
+    const result = await client.query(`SELECT * FROM netflix_shows WHERE type = 'Movie' LIMIT $1`, [
       itemCount,
     ]);
     res.json(result.rows);
