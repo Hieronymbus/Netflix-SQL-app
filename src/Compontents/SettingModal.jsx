@@ -30,7 +30,7 @@ function SettingModal({ setIsModalFor, isModalFor, netflixUser, fetchFavourites,
             <div className=' relative flex gap-5 w-full bg-slate-700'>
                 <div onMouseOver={() => setFetchFavourites(true)} onMouseOut={() => setFetchFavourites(false)} className={`${fetchFavourites ? 'absolute' : 'hidden'} -bottom-64 bg-black h-64 w-full z-20`}>
                     {movies.favourites?.map((movie) => {
-                        return <p onClick={() =>setIsModalFor(movie)} className='text-white my-5 hover:bg-white hover:text-black hover:cursor-pointer'key={movie}>{movie}</p>
+                        return <p onClick={() =>setIsModalFor(movie)} className='text-white my-5 hover:bg-white hover:text-black hover:cursor'key={movie}>{movie}</p>
                     })}
                 </div>
                 <button className='text-white py-5' onClick={() => alert('Settings are still under development')}>Settings</button>

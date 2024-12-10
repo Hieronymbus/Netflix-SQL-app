@@ -22,8 +22,6 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             searchCount: 0
         });
     }, [filterValue]);
-
-    useEffect(() => setMovies([]), [fetchFavourites]);//Don't know if this prevents favourite movies from sppending to all movies arr
     
     useEffect(() => {
         setLoading(true);
@@ -36,7 +34,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             fetchTvShows();
             console.log('movies: ', movies);                            
         };
-    }, [itemCount, netflixUser, fetchFavourites, filterValue]);
+    }, [itemCount, netflixUser, filterValue]);
 
     //Infinite scroll logic
     function handleScroll(e) {
