@@ -28,9 +28,9 @@ function SettingModal({ setIsModalFor, isModalFor, netflixUser, fetchFavourites,
         <div className='flex items-center w-fit px-10 justify-center z-20 absolute top-2 left-10 rounded-full bg-slate-600'>
             <button className='absolute text-white text-xl right-2.5' onClick={() => setSettingModal(false)}>x</button>
             <div className=' relative flex gap-5 w-full bg-slate-700'>
-                <div onMouseOver={() => setFetchFavourites(true)} onMouseOut={() => setFetchFavourites(false)} className={`${fetchFavourites ? 'absolute' : 'hidden'} -bottom-12 bg-black min-h-16 max-h-fit w-full z-20`}>
+                <div onMouseOver={() => setFetchFavourites(true)} onMouseOut={() => setFetchFavourites(false)} className={`${fetchFavourites ? 'absolute' : 'hidden'} -bottom-64 bg-black h-64 w-full z-20`}>
                     {movies.favourites?.map((movie) => {
-                        return <p onClick={() =>setIsModalFor(movie)} className='text-white my-5'key={movie}>{movie}</p>
+                        return <p onClick={() =>setIsModalFor(movie)} className='text-white my-5 hover:bg-white hover:text-black hover:cursor-pointer'key={movie}>{movie}</p>
                     })}
                 </div>
                 <button className='text-white py-5' onClick={() => alert('Settings are still under development')}>Settings</button>
