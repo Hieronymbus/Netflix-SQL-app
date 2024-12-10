@@ -80,6 +80,8 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
       };
 
       localStorage.setItem('user', JSON.stringify(data.user));
+      setToken(data.token);
+      console.log(data.token);
       setNetflixUser(data.user);
     } catch(err) {
       console.error(err);

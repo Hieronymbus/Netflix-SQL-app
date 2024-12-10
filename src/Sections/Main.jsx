@@ -6,6 +6,7 @@ const PORT = 3000;
 function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
 
     const [movieCount, setMovieCount] = useState();
+    const [isLoading, setIsLoading] = useState(true);
     
     // useEffect(() => {
     //     window.addEventListener('scroll', handleScroll);
@@ -35,9 +36,11 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
         } else {
             fetchAllMovies();
             fetchTvShows();
+            console.log('movies: ', movies);                            
         };
     }, [itemCount, netflixUser, fetchFavourites, filterValue]);
 
+    //Infinite scroll logic
     function handleScroll(e) {
         const movieRect = document.getElementById('lastMovie').getBoundingClientRect();
         const showRect = document.getElementById('lastShow').getBoundingClientRect();
@@ -60,7 +63,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                 showCount: prev.showCount += 4
             }));
         }
-    };
+    };  
 
     async function fetchFavouriteMovies() {
         const response = await fetch(`http://localhost:${PORT}/get-favourites/${netflixUser.userId}`);
@@ -81,28 +84,28 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
     async function fetchAllMovies() {
         const response = await fetch(`${import.meta.env.VITE_PORT}/movies/?itemCount=${itemCount.movieCount}`);
         const movieData = await response.json(); 
-        if(movieData.length > 0) {
-            setMovies(prev => ({
-                ...prev,
-                movies: [...prev.movies || [], ...movieData]
-            }));
-        };
-
-        setLoading(false);
+        setTimeout(() => {
+            if(movieData.length > 0) {
+                setMovies(prev => ({
+                    ...prev,
+                    movies: [...prev.movies || [], ...movieData]
+                }));
+            };
+        }, 500);
     };
 
     async function fetchTvShows() {
         try {
             const response = await fetch(`http://localhost:${PORT}/tv-shows/?itemCount=${itemCount.showCount}`);
             const tvShowData = await response.json();
-            if(tvShowData.length > 0) {
-                setMovies(prev => ({
-                    ...prev, 
-                    shows: [...prev.shows || [], ...tvShowData]
-                }));
-            };
-
-            console.log(tvShowData);
+            setTimeout(() => {
+                if(tvShowData.length > 0) {
+                    setMovies(prev => ({
+                        ...prev, 
+                        shows: [...prev.shows || [], ...tvShowData]
+                    }));
+                };
+            }, 500);
             } catch(err) {
             console.error(err.stack);
         }
@@ -189,7 +192,10 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             </div>
             <div>
                 <h2 className='text-3xl text-black my-5'>Tv-Shows</h2>
-                <ul onScroll={(e) => handleScroll(e.target)} className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
+                <ul onScroll={(e) => handleScroll(e.target)} className=' relative flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
+                    <div className={`${isLoading ? 'absolute' : 'hidden'} font-bold text-3xl text-green-500 z-20 inset-y-2/4 inset-x-2/4`}>
+                        Loading...
+                    </div>
                     {movies.shows?.length > 0 && movies.shows.map((show, index) => {
                         return (        
                             <li 

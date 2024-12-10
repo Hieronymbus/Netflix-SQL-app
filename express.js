@@ -68,10 +68,10 @@ function authMiddleware(req, res, next) {
 };
 
 //Test authentication
-app.post('/authenticate', authMiddleware, async(req, res) => {
-  const token = req.header("authentication");
-  res.status(201).send({ data: token });
-});
+// app.post('/authenticate', authMiddleware, async(req, res) => {
+//   const token = req.header("authentication");
+//   res.status(201).send({ data: token });
+// });
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -151,8 +151,7 @@ app.get("/movies", async (req, res) => {
       WHERE type = 'Movie' 
       ORDER BY release_year DESC LIMIT $1`
       , [req.query.itemCount]);
-      const movies = result.rows.slice(0, 4);
-    res.status(201).json(movies);
+    res.status(201).json(result.rows.slice(-4));
   } catch (err) {
     console.error(err);
     res.status(500).send("server error");
@@ -169,8 +168,10 @@ app.get("/tv-shows", async(req, res) => {
       `, [req.query.itemCount]
     );
   
-    const tvShows = result.rows.slice(0, 4);
-    res.status(201).json(tvShows);
+    // const tvShows = result.rows.slice(0, 4);
+    // for(const show of tvShows)() => show.title;
+
+    res.status(201).json(result.rows.slice(-4));
   } catch(err) {
     console.error(err);
   }

@@ -68,7 +68,6 @@ const MovieModal = ({ fetchFavouriteMovies, fetchFavourites, netflixUser, token,
     await fetchFavouriteMovies();
     const data = await response.json();
     console.log('Remove from favourites response: ', data);
-    console.log('yo');                         
   };
 
   return (

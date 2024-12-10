@@ -19,7 +19,7 @@ export default function App() {
   const [filterValue, setFilterValue] = useState();
   const [searchInput, setSearchInput] = useState('');
   const [isModalFor, setIsModalFor ] = useState("");
-  const [token, setToken] = useState();
+  const [token, setToken] = useState('');
   const [netflixUser, setNetflixUser] = useState();
   const [fetchFavourites, setFetchFavourites] = useState(false);
 
@@ -29,7 +29,8 @@ export default function App() {
   }, [fetchFavourites]);
 
   useEffect(() => {
-    console.log('ItemCount state has changed and is now rendering the page with the value of: ' + itemCount.showCount)
+    console.log('Show count: ' + itemCount.showCount);
+    console.log('Movie count: ' + itemCount.movieCount);
   }, [itemCount]);
 
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
