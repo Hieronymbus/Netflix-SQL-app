@@ -30,9 +30,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
         if(filterValue) {
             fetchMoviesByFilter();
         } else if(isSearching) {
-            fetchSearchedMovie()
-        } else if(fetchFavourites && netflixUser) {
-            fetchFavouriteMovies();
+            fetchSearchedMovie();
         } else {
             fetchAllMovies();
             fetchTvShows();
@@ -64,22 +62,6 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             }));
         }
     };  
-
-    async function fetchFavouriteMovies() {
-        const response = await fetch(`http://localhost:${PORT}/get-favourites/${netflixUser.userId}`);
-        const favMovieData = await response.json();
-        if(favMovieData == []) {
-            fetchAllMovies();
-            return;
-        };
-        let favMovieArr = [];
-        for(const movie of favMovieData) {
-            favMovieArr.push(movie.title);
-        };
-
-        setMovies(favMovieArr);
-        setLoading(false);
-    };
 
     async function fetchAllMovies() {
         const response = await fetch(`${import.meta.env.VITE_PORT}/movies/?itemCount=${itemCount.movieCount}`);
@@ -164,7 +146,6 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                     token={token}
                     netflixUser={netflixUser}
                     fetchFavourites={fetchFavourites}
-                    fetchFavouriteMovies={fetchFavouriteMovies}
                 />
             }  
             <div>

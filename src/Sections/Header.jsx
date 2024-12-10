@@ -4,7 +4,7 @@ import SearchBar from "../Compontents/SearchBar";
 import Register_Login from '../Compontents/Register_Login.jsx';
 import SettingModal from "../Compontents/SettingModal.jsx";
 
-function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setNetflixUser, netflixUser, token, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
+function Header({ setMovies, movies, setFetchFavourites, fetchFavourites, setToken, setNetflixUser, netflixUser, setIsModalFor, isModalFor, setFilterValue, fetchSearchedMovie, setSearchInput, searchInput, isSearching, setIsSearching, setItemCount }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [durationValue, setDurationValue] = useState();
   const [ratingValue, setRatingValue] = useState();
@@ -120,14 +120,6 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
     setLoginForm(false);
   };
 
-  function handleFetchFavourites() {
-    setFetchFavourites(!fetchFavourites);
-    if(!fetchFavourites) {
-      console.log('fetching favourites');
-      setMovies([]);
-    };
-  };
-
   let settingModalText;
   if(netflixUser) {
     const firstChar = netflixUser.username[0];
@@ -140,7 +132,7 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
     <header className="relative w-full text-center">
       <div className='flex w-full justify-between'>
         <button className='size-20 text-3xl rounded-full bg-slate-600 text-white cursor-pointer' onClick={() => setSettingModal(true)}>{settingModalText}</button>
-        {settingModal && <SettingModal netflixUser={netflixUser} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} setFetchFavourites={setFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} />}
+        {settingModal && <SettingModal netflixUser={netflixUser} setIsModalFor={setIsModalFor} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} setFetchFavourites={setFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} movies={movies} setMovies={setMovies} />}
         {signup && <Register_Login value={value} setValue={setValue} updateValues={updateValues} signup={signup} closeProfileModal={closeProfileModal} />}
         {loginForm && <Register_Login value={value} setValue={setValue} updateValues={updateValues} closeProfileModal={closeProfileModal} />}
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>

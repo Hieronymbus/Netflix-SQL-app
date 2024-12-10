@@ -13,6 +13,7 @@ export default function App() {
   const [movies, setMovies] = useState({
     movies: [],
     shows: [],
+    favourites: []
   });
   const [loading, setLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -81,6 +82,8 @@ export default function App() {
           setNetflixUser={setNetflixUser}
           setFetchFavourites={setFetchFavourites}
           fetchFavourites={fetchFavourites}
+          isModalFor={isModalFor}
+          setIsModalFor={setIsModalFor}
         />
    
         <Main 

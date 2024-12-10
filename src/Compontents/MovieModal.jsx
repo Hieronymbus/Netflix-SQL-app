@@ -65,7 +65,6 @@ const MovieModal = ({ fetchFavouriteMovies, fetchFavourites, netflixUser, token,
     };
     console.log('Remove from favourites');
     const response = await fetch(`http://localhost:${PORT}/remove-favourite/${id}/${netflixUser.userId}`, {method: 'DELETE'});
-    await fetchFavouriteMovies();
     const data = await response.json();
     console.log('Remove from favourites response: ', data);
   };
