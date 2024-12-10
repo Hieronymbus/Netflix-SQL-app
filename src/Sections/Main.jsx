@@ -32,7 +32,6 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
         } else {
             fetchAllMovies();
             fetchTvShows();
-            console.log('movies: ', movies);                            
         };
     }, [itemCount, netflixUser, filterValue]);
 
@@ -147,14 +146,14 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                 />
             }  
             <div>
-                <h2 className='text-3xl text-black mb-5'>Movies</h2>
+                <h2 className='text-3xl text-red-600 font-extrabold text-left mb-5'>Movies</h2>
                 <ul onScroll={(e) => handleScroll(e.target)} className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
                     {movies.movies?.length > 0 && movies.movies.map((movie, index) => {
                         return (        
                             <li 
                                 key={index}
                                 id={index + 1 === movies.movies.length ? 'lastMovie' : 'notLastMovie'}// Generate an ID to select the element for position measurements
-                                className='basis-3/12 flex-none relative p-5 h-96 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded cursor-pointer'
+                                className='basis-3/12 flex-none relative p-5 h-96 text-red-800 hover:text-red-950 bg-red-950 hover:bg-red-800 border border-black rounded cursor-pointer'
                                 onClick={()=>{setIsModalFor(movie.title)}}
                             >
                                 <div className='w-full flex flex-col justify-between h-full'>  
@@ -170,7 +169,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                 </ul>
             </div>
             <div>
-                <h2 className='text-3xl text-black my-5'>Tv-Shows</h2>
+                <h2 className='text-3xl text-red-600 font-extrabold text-left my-5'>Tv-Shows</h2>
                 <ul onScroll={(e) => handleScroll(e.target)} className=' relative flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
                     <div className={`${isLoading ? 'absolute' : 'hidden'} font-bold text-3xl text-green-500 z-20 inset-y-2/4 inset-x-2/4`}>
                         Loading...
@@ -180,7 +179,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                             <li 
                                 key={index} 
                                 id={index + 1 === movies.shows.length ? 'lastShow' : 'notLastShow'}
-                                className='basis-3/12 flex-none relative p-5 h-96 text-slate-100 bg-slate-700 hover:bg-slate-900 border border-black rounded cursor-pointer'
+                                className='basis-3/12 flex-none relative p-5 h-96 text-red-800 hover:text-red-950 bg-red-950 hover:bg-red-800 border border-black rounded cursor-pointer'
                                 onClick={()=>{setIsModalFor(show.title)}}
                             >
                                 <div className='w-full flex flex-col justify-end h-full'>  

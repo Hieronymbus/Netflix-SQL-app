@@ -72,8 +72,9 @@ const MovieModal = ({ fetchFavouriteMovies, fetchFavourites, netflixUser, token,
   return (
     <div
       className="
-                  w-4/5 h-3/4 z-20 bg-slate-600 text-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                  w-4/5 h-3/4 z-20 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
                   rounded border border-black shadow-2xl  flex flex-col gap-2 overflow-scroll no-scrollbar 
+                  text-red-800 bg-red-950
                   "
     >
       {isLoadingDetails ? (
@@ -82,7 +83,7 @@ const MovieModal = ({ fetchFavouriteMovies, fetchFavourites, netflixUser, token,
             <h2 className="text-2xl">LOADING details...</h2>
           </div>
           <div>
-            <button className="bg-slate-950 rounded p-1 text-2xl border border-black " onClick={() => setIsModalFor("")}>
+            <button className="rounded p-1 text-2xl" onClick={() => setIsModalFor("")}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
@@ -98,17 +99,17 @@ const MovieModal = ({ fetchFavouriteMovies, fetchFavourites, netflixUser, token,
                 {movieDetails.type} / {movieDetails.duration}
               </p>
             </div>
-            <div>
-              {fetchFavourites && <button onClick={() => removeFromFavourites(movieDetails.show_id)} className="bg-slate-950 rounded p-1 text-2xl border border-black">remove from favourites</button>}
-              {!fetchFavourites && <button onClick={() => addToFavourites(movieDetails.show_id)} className="bg-slate-950 rounded p-1 text-2xl border border-black">
-                  Add to favourites
+            <div className='flex gap-2.5 items-center my-0 h-fit'>
+                {fetchFavourites && <button onClick={() => removeFromFavourites(movieDetails.show_id)} className="p-1 hover:text-red-500 text-2xl">remove from favourites</button>}
+                {!fetchFavourites && <button onClick={() => addToFavourites(movieDetails.show_id)} className="p-1 hover:text-red-500 text-2xl">
+                    Add to favourites
+                  </button>
+                }  
+                <button className="p-1 text-2xl hover:text-red-500" onClick={() => setIsModalFor("")}>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
                 </button>
-              }  
-              <button className="bg-slate-950 rounded p-1 text-2xl border border-black " onClick={() => setIsModalFor("")}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
-              </button>
             </div>
           </div>
           <div className="p-5 flex flex-col gap-3">

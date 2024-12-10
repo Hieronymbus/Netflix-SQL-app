@@ -29,15 +29,10 @@ export default function App() {
     setNetflixUser(user);
   }, [fetchFavourites]);
 
-  useEffect(() => {
-    console.log('Show count: ' + itemCount.showCount);
-    console.log('Movie count: ' + itemCount.movieCount);
-  }, [itemCount]);
-
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
   const fetchSearchedMovie = async (e) => {
     let titleToSearch = encodeURIComponent(searchInput);
-    let searchedForArr = []
+    let searchedForArr = [];
     try { 
         const response = await fetch(`${import.meta.env.VITE_PORT}/search?searchFor=${titleToSearch}&itemCount=${itemCount}`);
         if(!response.ok) {
@@ -50,15 +45,15 @@ export default function App() {
         };
         setMovies( searchedForArr);
     } catch (error) {
-        console.error(error)
+        console.error(error);
     } finally {
-        setLoading(false)
+        setLoading(false);
     };
 }
   return (
     <>
-      {isModalFor && <div className='w-screen h-screen z-10 bg-slate-950 fixed opacity-50'></div>}
-      <div className='p-5 mx-auto bg-gray-200 flex flex-col w-full gap-10 '>
+      {isModalFor && <div className='w-screen h-screen z-10 bg-zinc-900 fixed opacity-50'></div>}
+      <div className='p-5 mx-auto bg-zinc-950 flex flex-col w-full'>
         <Header 
           setFilterValue={setFilterValue}
           filterValue={filterValue}

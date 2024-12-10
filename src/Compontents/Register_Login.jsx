@@ -9,8 +9,8 @@ function Register_Login({ signup, setValue, value, closeProfileModal, updateValu
     };
 
     return(
-        <div className='z-20 absolute left-0 right-0 bg-slate-950 w-fit h-fit p-5'>
-            <form className='text-white flex flex-col gap-2.5 relative'>
+        <div className='z-20 absolute left-0 -bottom-60 text-red-800 bg-red-950 w-full h-60 p-5'>
+            <form className='flex flex-col gap-2.5 relative'>
                 <button className='absolute top-0 right-0' onClick={closeProfileModal}>X</button>
                 <label>Enter username:</label>
                 <input type="text" value={value.username} onChange={(e) => handleValue(e, "username")} className='text-black pl-2.5' />

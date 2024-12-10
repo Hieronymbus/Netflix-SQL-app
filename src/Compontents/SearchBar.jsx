@@ -30,9 +30,9 @@ const SearchBar = ({ searchInput, setSearchInput, isSearching, setIsSearching, s
   }, [debounceSearch]);
 
   return (
-    <div className="mt-10">
+    <div className="w-1/2 my-10">
       <form
-        className="flex my-5 relative"
+        className="flex relative"
         onSubmit={(e) => {
           e.preventDefault();
           setIsSearching(true);
@@ -46,7 +46,7 @@ const SearchBar = ({ searchInput, setSearchInput, isSearching, setIsSearching, s
         <input
           type="text"
           name="searchInput"
-          className="p-2.5 mr-2.5 w-full border border-black rounded"
+          className="p-2.5 text-red-800 focus:text-red-950 bg-red-950 focus:outline-0 focus:bg-red-800 w-full border border-r-0 border-black rounded rounded-r-none"
           value={searchInput}
           onChange={(e) => {
             setIsSearching(true);
@@ -57,7 +57,7 @@ const SearchBar = ({ searchInput, setSearchInput, isSearching, setIsSearching, s
             };
           }}
         />
-        <button type="submit" className="text-slate-100 bg-cyan-600  flex justify-center items-center  border border-black hover:bg-slate-600  size-12 aspect-square rounded ">
+        <button type="submit" className="text-red-800 hover:text-red-950 bg-red-950 hover:bg-red-800 flex justify-center items-center border border-l-0 border-black size-12 aspect-square rounded rounded-l-none">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
           </svg>
