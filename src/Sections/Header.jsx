@@ -132,9 +132,7 @@ function Header({ setMovies, movies, setFetchFavourites, fetchFavourites, setTok
     <header className="relative w-full text-center flex flex-col">
       <div className='relative flex w-full m-0 items-center justify-between'>
         <button className='size-20 text-3xl rounded-full text-red-800 hover:text-red-950 bg-red-950 hover:bg-red-800 cursor-pointer' onMouseOver={() => setSettingModal(true)} onMouseLeave={() => setSettingModal(false)}>{settingModalText}</button>
-        {settingModal && <SettingModal netflixUser={netflixUser} setIsModalFor={setIsModalFor} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} setFetchFavourites={setFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} movies={movies} setMovies={setMovies} />}
-        {signup && <Register_Login value={value} setValue={setValue} updateValues={updateValues} signup={signup} closeProfileModal={closeProfileModal} />}
-        {loginForm && <Register_Login value={value} setValue={setValue} updateValues={updateValues} closeProfileModal={closeProfileModal} />}
+        {settingModal && <SettingModal value={value} setValue={setValue} closeProfileModal={closeProfileModal} updateValues={updateValues} netflixUser={netflixUser} setIsModalFor={setIsModalFor} loginForm={loginForm} signup={signup} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} setFetchFavourites={setFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} movies={movies} setMovies={setMovies} />}
         <h1 className="text-5xl drop-shadow-2xl text-red-600 font-mono">NETFLIX APP</h1>
         <div className="relative">
         </div>

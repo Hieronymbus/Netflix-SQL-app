@@ -1,6 +1,6 @@
+import Register_Login from "./Register_Login";
 
-
-function SettingModal({ setIsModalFor, isModalFor, netflixUser, fetchFavourites, setMovies, movies, logout, setSettingModal, setFetchFavourites, setSignup, setLoginForm }) {
+function SettingModal({ setIsModalFor, signup, value, setValue, updateValues, closeProfileModal, loginForm, isModalFor, netflixUser, fetchFavourites, setMovies, movies, logout, setSettingModal, setFetchFavourites, setSignup, setLoginForm }) {
     
     const PORT = 3000;
 
@@ -32,9 +32,11 @@ function SettingModal({ setIsModalFor, isModalFor, netflixUser, fetchFavourites,
                 </div>
                 <button className='p-2.5 hover:text-red-950 hover:bg-red-800 rounded-full' onClick={() => alert('Settings are still under development')}>Settings</button>
                 {netflixUser && <button className='p-2.5 hover:text-red-950 hover:bg-red-800 w-full rounded-full ' onMouseOver={() => fetchFavouriteMovies()} onMouseOut={() => setFetchFavourites(false)}>Favourites</button>}
-                {!netflixUser && <button className='p-2.5 hover:text-red-950 hover:bg-red-800' onClick={() => setSignup(true)}>Sign up</button>}
-                {!netflixUser && <button className='p-2.5 hover:text-red-950 hover:bg-red-800 w-full rounded-full' onClick={() => setLoginForm(true)}>Sign in</button>}
+                {!netflixUser && <button className='p-2.5 hover:text-red-950 hover:bg-red-800 text-nowrap rounded-full' onMouseOver={() => setSignup(true)} onMouseLeave={() => setSignup(false)}>Sign up</button>}
+                {!netflixUser && <button className='p-2.5 hover:text-red-950 hover:bg-red-800 w-full rounded-full' onMouseOver={() => setLoginForm(true)} onMouseLeave={() => setLoginForm(false)}>Sign in</button>}
                 {netflixUser && <button className='text-nowrap p-2.5 hover:text-red-950 hover:bg-red-800 w-full rounded-full' onClick={() => logout()}>Sign out</button>}
+                {loginForm && <Register_Login value={value} setValue={setValue} updateValues={updateValues} closeProfileModal={closeProfileModal} setLoginForm={setLoginForm}/>}
+                {signup && <Register_Login value={value} setValue={setValue} updateValues={updateValues} signup={signup} closeProfileModal={closeProfileModal} setSignup={setSignup} />}
             </div>
         </div>
     )
