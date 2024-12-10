@@ -123,6 +123,7 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
   function handleFetchFavourites() {
     setFetchFavourites(!fetchFavourites);
     if(!fetchFavourites) {
+      console.log('fetching favourites');
       setMovies([]);
     };
   };
@@ -139,7 +140,7 @@ function Header({ setMovies, setFetchFavourites, fetchFavourites, setToken, setN
     <header className="relative w-full text-center">
       <div className='flex w-full justify-between'>
         <button className='size-20 text-3xl rounded-full bg-slate-600 text-white cursor-pointer' onClick={() => setSettingModal(true)}>{settingModalText}</button>
-        {settingModal && <SettingModal netflixUser={netflixUser} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} handleFetchFavourites={handleFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} />}
+        {settingModal && <SettingModal netflixUser={netflixUser} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} setFetchFavourites={setFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} />}
         {signup && <Register_Login value={value} setValue={setValue} updateValues={updateValues} signup={signup} closeProfileModal={closeProfileModal} />}
         {loginForm && <Register_Login value={value} setValue={setValue} updateValues={updateValues} closeProfileModal={closeProfileModal} />}
         <h1 className="text-5xl text-red-600 font-mono">NETFLIX APP</h1>
