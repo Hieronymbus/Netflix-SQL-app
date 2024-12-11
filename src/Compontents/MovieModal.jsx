@@ -74,7 +74,7 @@ const MovieModal = ({ fetchFavouriteMovies, fetchFavourites, netflixUser, token,
       className="
                   w-4/5 h-3/4 z-20 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
                   rounded border border-black shadow-2xl  flex flex-col gap-2 overflow-scroll no-scrollbar 
-                  text-red-800 bg-red-950
+                  text-red-950 bg-sky-100
                   "
     >
       {isLoadingDetails ? (
@@ -100,12 +100,12 @@ const MovieModal = ({ fetchFavouriteMovies, fetchFavourites, netflixUser, token,
               </p>
             </div>
             <div className='flex gap-2.5 items-center my-0 h-fit'>
-                {fetchFavourites && <button onClick={() => removeFromFavourites(movieDetails.show_id)} className="p-1 hover:text-red-500 text-2xl">remove from favourites</button>}
-                {!fetchFavourites && <button onClick={() => addToFavourites(movieDetails.show_id)} className="p-1 hover:text-red-500 text-2xl">
+                {fetchFavourites && <button onClick={() => removeFromFavourites(movieDetails.show_id)} className="p-1 hover:text-red-900 text-2xl">remove from favourites</button>}
+                {!fetchFavourites && <button onClick={() => addToFavourites(movieDetails.show_id)} className="p-1 hover:text-red-900 text-2xl">
                     Add to favourites
                   </button>
                 }  
-                <button className="p-1 text-2xl hover:text-red-500" onClick={() => setIsModalFor("")}>
+                <button className="p-1 text-2xl hover:text-red-900" onClick={() => setIsModalFor("")}>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                   </svg>

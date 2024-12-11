@@ -24,7 +24,7 @@ function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, s
             return(
                 <p  key={index} 
                     onClick={() => setFilterValue(filterType, item)} 
-                    className='hover:cursor-pointer text-red-800 hover:text-red-950 bg-red-950 hover:bg-red-800 my-5'
+                    className='hover:cursor-pointer text-red-950 hover:text-red-900 my-5'
                 >
                     {item}
                 </p>
@@ -47,7 +47,7 @@ function FilterOptions({ onHandleCloseDropDown, generateValue, setRatingValue, s
                     </svg>
                 </button>
             </div>
-            <div className='text-red-800 bg-red-950 flex gap-10'>
+            <div className='text-red-950 bg-sky-100 flex gap-10'>
                 <div>
                     <p className="underline text-xl font-extrabold">Year</p>
                     {mapValues(yearValues, 'year')}

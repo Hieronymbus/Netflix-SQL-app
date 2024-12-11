@@ -6,7 +6,7 @@ const PORT = 3000;
 function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, token, fetchSearchedMovie, itemCount, filterValue, setItemCount, movies, setMovies, loading, setLoading, isSearching, setIsModalFor, isModalFor } ) {
 
     const [movieCount, setMovieCount] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     
     // useEffect(() => {
     //     window.addEventListener('scroll', handleScroll);
@@ -114,14 +114,22 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             if(!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };
-            const movieData = await response.json();
+            const data = await response.json();
+            console.log(data);
             //trial changes using filteredArr
-            let filteredArr = []
-            for(const movie of movieData) {
-                filteredArr.push(movie.title);
+            const shows = [];
+            const movies = [];
+            for(const movie of data.movies) {
+                movies.push(movie);
+            };
+            for(const show of data.shows) {
+                shows.push(show);
             };
 
-            setMovies(prev => [ ...filteredArr]);
+            setMovies({
+                movies: movies,
+                shows: shows
+            });
         } catch(err) {
             console.error('Error fetching movies ', err);
         } finally {
@@ -131,9 +139,6 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
 
     return(
         <main className='w-full relative text-center'>
-            <h1 className='absolute mx-auto bottom-0 left-0 right-0 bold text-center bg-black w-1/4 text-white'>
-                {loading && 'loading...'}
-            </h1>
             {
                 isModalFor 
                 && 
@@ -146,14 +151,14 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                 />
             }  
             <div>
-                <h2 className='text-3xl text-red-600 font-extrabold text-left mb-5'>Movies</h2>
+                <h2 className='text-3xl text-sky-100 font-extrabold text-left mb-5'>Movies</h2>
                 <ul onScroll={(e) => handleScroll(e.target)} className='flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
                     {movies.movies?.length > 0 && movies.movies.map((movie, index) => {
                         return (        
                             <li 
                                 key={index}
                                 id={index + 1 === movies.movies.length ? 'lastMovie' : 'notLastMovie'}// Generate an ID to select the element for position measurements
-                                className='basis-3/12 flex-none relative p-5 h-96 text-red-800 hover:text-red-950 bg-red-950 hover:bg-red-800 border border-black rounded cursor-pointer'
+                                className='basis-3/12 flex-none relative p-5 h-96 text-red-950 hover:text-red-900 bg-sky-100 hover:bg-sky-200 rounded cursor-pointer'
                                 onClick={()=>{setIsModalFor(movie.title)}}
                             >
                                 <div className='w-full flex flex-col justify-between h-full'>  
@@ -169,17 +174,15 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                 </ul>
             </div>
             <div>
-                <h2 className='text-3xl text-red-600 font-extrabold text-left my-5'>Tv-Shows</h2>
+                <div className={`${isLoading ? 'absolute' : 'hidden'} font-bold text-3xl p-5 size-fit bg-black text-sky-100 rounded-full z-20 inset-y-2/4 inset-x-2/4`}>Loading...</div>
+                <h2 className='text-3xl text-sky-100 font-extrabold text-left my-5'>Tv-Shows</h2>
                 <ul onScroll={(e) => handleScroll(e.target)} className=' relative flex gap-2.5 max-w-screen max-h-96 overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
-                    <div className={`${isLoading ? 'absolute' : 'hidden'} font-bold text-3xl text-green-500 z-20 inset-y-2/4 inset-x-2/4`}>
-                        Loading...
-                    </div>
                     {movies.shows?.length > 0 && movies.shows.map((show, index) => {
                         return (        
                             <li 
                                 key={index} 
                                 id={index + 1 === movies.shows.length ? 'lastShow' : 'notLastShow'}
-                                className='basis-3/12 flex-none relative p-5 h-96 text-red-800 hover:text-red-950 bg-red-950 hover:bg-red-800 border border-black rounded cursor-pointer'
+                                className='basis-3/12 flex-none relative p-5 h-96 text-red-950 hover:text-red-900 bg-sky-100 hover:bg-sky-200 rounded cursor-pointer'
                                 onClick={()=>{setIsModalFor(show.title)}}
                             >
                                 <div className='w-full flex flex-col justify-end h-full'>  

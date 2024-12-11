@@ -178,7 +178,7 @@ app.get("/tv-shows", async(req, res) => {
 });
 
 app.get("/filter", async (req, res) => {
-  const itemCount = parseInt(req.query.itemCount) || 12;
+  const itemCount = parseInt(req.query.itemCount) || 4;
   const releaseYear = parseInt(req.query.releaseYear) || null;
   const duration = req.query.duration || null;
   const rating = req.query.rating || null;
@@ -188,6 +188,8 @@ app.get("/filter", async (req, res) => {
   try {
     const filters = [];
     const values = [];
+    const movies = [];
+    const shows = [];
 
     if (releaseYear) {
       filters.push(`(release_year BETWEEN $${filters.length + 1}`);
@@ -203,7 +205,7 @@ app.get("/filter", async (req, res) => {
       values.push(rating);
     }
     if (searchValue) {
-      filters.push(`title ILIKE '%${searchValue}%'`)
+      filters.push(`title ILIKE '%${searchValue}%'`);
     }
 
     const resultQuery = filters.length ? `WHERE ${filters.join(" AND ")}` : "";
@@ -216,11 +218,26 @@ app.get("/filter", async (req, res) => {
 
     values.push(itemCount);
 
-    console.log("Executing Query:", query);
+    console.log("Executing Query:", query);       
     console.log("With values:", values);
 
     const result = await client.query(query, values);
-    res.json(result.rows);
+    console.log(result.rows);
+    result.rows.forEach((result) => {
+      if(result.type == 'Movie') {
+        movies.push(result);
+      } else if(result.type == 'TV Show') {
+        shows.push(result);
+      }     
+    });
+
+    if(movies.length === 0) {
+      movies.push({ title: 'No movies '});
+    } else if(shows === 0) {
+      shows.push({ title: 'No shows' });
+    };
+
+    res.status(201).json({ movies: movies, shows: shows });
   } catch (err) {
     console.error("Server error:", err);
     res.status(500).send("Server error");
