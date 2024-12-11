@@ -32,18 +32,18 @@ export default function App() {
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
   const fetchSearchedMovie = async (e) => {
     let titleToSearch = encodeURIComponent(searchInput);
-    let searchedForArr = [];
+
     try { 
-        const response = await fetch(`${import.meta.env.VITE_PORT}/search?searchFor=${titleToSearch}&itemCount=${itemCount}`);
+        const response = await fetch(`${import.meta.env.VITE_PORT}/search?searchFor=${titleToSearch}`);
         if(!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         };
-        const searchData = await response.json();
+        const data = await response.json();
 
-        for(const movie of searchData) {
-            searchedForArr.push(movie.title);
-        };
-        setMovies( searchedForArr);
+        setMovies({
+          movies: data.movies,
+          shows: data.shows
+        });
     } catch (error) {
         console.error(error);
     } finally {

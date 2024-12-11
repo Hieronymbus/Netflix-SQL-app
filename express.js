@@ -232,8 +232,8 @@ app.get("/filter", async (req, res) => {
     });
 
     if(movies.length === 0) {
-      movies.push({ title: 'No movies '});
-    } else if(shows === 0) {
+      movies.push({ title: 'No movies'});
+    } else if(shows.length === 0) {
       shows.push({ title: 'No shows' });
     };
 
@@ -246,13 +246,30 @@ app.get("/filter", async (req, res) => {
 
 app.get("/search", async (req, res) => {
   const { searchFor, itemCount } = req.query;
+  const movies = [];
+  const shows = [];
 
   try {
     const result = await client.query(
-      `SELECT * FROM netflix_shows WHERE title ILIKE '%${searchFor}%'  LIMIT $1 `,
-      [itemCount]
+      `SELECT * FROM netflix_shows WHERE title ILIKE '%${searchFor}%'`
     );
-    res.json(result.rows);
+
+    console.log(result);
+
+    result.rows.forEach(result => {
+      if(result.type === 'Movie') {
+        movies.push(result);
+      } else if(result.type === 'TV Show') {
+        shows.push(result);
+      }
+    });
+    if(movies.length === 0) {
+      movies.push({ title: 'No movies'});
+    } else if(shows.length ===0) {
+      shows.push({ title: 'No shows' });
+    };
+
+    res.json({ movies: movies, shows: shows });
   } catch (err) {
     console.error(err);
     res.status(500).send("server error");
