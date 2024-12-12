@@ -76,7 +76,7 @@ export default function App() {
   return (
     <div className='h-full'>
       {isModalFor && <div className='w-screen h-screen z-10 bg-zinc-900 fixed opacity-50'></div>}
-      <div className='p-0 py-5 sm:p-5 mx-auto bg-zinc-950 flex flex-col w-full'>
+      <div className='p-0 py-5 md:p-5 mx-auto bg-zinc-950 flex flex-col w-full'>
         <Header 
           setFilterValue={setFilterValue}
           filterValue={filterValue}

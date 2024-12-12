@@ -23,9 +23,9 @@ function SettingModal({ setIsModalFor, signup, value, setValue, updateValues, cl
     };
 
     return(
-        <div onMouseOver={() => setSettingModal(true)} onMouseLeave={() => setSettingModal(false)} className='flex h-20 items-center w-fit px-10 justify-center z-20 absolute left-0 rounded-full text-red-950 bg-sky-100'>
-            <div className='flex relative gap-5 w-full'>
-                <div onMouseOver={() => setFetchFavourites(true)} onMouseLeave={() => setFetchFavourites(false)} className={`${fetchFavourites ? 'absolute' : 'hidden'} shadow-xl rounded-lg -bottom-64 left-0 text-red-950 bg-sky-100 h-64 w-full z-20`}>
+        <div onMouseOver={() => setSettingModal(true)} onMouseLeave={() => setSettingModal(false)} className='absolute flex md:h-16 lg:h-20 items-center w-fit px-10 justify-center z-20 left-0 top-0 rounded text-red-950 bg-sky-100'>
+            <div className='relative flex gap-5 w-full'>
+                <div onMouseOver={() => setFetchFavourites(true)} onMouseLeave={() => setFetchFavourites(false)} className={`${fetchFavourites ? 'absolute' : 'hidden'} shadow-xl -bottom-64 left-0 text-red-950 bg-sky-100 h-64 w-full z-20`}>
                     {movies.favourites?.map((movie) => {
                         return <p onClick={() =>setIsModalFor(movie)} className='text-white my-5 text-red-950 hover:text-red-900 hover:cursor-pointer'key={movie}>{movie}</p>
                     })}                 

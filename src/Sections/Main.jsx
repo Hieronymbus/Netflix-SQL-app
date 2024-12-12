@@ -158,7 +158,7 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
                             <li 
                                 key={index}
                                 id={index + 1 === movies.movies.length ? 'lastMovie' : 'notLastMovie'}// Generate an ID to select the element for position measurements
-                                className='relative md:basis-3/12 flex-none p-5 mb-2.5 md:h-96 md:rounded text-red-950 hover:text-red-900 bg-sky-100 hover:bg-sky-200 cursor-pointer'
+                                className='relative border border-b-1 border-red-950 md:border-none md:basis-3/12 flex-none p-5 md:h-96 md:rounded text-red-950 hover:text-red-900 bg-sky-100 hover:bg-sky-200 cursor-pointer'
                                 onClick={()=>{setIsModalFor(movie.title)}}
                             >
                                 <div className='w-full flex flex-col justify-between h-full'>  
@@ -176,13 +176,13 @@ function Main( { searchInput, fetchFavourites, setFetchFavourites, netflixUser, 
             <div>
                 <div className={`${isLoading ? 'absolute' : 'hidden'} font-bold text-3xl p-5 size-fit bg-black text-sky-100 rounded-full z-20 inset-y-2/4 inset-x-2/4`}>Loading...</div>
                 <h2 className='text-3xl text-center md:text-left mt-9 mb-5 text-sky-100 font-extrabold'>Tv-Shows</h2>
-                <ul onScroll={(e) => handleScroll(e.target)} className='md:flex max-h-96 gap-2.5 max-w-screen md:max-h-96 shadow-inner overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
+                <ul onScroll={(e) => handleScroll(e.target)} className='md:flex max-h-96 gap-2.5 max-w-screen md:h-fit shadow-inner overflow-y-auto no-scrollbar no-scrollbar::-webkit-scrollbar'>
                     {movies.shows?.length > 0 && movies.shows.map((show, index) => {
                         return (        
                             <li 
                                 key={index} 
                                 id={index + 1 === movies.shows.length ? 'lastShow' : 'notLastShow'}
-                                className='relative md:basis-3/12 flex-none p-5 mb-2.5 md:h-96 md:rounded text-red-950 hover:text-red-900 bg-sky-100 hover:bg-sky-200 cursor-pointer'
+                                className='relative border border-b-1 border-red-950 md:border-none md:basis-3/12 flex-none p-5 md:h-96 md:rounded text-red-950 hover:text-red-900 bg-sky-100 hover:bg-sky-200 cursor-pointer'
                                 onClick={()=>{setIsModalFor(show.title)}}
                             >
                                 <div className='w-full flex flex-col justify-end h-full'>  
