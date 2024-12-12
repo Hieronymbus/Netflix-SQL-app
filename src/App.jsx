@@ -23,11 +23,34 @@ export default function App() {
   const [token, setToken] = useState('');
   const [netflixUser, setNetflixUser] = useState();
   const [fetchFavourites, setFetchFavourites] = useState(false);
+  const [breakpoint, setBreakPoint] = useState(() => {
+    const breakPoint = "";
+    const viewportWidth = window.innerWidth;
+    switch(viewportWidth) {
+      case (viewportWidth >= 640 && viewportWidth < 768):
+        "small"
+        break;
+      case (viewportWidth >= 768 && viewportWidth < 1024):
+        "medium"
+        break;
+      case (viewportWidth >= 1024):
+        "large"
+          break;
+        default:
+          "too small"
+    };
+    return breakPoint;
+  });
+
+  // useEffect(() => {
+
+  // }, [breakpoint]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     setNetflixUser(user);
   }, [fetchFavourites]);
+
 
  // async function that handles fetch api call for searching, using searchInput and item counts as query and sets movies state to the response.titles
   const fetchSearchedMovie = async (e) => {

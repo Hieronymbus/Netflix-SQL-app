@@ -130,10 +130,10 @@ function Header({ setMovies, movies, setFetchFavourites, fetchFavourites, setTok
 
   return (
     <header className="relative w-full text-center flex flex-col">
-      <div className='relative flex w-full m-0 items-center justify-between'>
-        <button className='size-20 text-3xl rounded-full text-red-950 hover:text-red-950 bg-sky-100 cursor-pointer' onMouseOver={() => setSettingModal(true)} onMouseLeave={() => setSettingModal(false)}>{settingModalText}</button>
+      <div className='relative flex w-full m-0 items-center justify-center'>
+        <button className='absolute left-0 top-0 size-10 md:size-16 lg:size-20 sm:text-xl md:text-xl lg:text-3xl rounded text-red-950 hover:text-red-950 bg-sky-100 cursor-pointer' onMouseOver={() => setSettingModal(true)} onMouseLeave={() => setSettingModal(false)}>{settingModalText}</button>
         {settingModal && <SettingModal value={value} setValue={setValue} closeProfileModal={closeProfileModal} updateValues={updateValues} netflixUser={netflixUser} setIsModalFor={setIsModalFor} loginForm={loginForm} signup={signup} logout={logout} setSettingModal={setSettingModal} fetchFavourites={fetchFavourites} setFetchFavourites={setFetchFavourites} setSignup={setSignup} setLoginForm={setLoginForm} movies={movies} setMovies={setMovies} />}
-        <h1 className="text-5xl drop-shadow-2xl text-red-600 font-mono">NETFLIX APP</h1>
+        <h1 className="text-3xl self-center md:text-5xl text-red-600 font-mono">NETFLIX APP</h1>    
         <div className="relative">
         </div>
       </div>
@@ -147,7 +147,7 @@ function Header({ setMovies, movies, setFetchFavourites, fetchFavourites, setTok
           fetchSearchedMovie={fetchSearchedMovie}
         />
         <div className='relative'>
-          <button type="submit" onMouseOver={() => setIsDropDown(true)} onMouseLeave={() => setIsDropDown(false)} className="text-red-950 bg-sky-100 flex justify-center items-center size-12 ml-1 rounded">
+          <button type="submit" onMouseOver={() => setIsDropDown(true)} onMouseLeave={() => setIsDropDown(false)} className="hidden md:flex justify-center items-center size-12 rounded rounded-l-none text-red-950 bg-sky-100">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
             </svg>
